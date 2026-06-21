@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 using System.Text;
 using TrackFinderDb.Models.AchievementModels;
+using TrackFinderDb.Models.CommunityModels;
 
 /*
  * ------------------------------------------------ *
@@ -46,36 +48,37 @@ using TrackFinderDb.Models.AchievementModels;
 
 namespace TrackFinderDb.Models.UserModels
 {
-    [Index(nameof(UserName), IsUnique = true)]
+    [Index(nameof(Username), IsUnique = true)]
     public class User
     {
         [Key]
-        public string? UserId { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         [Required]
-        public string? UserName { get; set; }
+        public string Username { get; set; } = string.Empty;
         [Required]
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
         [Required]
         public string? LastName { get; set; }
-        public DateTime? UserBirthdate { get; set; }
+        public DateTime Birthdate { get; set; }
         [Required]
-        public string? UserEmail { get; set; }
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
         [Required]
-        public string? UserPasswordHash { get; set; }
+        public string PasswordHash { get; set; } = string.Empty;
         [Required]
-        public string? Gender { get; set; }
-
+        public string? Gender { get; set; } = string.Empty;
         public string? Bio { get; set; }
         public string? ProfilePictureUrl { get; set; }
-
         public bool EmailVerified { get; set; } = false;
-
         public bool IsBanned { get; set; } = false;
+        public DateTime CreatedAt { get; set; }
+        public string Role { get; set; } = string.Empty;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public Student? Student { get; set; }
-        public Instructor? Instructor { get; set; }
-        public ICollection<UserBadge>? UserBadges { get; set; }
+        public virtual Student? Student { get; set; }
+        public virtual Instructor? Instructor { get; set; }
+        public virtual ICollection<UserBadge>? UserBadges { get; set; }
+        public virtual ICollection<Post>? Posts { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; }
+        public virtual ICollection<PostReport>? PostReports { get; set; }
     }
 }

@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Text.RegularExpressions;
 using TrackFinderDb.Models.AchievementModels;
-using TrackFinderDb.Models.TrackModels;
+using TrackFinderDb.Models.AssessmentModels;
+using TrackFinderDb.Models.CommunityModels;
+using TrackFinderDb.Models.TeachingModels;
+
 
 /*
  * ------------------------------------------------ *
@@ -47,10 +49,6 @@ namespace TrackFinderDb.Models.UserModels
 {
     public class Student
     {
-        [Key]
-        public string? StudentId { get; set; }
-        public string? StudyTrackId { get; set; }
-
         public string? EducationState { get; set; }
         public string? SchoolOrUnversityName { get; set; }
         public string? Major { get; set; }
@@ -58,18 +56,14 @@ namespace TrackFinderDb.Models.UserModels
         public string? DegreeProgram { get; set; }
         public int AcademicYear { get; set; }
         public float GPA { get; set; }
-
         public string? Bio { get; set; }
 
-        public User? User { get; set; }
-        public Track? StudyTrack { get; set; }
-        public ICollection<Request> Requests { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; }
-        public ICollection<AssessmentQuestion> AssessmentQuestions { get; set; }
-        public ICollection<Certificate> AchievedCertificates { get; set; }
-        public ICollection<Group> JoinedGroups { get; set; }
-        public ICollection<Post> CreatedPosts { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-
+        [Key]
+        public string? UserId { get; set; }
+        public virtual User? User { get; set; }
+        public virtual ICollection<Enrollment>? Enrollments { get; set; }
+        public virtual ICollection<AssessmentResult>? AssessmentResults { get; set; }
+        public virtual ICollection<Certificate>? AchievedCertificates { get; set; }
+        public virtual ICollection<JoinedMembers>? JoinedCommunities { get; set; }
     }
 }

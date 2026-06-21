@@ -37,8 +37,8 @@ namespace TrackFinderDb.Models.AchievementModels
         public int UserId { get; set; }
         public int BadgeId { get; set; }
 
-        public User? User { get; set; }
-        public Badges? Badge { get; set; }
+        public virtual User? User { get; set; }
+        public virtual Badges? Badge { get; set; }
 
         public DateTime EarnedAt { get; set; }
     }

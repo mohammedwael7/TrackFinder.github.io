@@ -40,6 +40,6 @@ namespace TrackFinderDb.Models.AchievementModels
         public string? BadgeDescription { get; set; }
         public string? BadgeImageUrl { get; set; }
 
-        public ICollection<UserBadge>? UserBadges { get; set; }
+        public virtual ICollection<UserBadge>? UserBadges { get; set; }
     }
 }
