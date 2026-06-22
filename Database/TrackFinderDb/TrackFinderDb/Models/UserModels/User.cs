@@ -8,10 +8,6 @@ using TrackFinderDb.Models.AchievementModels;
 using TrackFinderDb.Models.CommunityModels;
 
 /*
- * ------------------------------------------------ *
- * Updated At: 2026-05-24                         |
- * Updated By: [Ahmed Ehab]                         |
- * ------------------------------------------------ *
 -- ////////////////////////////////////////////////
 --                                                
 -- ██╗   ██╗  ███████╗  ███████╗  ██████╗        
@@ -71,7 +67,7 @@ namespace TrackFinderDb.Models.UserModels
         public string? ProfilePictureUrl { get; set; }
         public bool EmailVerified { get; set; } = false;
         public bool IsBanned { get; set; } = false;
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string Role { get; set; } = string.Empty;
 
         public virtual Student? Student { get; set; }

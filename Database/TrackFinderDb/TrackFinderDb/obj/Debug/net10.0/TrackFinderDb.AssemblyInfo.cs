@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrackFinderDb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+589774863aeaee7277bf7e8023d8b8b8ce54203e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ceae7bebc0fed3fd4b5a4e3d667c4f43fff539a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrackFinderDb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrackFinderDb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

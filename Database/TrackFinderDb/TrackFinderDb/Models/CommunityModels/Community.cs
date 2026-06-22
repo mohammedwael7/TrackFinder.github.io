@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TrackFinderDb.Models.UserModels;
@@ -7,7 +8,7 @@ namespace TrackFinderDb.Models.CommunityModels
 {
     public class Community
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = string.Empty;
 
         public Guid AdminId { get; set; }

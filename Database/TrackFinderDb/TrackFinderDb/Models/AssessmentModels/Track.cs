@@ -6,10 +6,6 @@ using TrackFinderDb.Models.AssessmentModels;
 using TrackFinderDb.Models.UserModels;
 
 /*
- * ------------------------------------------------ *
- * Last Updated: 2026-05-24                         |
- * Updated By: [Ahmed Ehab]                         |
- * ------------------------------------------------ *
 -- ////////////////////////////////////////////////
 --
 -- ████████╗ ██████╗   █████╗   ██████╗ ██╗  ██╗

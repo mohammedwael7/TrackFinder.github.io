@@ -1,5 +1,6 @@
-﻿using TrackFinderDb.Models.ExamsAndQuizesModels;
+using TrackFinderDb.Models.ExamsAndQuizesModels;
 using TrackFinderDb.Models.UserModels;
+using TrackFinderDb.Models.AssessmentModels;
 
 namespace TrackFinderDb.Models.TeachingModels
 {
@@ -20,7 +21,7 @@ namespace TrackFinderDb.Models.TeachingModels
         Weeks,
         Months
     }
-    public struct CourseDuration
+    public class CourseDuration
     {
         public int Value { get; set; }
         public DurationIn DurationIn { get; set; }
@@ -40,6 +41,8 @@ namespace TrackFinderDb.Models.TeachingModels
 
         public Guid InstructorId { get; set; }
         public virtual Instructor Instructor { get; set; } = new Instructor();
+        public int? TrackStackId { get; set; }
+        public virtual TrackStack? TrackStack { get; set; }
         public virtual ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
         public virtual ICollection<CourseSkill> CourseSkills { get; set; } = new List<CourseSkill>();
         public virtual ICollection<Material>? Materials { get; set; }

@@ -5,7 +5,7 @@ using TrackFinderDb.Models.ExamsAndQuizesModels;
 
 namespace TrackFinderDb.Models.TeachingModels
 {
-    public struct LessonDuration
+    public class LessonDuration
     {
         public int Minutes { get; set; }
         public int Seconds { get; set; }

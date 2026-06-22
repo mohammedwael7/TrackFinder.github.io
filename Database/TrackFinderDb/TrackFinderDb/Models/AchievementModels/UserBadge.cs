@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TrackFinderDb.Models.UserModels;
@@ -34,7 +34,7 @@ namespace TrackFinderDb.Models.AchievementModels
 {
     public class UserBadge
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public int BadgeId { get; set; }
 
         public virtual User? User { get; set; }
