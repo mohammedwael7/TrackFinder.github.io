@@ -27,7 +27,7 @@ namespace TrackFinderDb.Models.TeachingModels
     }
     public class Course
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public int Price { get; set; }
@@ -38,7 +38,7 @@ namespace TrackFinderDb.Models.TeachingModels
         public CourseDuration Duration { get; set; }
         public double? Discount { get; set; }
 
-        public int InstructorId { get; set; }
+        public Guid InstructorId { get; set; }
         public virtual Instructor Instructor { get; set; } = new Instructor();
         public virtual ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
         public virtual ICollection<CourseSkill> CourseSkills { get; set; } = new List<CourseSkill>();

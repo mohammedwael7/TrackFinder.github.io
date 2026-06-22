@@ -7,7 +7,7 @@ namespace TrackFinderDb.Models.TeachingModels
 {
     public class CourseSkill
     {
-        public int CourseId { get; set; }
+        public Guid CourseId { get; set; }
         public int GainedSkillId { get; set; }
         public Course Course { get; set; } = new Course();
         public GainedSkill GainedSkill { get; set; } = new GainedSkill();

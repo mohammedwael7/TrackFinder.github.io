@@ -19,8 +19,8 @@ namespace TrackFinderDb.Models.UserModels
         public double Rating { get; set; }
 
         [Key]
-        public int UserId { get; set; }
-        public int CommunityId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid CommunityId { get; set; }
         public virtual User User { get; set; } = new User();
         public virtual Community? AdminstratedCommunity { get; set; }
         public virtual Community ModeratedCommunity { get; set; } = new Community();

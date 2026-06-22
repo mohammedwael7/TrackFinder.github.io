@@ -14,7 +14,7 @@ namespace TrackFinderDb.Models.OrdersAndPayments
         public string type { get; set; } = string.Empty;
         public DateTime PurchaseDate { get; set; }
 
-        public int PurchasedItemId { get; set; }
+        public Guid PurchasedItemId { get; set; }
         public Guid StudentId { get; set; }
         public Guid InstructorId { get; set; }
         public virtual Course? Course { get; set; }

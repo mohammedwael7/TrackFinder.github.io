@@ -21,7 +21,7 @@ namespace TrackFinderDb.Models.TeachingModels
         public DateTime? LastActiveDate { get; set; }
         public int CompletedLessons { get; set; }
 
-        public int CourseId { get; set; }
+        public Guid CourseId { get; set; }
         public Guid UserId { get; set; }
         public virtual Course Course { get; set; } = new Course();
         public virtual User User { get; set; } = new User();

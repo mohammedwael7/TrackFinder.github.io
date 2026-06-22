@@ -11,9 +11,9 @@ namespace TrackFinderDb.Models.CommunityModels
         public string Content { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
 
-        public int PostId { get; set; }
-        public int? UserId { get; set; }
-        public int? ParentCommentId { get; set; }
+        public Guid PostId { get; set; }
+        public Guid? UserId { get; set; }
+        public Guid? ParentCommentId { get; set; }
         public virtual Post Post { get; set; } = null!;
         public virtual User User { get; set; } = null!;
         public virtual Comment? ParentComment { get; set; }

@@ -59,7 +59,7 @@ namespace TrackFinderDb.Models.UserModels
         public string? Bio { get; set; }
 
         [Key]
-        public string? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public virtual User? User { get; set; }
         public virtual ICollection<Enrollment>? Enrollments { get; set; }
         public virtual ICollection<AssessmentResult>? AssessmentResults { get; set; }
