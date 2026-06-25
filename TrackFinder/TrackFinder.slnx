@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TrackFinder.Application/TrackFinder.Application.csproj" />
+  <Project Path="TrackFinder.Domain/TrackFinder.Domain.csproj" Id="aae02393-8f22-4211-b130-72c52827d860" />
+  <Project Path="TrackFinder.Infrastructure/TrackFinder.Infrastructure.csproj" />
+  <Project Path="TrackFinder.Presentation/TrackFinder.Presentation.csproj" />
+</Solution>
