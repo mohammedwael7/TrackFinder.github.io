@@ -1,4 +1,4 @@
-﻿using TrackFinder.Domain.Models.UserModels;
+using TrackFinder.Domain.Models.UserModels;
 
 namespace TrackFinder.Domain.Models.CommunityModels
 {

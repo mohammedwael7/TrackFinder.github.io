@@ -1,6 +1,6 @@
 ﻿namespace TrackFinder.Domain.Models.CourseModels
 {
-    public struct LessonDuration
+    public class LessonDuration
     {
         public int Minutes { get; set; }
         public int Seconds { get; set; }
