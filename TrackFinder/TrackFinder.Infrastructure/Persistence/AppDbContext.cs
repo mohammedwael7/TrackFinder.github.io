@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using TrackFinder.Domain.Models.AchievementModels;
-using TrackFinder.Domain.Models.AssessmentModels;
-using TrackFinder.Domain.Models.CommunityModels;
-using TrackFinder.Domain.Models.CourseModels;
-using TrackFinder.Domain.Models.OrdersAndPaymentsModels;
-using TrackFinder.Domain.Models.UserModels;
+using TrackFinder.Models.AchievementModels;
+using TrackFinder.Models.AssessmentModels;
+using TrackFinder.Models.CommunityModels;
+using TrackFinder.Models.CourseModels;
+using TrackFinder.Models.OrdersAndPaymentsModels;
+using TrackFinder.Models.UserModels;
 
 /*
  *  HOW TO ADD A NEW MODEL (for the next team member):

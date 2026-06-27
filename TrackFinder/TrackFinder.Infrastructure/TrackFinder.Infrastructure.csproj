@@ -8,13 +8,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="External Services\**" />
+	  <EmbeddedResource Remove="External Services\**" />
+	  <None Remove="External Services\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\TrackFinder.Application\TrackFinder.Application.csproj" />
 		<ProjectReference Include="..\TrackFinder.Domain\TrackFinder.Domain.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="External Services\" />
-		<Folder Include="Migrations\" />
 		<Folder Include="Persistence\" />
  	</ItemGroup>
 

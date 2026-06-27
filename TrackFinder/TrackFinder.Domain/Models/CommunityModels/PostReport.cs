@@ -1,6 +1,6 @@
 ﻿using TrackFinder.Domain.Models.UserModels;
 
-namespace TrackFinder.Domain.Models.CommunityModels
+namespace TrackFinder.Models.CommunityModels
 {
     public enum ReportReason
     {

@@ -1,6 +1,6 @@
 ﻿using TrackFinder.Domain.Models.CourseModels;
 
-namespace TrackFinder.Domain.Models.AssessmentModels
+namespace TrackFinder.Models.AssessmentModels
 {
     public class TrackStack
     {

@@ -1,6 +1,6 @@
 ﻿using TrackFinder.Domain.Models.AssessmentModels;
 
-namespace TrackFinder.Domain.Models.CourseModels
+namespace TrackFinder.Models.CourseModels
 {
     public class CourseSkill
     {

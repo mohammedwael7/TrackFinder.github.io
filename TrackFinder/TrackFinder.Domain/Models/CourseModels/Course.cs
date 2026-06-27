@@ -1,7 +1,7 @@
 using TrackFinder.Domain.Models.AssessmentModels;
 using TrackFinder.Domain.Models.UserModels;
 
-namespace TrackFinder.Domain.Models.CourseModels;
+namespace TrackFinder.Models.CourseModels;
 
 public enum Level
 {
