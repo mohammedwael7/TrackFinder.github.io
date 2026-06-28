@@ -12,7 +12,7 @@ using TrackFinderDb.Models.TrackFinderDbContext;
 namespace TrackFinder.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260627160427_InitialMigration")]
+    [Migration("20260628205025_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

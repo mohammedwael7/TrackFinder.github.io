@@ -7,9 +7,8 @@ builder.Services.AddControllersWithViews();
 
 // Database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-	?? throw new ArgumentNullException($"connection string is empty");
-builder.Services.AddDbContext<AppDbContext>(options =>
-	options.UseSqlServer(connectionString));
+	?? throw new ArgumentNullException($"Invalid Connection String");
+builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
