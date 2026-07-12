@@ -1,0 +1,14 @@
+wwwroot\css\site.css
+wwwroot\favicon.ico
+wwwroot\images\track-logo.png
+wwwroot\js\site.js
+wwwroot\lib\bootstrap\LICENSE
+wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+wwwroot\lib\jquery-validation\LICENSE.md
+wwwroot\lib\jquery\LICENSE.txt
+C:\Users\MASTER\Downloads\TrackFinder.github.io-main\TrackFinder\TrackFinder\wwwroot\css\site.css
+C:\Users\MASTER\Downloads\TrackFinder.github.io-main\TrackFinder\TrackFinder\wwwroot\favicon.ico
+C:\Users\MASTER\Downloads\TrackFinder.github.io-main\TrackFinder\TrackFinder\wwwroot\js\site.js
+C:\Users\MASTER\Downloads\TrackFinder.github.io-main\TrackFinder\TrackFinder\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+C:\Users\MASTER\Downloads\TrackFinder.github.io-main\TrackFinder\TrackFinder\wwwroot\lib\jquery-validation\LICENSE.md
+C:\Users\MASTER\Downloads\TrackFinder.github.io-main\TrackFinder\TrackFinder\wwwroot\lib\jquery\LICENSE.txt
