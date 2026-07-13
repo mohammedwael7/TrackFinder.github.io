@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using TrackFinder.Models.AssessmentModels;
 using TrackFinder.Models.UserModels;
 
@@ -30,12 +31,14 @@ public class Course
 	public Guid Id { get; set; } = Guid.NewGuid();
 	public string Name { get; set; } = string.Empty;
 	public string? Description { get; set; } = string.Empty;
-	public int Price { get; set; }
+	public decimal Price { get; set; }
 	public string? ImageUrl { get; set; }
 	public Language Language { get; set; }
 	public Level Level { get; set; }
+	[Range(0, 5)]
 	public double Rating { get; set; }
 	public CourseDuration Duration { get; set; } = null!;
+	[Range(0, 100)]
 	public double? Discount { get; set; }
 
 	public Guid InstructorId { get; set; }
@@ -48,4 +51,17 @@ public class Course
 	public virtual ICollection<Enrollment>? Enrollments { get; set; }
 	public virtual ICollection<Lesson> Lessons { get; set; } = null!;
 	public virtual ICollection<CourseSkill> CourseSkills { get; set; } = null!;
+
+	public void MapFrom(Course course)
+	{
+		Name = course.Name;
+		Description = course.Description;
+		Price = course.Price;
+		ImageUrl = course.ImageUrl;
+		Language = course.Language;
+		Level = course.Level;
+		Rating = course.Rating;
+		Duration = course.Duration;
+		Discount = course.Discount;
+	}
 }

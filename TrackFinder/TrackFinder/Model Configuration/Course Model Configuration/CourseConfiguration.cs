@@ -28,6 +28,17 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
 		builder.Property(c => c.Language)
 			  .HasConversion<int>();
 
+		builder.Property(c => c.Price)
+			.IsRequired()
+			.HasColumnType("decimal(18,2)");
+
+		builder.Property(c => c.Rating)
+			.IsRequired()
+			.HasColumnType("float");
+
+		builder.Property(c => c.Discount)
+			.HasColumnType("float");
+
 		builder.Property(c => c.Level)
 			  .HasConversion<int>();
 

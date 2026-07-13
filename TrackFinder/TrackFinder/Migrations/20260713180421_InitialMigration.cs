@@ -456,7 +456,7 @@ namespace TrackFinder.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    Price = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Language = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
@@ -669,7 +669,7 @@ namespace TrackFinder.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FileName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    FileUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    FileUrl = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ContentType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LessonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
