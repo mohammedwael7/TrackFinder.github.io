@@ -1,6 +1,3 @@
 <Solution>
-  <Project Path="TrackFinder.Application/TrackFinder.Application.csproj" />
-  <Project Path="TrackFinder.Domain/TrackFinder.Domain.csproj" />
-  <Project Path="TrackFinder.Infrastructure/TrackFinder.Infrastructure.csproj" />
-  <Project Path="TrackFinder.Presentation/TrackFinder.Presentation.csproj" />
+  <Project Path="TrackFinder/TrackFinder.csproj" />
 </Solution>
