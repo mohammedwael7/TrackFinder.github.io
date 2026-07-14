@@ -130,6 +130,78 @@ namespace TrackFinder.Services.UserProfileServices
             return dto;
         }
 
+        public async Task<List<UserSearchResultDto>> SearchUsersAsync(string query, Guid currentUserId)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return new List<UserSearchResultDto>();
+
+            var users = await _db.Users
+                .Where(u => u.Id != currentUserId && u.UserName.Contains(query))
+                .Take(20)
+                .ToListAsync();
+
+            var results = new List<UserSearchResultDto>();
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                results.Add(new UserSearchResultDto
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    ProfilePictureUrl = user.ProfilePictureUrl,
+                    Role = roles.FirstOrDefault() ?? "Student"
+                });
+            }
+            return results;
+        }
+
+        public async Task<PublicProfileDto> GetPublicProfileAsync(Guid userId)
+        {
+            var user = await _db.Users
+                .Include(u => u.Student)
+                .Include(u => u.Instructor)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                throw new InvalidOperationException("User not found.");
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault() ?? "Student";
+
+            var dto = new PublicProfileDto
+            {
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Birthdate = user.Birthdate,
+                Gender = user.Gender,
+                Bio = user.Bio,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                Role = role
+            };
+
+            if (role.Equals("Student", StringComparison.OrdinalIgnoreCase))
+            {
+                dto.EducationState = user.Student?.EducationState;
+                dto.SchoolOrUnversityName = user.Student?.SchoolOrUnversityName;
+                dto.Major = user.Student?.Major;
+                dto.Minor = user.Student?.Minor;
+                dto.DegreeProgram = user.Student?.DegreeProgram;
+                dto.AcademicYear = user.Student?.AcademicYear ?? 0;
+                dto.GPA = user.Student?.GPA ?? 0;
+            }
+            else if (role.Equals("Instructor", StringComparison.OrdinalIgnoreCase))
+            {
+                dto.Title = user.Instructor?.Title;
+                dto.GithubLink = user.Instructor?.GithubLink;
+                dto.LinkedInLink = user.Instructor?.LinkedInLink;
+            }
+
+            return dto;
+        }
+
         public async Task<AuthResultDto> UpdateProfileAsync(Guid userId, string role, EditProfileDto dto, string webRootPath)
         {
             var user = await _db.Users

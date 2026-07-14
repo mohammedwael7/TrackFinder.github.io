@@ -418,6 +418,53 @@
         color: var(--text-muted);
     }
 
+    .search-bar-form {
+        display: flex;
+        align-items: center;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 999px;
+        padding: 4px 4px 4px 16px;
+        transition: var(--transition);
+    }
+
+    .search-bar-form:focus-within {
+        background: rgba(255,255,255,0.25);
+        border-color: rgba(255,255,255,0.4);
+    }
+
+    .search-bar-input {
+        background: none;
+        border: none;
+        outline: none;
+        color: white;
+        font-size: 14px;
+        font-family: inherit;
+        min-width: 180px;
+    }
+
+    .search-bar-input::placeholder {
+        color: rgba(255,255,255,0.6);
+    }
+
+    .search-bar-btn {
+        background: rgba(255,255,255,0.2);
+        border: none;
+        border-radius: 50%;
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: white;
+        transition: var(--transition);
+    }
+
+    .search-bar-btn:hover {
+        background: rgba(255,255,255,0.35);
+    }
+
     @@media (max-width: 768px) {
         .dashboard-header-banner {
             flex-direction: column;
@@ -442,8 +489,18 @@
         <div class="banner-welcome">Welcome back, @Model.User.FirstName! </div>
         <div class="banner-subtext">Let's continue building your tech skill set today.</div>
     </div>
-    <div class="role-badge">
-        @Model.Role
+    <div style="display:flex; align-items:center; gap:16px;">
+        <form asp-action="Search" asp-controller="Main" method="get" class="search-bar-form">
+            <input type="text" name="query" class="search-bar-input" placeholder="Search users by username..." autocomplete="off" />
+            <button type="submit" class="search-bar-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </button>
+        </form>
+        <div class="role-badge">
+            @Model.Role
+        </div>
     </div>
 </div>
 

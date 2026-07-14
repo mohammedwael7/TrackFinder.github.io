@@ -51,6 +51,7 @@ namespace TrackFinder
                 options.Cookie.Name = "tf_auth";
             });
 
+            // ── MemoryCache ──────────────────────────────────────────────────────────
             builder.Services.AddMemoryCache();
 
             // ── MVC ───────────────────────────────────────────────────────────────

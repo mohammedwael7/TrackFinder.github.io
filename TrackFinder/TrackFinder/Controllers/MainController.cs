@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TrackFinder.DTOs;
 using TrackFinder.Models.UserModels;
@@ -91,6 +92,43 @@ namespace TrackFinder.Controllers
 
             TempData["SuccessMessage"] = result.SuccessMessage;
             return RedirectToAction(nameof(Index));
+        }
+
+        // ── GET /Main/Search?query= ──────────────────────────────────────
+        [HttpGet]
+        public async Task<IActionResult> Search(string query)
+        {
+            var userIdString = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+                return RedirectToAction("Index", "Login");
+
+            ViewBag.Query = query;
+            var results = await _profileService.SearchUsersAsync(query ?? "", userId);
+            return View(results);
+        }
+
+        // ── GET /Main/ViewProfile/{id} ────────────────────────────────────
+        [HttpGet]
+        public async Task<IActionResult> ViewProfile(Guid id)
+        {
+            var userIdString = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var currentUserId))
+                return RedirectToAction("Index", "Login");
+
+            if (id == currentUserId)
+                return RedirectToAction("Profile");
+
+            try
+            {
+                var dto = await _profileService.GetPublicProfileAsync(id);
+                ViewBag.ProfilePictureUrl = dto.ProfilePictureUrl;
+                return View(dto);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }
