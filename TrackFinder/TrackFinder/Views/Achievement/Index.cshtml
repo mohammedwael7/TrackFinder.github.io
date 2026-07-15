@@ -4,7 +4,6 @@
 }
 
 <div style="background-color: #f8fafc; padding: 2rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh;">
-
     <!-- Top Header -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
         <div>
@@ -23,7 +22,6 @@
 
     <!-- Row: Certificates Container -->
     <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 3rem;">
-
         <!-- Featured Certificate -->
         @if (Model.FeaturedCertificate != null)
         {
@@ -65,7 +63,7 @@
             </div>
         }
 
-        <!-- Next Milestone Card (تم ربط علامة الزائد بصفحة شهادات الطالب الحالي) -->
+        <!-- Next Milestone Card -->
         @if (Model.NextMilestoneCertificate != null)
         {
             <a asp-action="MyCertificates" asp-route-studentId="@Model.StudentCertificates.FirstOrDefault()?.StudentId" style="text-decoration: none; color: inherit; display: block;">
@@ -85,11 +83,15 @@
                 </div>
             </a>
         }
-
     </div>
 
-    <!-- Section: Mastery Badges -->
-    <h5 id="badges-section" style="color: #1a3a5c; font-weight: 700; margin: 0 0 0.25rem 0; font-size: 1.1rem; scroll-margin-top: 2rem;">Mastery Badges</h5>
+    <!-- Section: Mastery Badges (تم تعديل التوجيه هنا لـ Badge بالمفرد أوتوماتيك) -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+        <h5 id="badges-section" style="color: #1a3a5c; font-weight: 700; margin: 0; font-size: 1.1rem; scroll-margin-top: 2rem;">Mastery Badges</h5>
+        <a asp-action="Badge" style="color: #2a7fa5; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;">
+            View Badges Guide <i class="bi bi-arrow-right-short" style="font-size: 1.1rem;"></i>
+        </a>
+    </div>
     <p style="color: #7a8fa6; font-size: 0.83rem; margin: 0; margin-bottom: 1.5rem;">Earn unique digital insignia as you progress through Track Finder.</p>
 
     <!-- Badges Wrapper Flex -->
@@ -111,15 +113,9 @@
         }
     </div>
 
-    <!-- Bottom Peak Banner (يحتوي الآن على زري الشهادات والبادجز معاً) -->
+    <!-- Bottom Peak Banner -->
     <div style="background: linear-gradient(135deg, #2c5282 0%, #3a8fc4 100%); border-radius: 16px; padding: 2rem; position: relative; overflow: hidden; box-shadow: 0 10px 25px rgba(44,82,130,0.15);">
         <div style="position: absolute; right: -40px; bottom: -40px; width: 220px; height: 220px; background: rgba(255,255,255,0.06); border-radius: 50%; display: flex; align-items: center; justify-content: center; pointer-events: none;">
             <i class="bi bi-star-fill" style="font-size: 7rem; color: rgba(255,255,255,0.03);"></i>
         </div>
-
         <h5 style="color: white; font-weight: 700; margin: 0 0 0.5rem 0; font-size: 1.25rem;">Quick Access Profile</h5>
-        <p style="color: rgba(255,255,255,0.9); font-size: 0.88rem; margin: 0; margin-bottom: 1.5rem; max-width: 500px;">
-            View your collected technical badges and official verified certificates directly.
-        </p>
-
-        <div style="display: flex; gap: 0.75rem; position: relative; z-index: 2;">
