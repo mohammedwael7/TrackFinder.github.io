@@ -1,0 +1,51 @@
+﻿@model List<TrackFinder.Models.AchievementModels.StudentCertificate>
+@{
+    ViewData["Title"] = "My Certificates";
+}
+
+<div style="background-color: #f8fafc; padding: 2rem; font-family: sans-serif; min-height: 100vh;">
+    <div style="max-width: 1100px; margin: 0 auto;">
+
+        <!-- Header -->
+        <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <a asp-action="Index" style="color: #2a7fa5; font-size: 0.88rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; margin-bottom: 0.5rem;"><i class="bi bi-arrow-left"></i> Back to Achievements</a>
+                <h5 style="color: #1a3a5c; font-weight: 700; margin: 0; font-size: 1.4rem;">My Earned Certificates</h5>
+                <p style="color: #7a8fa6; font-size: 0.88rem; margin: 0; margin-top: 0.25rem;">A complete list of your verified technical mastery achievements.</p>
+            </div>
+        </div>
+
+        <!-- Row Grid for Student Certificates Only -->
+        <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
+            @if (Model == null || !Model.Any())
+            {
+                <div style="width: 100%; text-align: center; padding: 3rem; background: #ffffff; border-radius: 16px; color: #7a8fa6; border: 1px solid #e2e8f0;">
+                    <i class="bi bi-journal-x" style="font-size: 3rem; color: #cbd5e1;"></i>
+                    <p style="margin-top: 1rem; font-weight: 600;">You haven't earned any certificates yet. Keep learning!</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var cert in Model)
+                {
+                    <div style="width: 280px; background: #ffffff; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.01); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #f0f4f8;">
+                        <div>
+                            <div style="width: 42px; height: 42px; background: #2c5282; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; box-shadow: 0 4px 10px rgba(44,82,130,0.1);">
+                                <i class="bi bi-file-earmark-text" style="color: white; font-size: 1.1rem;"></i>
+                            </div>
+                            <h6 style="color: #1a3a5c; font-weight: 700; margin: 0 0 0.5rem 0; font-size: 1rem;">@cert.Certificate?.Title</h6>
+                            <p style="color: #7a8fa6; font-size: 0.83rem; margin: 0; line-height: 1.4; margin-bottom: 1.5rem;">@cert.Certificate?.Description</p>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid #f8fafc; padding-top: 1rem;">
+                            <a href="@cert.Certificate?.CertificateUrl" target="_blank" style="color: #2a7fa5; font-size: 0.83rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                <i class="bi bi-file-earmark"></i> View PDF
+                            </a>
+                            <small style="color: #94a3b8; font-size: 0.75rem;">@cert.IssuedAt.ToString("dd MMM yyyy")</small>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,36 @@
+@model TrackStackVM
+@{
+    ViewData["Title"] = "Stack Details";
+}
+
+<section class="info-card rounded-5 p-4 p-lg-5 mb-4">
+    <div class="section-kicker mb-2">Stack details</div>
+    <h1 class="h3 text-brand-ink mb-2">@Model.StackName</h1>
+    <p class="text-brand-muted mb-0">@Model.StackDescription</p>
+</section>
+
+<section class="info-card rounded-4 p-4 p-lg-5">
+    <div class="section-kicker mb-3">Tools</div>
+    <h2 class="h4 text-brand-ink mb-4">Related tools and notes</h2>
+    <div class="row g-3">
+        @foreach (var tool in Model.Tools)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-details-card card h-100 border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <h3 class="h6 text-brand-ink mb-2">@tool</h3>
+                        <p class="text-brand-muted small mb-0">
+                            TODO: the current view model exposes the tool name only. Add tool descriptions when the backend provides them.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    @if (!Model.Tools.Any())
+    {
+        <div class="alert alert-brand mb-0">
+            No tools are currently exposed for this stack.
+        </div>
+    }
+</section>

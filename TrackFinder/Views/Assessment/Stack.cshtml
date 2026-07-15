@@ -1,0 +1,135 @@
+@model TrackFinder.ViewModels.Assessment_ViewModels.TrackStackVM
+@inject TrackFinder.Context.AppDbContext DbContext
+@using Microsoft.EntityFrameworkCore
+
+@{
+    ViewData["Title"] = "Stack Details";
+
+    var stackName = Model?.StackName;
+    var stackDescription = Model?.StackDescription;
+
+    var toolsList = new List<TrackFinder.Models.AssessmentModels.Tools>();
+
+    if (Model == null)
+    {
+        var stackIdString = ViewContext.RouteData.Values["stackId"]?.ToString()
+                            ?? ViewContext.RouteData.Values["id"]?.ToString()
+                            ?? ViewContext.HttpContext.Request.Query["stackId"].ToString();
+
+        if (int.TryParse(stackIdString, out var stackId))
+        {
+            var dbStack = await DbContext.TrackStacks
+                .Include(s => s.RelatedStackTools)
+                    .ThenInclude(st => st.RelatedTool)
+                .FirstOrDefaultAsync(s => s.Id == stackId);
+
+            if (dbStack != null)
+            {
+                stackName = dbStack.StackName;
+                stackDescription = dbStack.StackDescription;
+                toolsList = dbStack.RelatedStackTools?
+                    .Select(st => st.RelatedTool)
+                    .Where(t => t != null)
+                    .ToList() ?? new List<TrackFinder.Models.AssessmentModels.Tools>();
+            }
+        }
+    }
+    else
+    {
+        if (Model.Tools != null && Model.Tools.Any())
+        {
+            var toolNames = Model.Tools
+                .Select(x => x.Name)
+                .ToList();
+
+            toolsList = await DbContext.Tools
+                .Where(t => toolNames.Contains(t.Name))
+                .ToListAsync();
+
+            foreach (var tool in Model.Tools)
+            {
+                if (!toolsList.Any(t => t.Name.Equals(tool.Name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    toolsList.Add(new TrackFinder.Models.AssessmentModels.Tools
+                    {
+                        Name = tool.Name,
+                        Description = string.IsNullOrWhiteSpace(tool.Description)
+                            ? "No description available."
+                            : tool.Description
+                    });
+                }
+            }
+        }
+    }
+}
+
+<div class="py-4">
+    @if (string.IsNullOrEmpty(stackName))
+    {
+        <div class="alert alert-danger text-center rounded-4 py-4">
+            <h4 class="alert-heading fw-bold mb-2">Stack Not Found</h4>
+            <p class="mb-0">We couldn't retrieve the stack details because the specified stack could not be found or no stack ID was provided.</p>
+        </div>
+    }
+    else
+    {
+        <div class="mb-4">
+            <button onclick="history.back();" class="btn btn-link text-decoration-none text-brand-muted p-0">
+                <i class="bi bi-arrow-left-circle me-1"></i> Go Back
+            </button>
+        </div>
+
+        <div class="info-card rounded-4 p-4 p-md-5 mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-9">
+                    <span class="tf-badge-soft badge fw-bold px-3 py-2 mb-2">Technology Stack</span>
+                    <h1 class="h2 fw-bold text-brand-ink mb-2">@stackName</h1>
+                    <p class="text-brand-muted mb-0">@stackDescription</p>
+                </div>
+                <div class="col-md-3 text-md-end mt-3 mt-md-0">
+                    <span class="step-chip">
+                        Total Tools: @toolsList.Count
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-card rounded-4">
+            <div class="p-4">
+                @if (toolsList == null || !toolsList.Any())
+                {
+                    <div class="alert alert-brand text-center rounded-3 mb-0 py-4">
+                        <i class="bi bi-info-circle fs-3 d-block mb-2 text-brand-ink"></i>
+                        No tools are currently registered for this stack.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table tf-table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 25%;">Tool Name</th>
+                                    <th scope="col" style="width: 75%;">Description / Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var tool in toolsList)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="tool-badge-table">@tool.Name</span>
+                                        </td>
+                                        <td class="text-brand-muted">
+                                            @tool.Description
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

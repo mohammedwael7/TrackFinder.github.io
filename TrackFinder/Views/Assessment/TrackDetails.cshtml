@@ -1,0 +1,59 @@
+@model TrackDetailsVM
+@{
+    ViewData["Title"] = "Track Details";
+}
+
+<section class="info-card rounded-5 p-4 p-lg-5 mb-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
+        <div>
+            <div class="section-kicker mb-2">Track details</div>
+            <h1 class="h3 text-brand-ink mb-2">@Model.TrackName</h1>
+            <p class="text-brand-muted mb-0">@Model.TrackDescription</p>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.RoadMapUrl))
+        {
+            <a class="btn btn-brand rounded-pill px-4" href="@Model.RoadMapUrl" target="_blank" rel="noopener noreferrer">Open roadmap</a>
+        }
+    </div>
+</section>
+
+<section class="row g-4">
+    <div class="col-lg-6">
+        <div class="info-card rounded-4 p-4 p-lg-5 h-100">
+            <div class="section-kicker mb-3">Skills</div>
+            <h2 class="h4 text-brand-ink mb-4">Required and gained skills</h2>
+            <div class="row g-3">
+                @foreach (var skill in Model.GainedSkills)
+                {
+                    <div class="col-md-6">
+                        <partial name="_SkillCard" model="skill" />
+                    </div>
+                }
+            </div>
+            @if (!Model.GainedSkills.Any())
+            {
+                <div class="alert alert-brand mb-0">
+                    No skills are currently exposed for this track.
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="info-card rounded-4 p-4 p-lg-5 h-100">
+            <div class="section-kicker mb-3">Roadmap</div>
+            <h2 class="h4 text-brand-ink mb-4">Related stacks</h2>
+            <div class="d-grid gap-3">
+                @foreach (var stack in Model.Stacks)
+                {
+                    <partial name="_StackCard" model="stack" />
+                }
+            </div>
+            @if (!Model.Stacks.Any())
+            {
+                <div class="alert alert-brand mb-0">
+                    No stacks are currently exposed for this track.
+                </div>
+            }
+        </div>
+    </div>
+</section>

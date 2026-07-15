@@ -1,0 +1,85 @@
+@model List<TrackFinder.ViewModels.Assessment_ViewModels.AssessmentHistoryItemVM>
+
+@{
+    ViewData["Title"] = "Assessment History";
+}
+
+<style>
+    .history-header {
+        border-radius: 20px;
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+    }
+
+    .history-table-card {
+        border-radius: 20px;
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+        overflow: hidden;
+    }
+
+    .table-container {
+        padding: 1.5rem;
+    }
+</style>
+
+<div class="py-4">
+    <div class="history-header p-4 p-md-5 mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-9">
+                <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-2 mb-2">My Profile</span>
+                <h1 class="h2 fw-bold text-dark mb-2">Assessment History</h1>
+                <p class="text-secondary mb-0">Browse through your previous career assessments, check matching percentages, and review detailed recommendations.</p>
+            </div>
+            <div class="col-md-3 text-md-end mt-3 mt-md-0">
+                <a asp-action="Index" class="btn btn-brand rounded-pill px-4">
+                    Take New Assessment
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="history-table-card card border-0">
+        <div class="table-container">
+            @if (Model == null || !Model.Any())
+            {
+                <div class="alert alert-info text-center rounded-3 mb-0 py-4">
+                    <i class="bi bi-clock-history fs-3 d-block mb-2 text-primary"></i>
+                    No assessment history available yet. Start your first assessment to see results here!
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table tf-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width: 70%;">Created At</th>
+                                <th scope="col" style="width: 30%;" class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="fw-medium text-dark">
+                                        @item.CreatedAt.ToString("dd MMM yyyy")
+                                        <div class="small text-secondary fw-normal">@item.CreatedAt.ToString("HH:mm")</div>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <a href="/Assessment/Result/@item.AssessmentResultId" class="btn btn-brand-outline btn-sm rounded-pill px-3 py-1.5">
+                                            View Result
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

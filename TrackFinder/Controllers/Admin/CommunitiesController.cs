@@ -1,0 +1,155 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using TrackFinder.Models.CommunityModels;
+using TrackFinder.Context;
+using TrackFinder.ViewModels.Communities;
+
+namespace TrackFinder.Controllers.Admin;
+
+public class CommunitiesController : Controller
+{
+    private readonly AppDbContext _context;
+
+    public CommunitiesController(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var items = await _context.Communities
+    .Include(c => c.Admin)
+    .Include(c => c.JoinedMembers)
+    .ToListAsync();
+        var vm = items.Select(c => new CommunityListVM
+        {
+            Id = c.Id,
+            Name = c.Name,
+            AdminName = c.Admin != null
+    ? c.Admin.User.FirstName + " " + c.Admin.User.LastName
+    : null,
+            MemberCount = c.JoinedMembers?.Count() ?? 0
+        }).ToList();
+        return View("~/Views/Admin/Communities/Index.cshtml", vm);
+    }
+
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var item = await _context.Communities
+    .Include(c => c.Admin)
+    .Include(c => c.JoinedMembers)
+    .FirstOrDefaultAsync(c => c.Id == id);
+        if (item == null) return NotFound();
+        var vm = new CommunityDetailsVM
+        {
+            Id = item.Id,
+            Name = item.Name,
+            Description = item.Description,
+            AdminName = item.Admin != null
+    ? item.Admin.User.FirstName + " " + item.Admin.User.LastName
+    : null,
+            MemberCount = item.JoinedMembers?.Count() ?? 0
+        };
+        return View("~/Views/Admin/Communities/Details.cshtml", vm);
+    }
+
+    public IActionResult Create()
+    {
+        ViewBag.Instructors = new SelectList(_context.Instructors.Include(i => i.User).Select(i => new { UserId = i.UserId, Name = i.User.FirstName + " " + i.User.LastName }), "UserId", "Name");
+        return View("~/Views/Admin/Communities/Create.cshtml", new CreateCommunityVM());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateCommunityVM model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View("~/Views/Admin/Communities/Create.cshtml", model);
+        }
+
+        var community = new Community
+        {
+            Id = Guid.NewGuid(),
+            Name = model.Name,
+            Description = model.Description,
+
+            
+            AdminId = Guid.Parse(HttpContext.Session.GetString("UserId")!)
+
+         
+        };
+
+        _context.Communities.Add(community);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        var item = await _context.Communities.FindAsync(id);
+
+        if (item == null)
+            return NotFound();
+
+        var vm = new EditCommunityVM
+        {
+            Id = item.Id,
+            Name = item.Name,
+            Description = item.Description
+        };
+
+        return View("~/Views/Admin/Communities/Edit.cshtml", vm);
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(Guid id, EditCommunityVM model)
+    {
+        if (id != model.Id)
+            return BadRequest();
+
+        if (!ModelState.IsValid)
+        {
+            return View("~/Views/Admin/Communities/Edit.cshtml", model);
+        }
+
+        var item = await _context.Communities.FindAsync(id);
+
+        if (item == null)
+            return NotFound();
+
+        item.Name = model.Name;
+        item.Description = model.Description;
+
+        _context.Communities.Update(item);
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var item = await _context.Communities.FindAsync(id);
+        if (item == null) return NotFound();
+        var vm = new CommunityDetailsVM
+        {
+            Id = item.Id,
+            Name = item.Name,
+            AdminName = null,
+            MemberCount = item.JoinedMembers?.Count() ?? 0
+        };
+        return View("~/Views/Admin/Communities/Delete.cshtml", vm);
+    }
+
+    [HttpPost, ActionName("DeleteConfirmed")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(Guid id)
+    {
+        var item = await _context.Communities.FindAsync(id);
+        if (item == null) return NotFound();
+        _context.Communities.Remove(item);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+}

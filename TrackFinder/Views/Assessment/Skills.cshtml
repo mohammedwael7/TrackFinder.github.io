@@ -1,0 +1,70 @@
+@model TrackFinder.ViewModels.Assessment_ViewModels.TrackDetailsVM
+
+@{
+    ViewData["Title"] = "Track Skills";
+}
+
+<div class="py-4">
+    @if (Model == null)
+    {
+        <div class="alert alert-danger text-center rounded-4 py-4">
+            <h4 class="alert-heading fw-bold mb-2">Track Not Found</h4>
+            <p class="mb-0">We couldn't retrieve the skills catalogue for this track.</p>
+        </div>
+    }
+    else
+    {
+        <div class="info-card rounded-4 p-4 p-md-5 mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-9">
+                    <span class="tf-badge-soft badge fw-bold px-3 py-2 mb-2">Skills Catalogue</span>
+                    <h1 class="h2 fw-bold text-brand-ink mb-2">@Model.TrackName Skills</h1>
+                    <p class="text-brand-muted mb-0">Here are the essential skills you will gain and develop in the @Model.TrackName track.</p>
+                </div>
+                <div class="col-md-3 text-md-end mt-3 mt-md-0">
+                    <span class="step-chip">
+                        Total Skills: @(Model.GainedSkills?.Count ?? 0)
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-card rounded-4">
+            <div class="p-4">
+                @if (Model.GainedSkills == null || !Model.GainedSkills.Any())
+                {
+                    <div class="alert alert-brand text-center rounded-3 mb-0 py-4">
+                        <i class="bi bi-info-circle fs-3 d-block mb-2 text-brand-ink"></i>
+                        No skills have been registered for this track yet.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table tf-table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 25%;">Skill Name</th>
+                                    <th scope="col" style="width: 75%;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var skill in Model.GainedSkills)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="skill-badge-table">@skill.Name</span>
+                                        </td>
+                                        <td class="text-brand-muted">
+                                            @skill.Description
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

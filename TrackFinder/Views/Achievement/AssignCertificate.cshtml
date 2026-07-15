@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Assign Certificate";
+}
+
+<div style="background-color: #f8fafc; padding: 2rem 0; font-family: sans-serif;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 0 15px;">
+
+        <div style="margin-bottom: 1.5rem;">
+            <h5 style="color: #1a3a5c; font-weight: 700; margin-bottom: 0.25rem; font-size: 1.35rem;">Assign Certificate</h5>
+            <p style="color: #7a8fa6; font-size: 0.85rem; margin: 0;">Formally issue a certificate milestone to a successful student.</p>
+        </div>
+
+        <div style="background: #ffffff; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: none;">
+            <form asp-action="AssignCertificate" method="post">
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: block; color: #1a3a5c; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; margin-bottom: 0.5rem;">SELECT STUDENT</label>
+                    <select name="studentId" style="width: 100%; border-radius: 10px; border: 1.5px solid #dde3ea; font-size: 0.88rem; padding: 0.7rem 1rem; background-color: #fcfdfe; box-sizing: border-box; color: #1a3a5c; height: 45px;">
+                        @foreach (var student in ViewBag.Students)
+                        {
+                            <option value="@student.UserId">@student.User?.Username</option>
+                        }
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: block; color: #1a3a5c; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; margin-bottom: 0.5rem;">SELECT CERTIFICATE</label>
+                    <select name="certificateId" style="width: 100%; border-radius: 10px; border: 1.5px solid #dde3ea; font-size: 0.88rem; padding: 0.7rem 1rem; background-color: #fcfdfe; box-sizing: border-box; color: #1a3a5c; height: 45px;">
+                        @foreach (var cert in ViewBag.Certificates)
+                        {
+                            <option value="@cert.Id">@cert.Title</option>
+                        }
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 1.75rem;">
+                    <label style="display: block; color: #1a3a5c; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; margin-bottom: 0.5rem;">SELECT RELATED COURSE</label>
+                    <select name="courseId" style="width: 100%; border-radius: 10px; border: 1.5px solid #dde3ea; font-size: 0.88rem; padding: 0.7rem 1rem; background-color: #fcfdfe; box-sizing: border-box; color: #1a3a5c; height: 45px;">
+                        @foreach (var course in ViewBag.Courses)
+                        {
+                            <option value="@course.Id">@course.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem;">
+                    <button type="submit" style="background: linear-gradient(135deg, #2c5282 0%, #3a8fc4 100%); color: white; border: none; border-radius: 10px; font-weight: 600; padding: 0.75rem 1.75rem; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 12px rgba(44,82,130,0.15);">Assign Certificate</button>
+                    <a asp-action="Certificates" style="background: #f0f4f8; color: #1a3a5c; border-radius: 10px; font-weight: 600; padding: 0.75rem 1.75rem; font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

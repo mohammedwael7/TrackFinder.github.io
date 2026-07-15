@@ -1,0 +1,198 @@
+﻿@model List<TrackFinder.ViewModels.Assessment_ViewModels.QuestionOnAssessmentVM>
+@{
+    ViewData["Title"] = "Career Assessment";
+}
+
+<div class="assessment-container py-4" style="max-width: 800px; margin: 0 auto;">
+    <div class="mb-4 text-center">
+        <h1 class="h2 fw-bold text-brand-ink mb-2">TrackFinder Assessment</h1>
+        <p class="text-brand-muted mb-4">Answer these simple questions to find your perfect technology track match.</p>
+
+        <div class="progress tf-progress mb-2">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="small text-brand-muted fw-semibold" id="questionNumberLabel">Question 1 of @Model.Count</span>
+            <span class="small text-brand-ink fw-bold" id="progressPercentageLabel">20% Completed</span>
+        </div>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-brand text-center rounded-4 py-4">
+            <h4 class="alert-heading fw-bold mb-2">No Questions Available</h4>
+            <p class="mb-0 text-brand-muted">The database doesn't seem to contain any questions for this assessment right now.</p>
+        </div>
+    }
+    else
+    {
+        <form id="assessmentForm" asp-controller="Assessment" asp-action="Take" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 mb-4"></div>
+
+            <div class="question-wrapper">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var question = Model[i];
+                    <div class="question-step step-fade @(i == 0 ? "" : "d-none")" data-step-index="@i">
+                        <input type="hidden" name="Answers[@i].QuestionId" value="@question.Id" />
+
+                        <div class="question-card card p-4 p-md-5">
+                            <div class="card-body p-0">
+                                <span class="badge tf-badge-soft px-3 py-2 mb-3">Question @(i + 1) of @Model.Count</span>
+                                <h2 class="h3 fw-bold text-brand-ink mb-4">@question.QuestionText</h2>
+
+                                <div class="d-grid gap-3">
+                                    <div class="choice-container">
+                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_5" value="5" />
+                                        <label class="assessment-option" for="q_@(question.Id)_opt_5">
+                                            <div class="radio-circle"></div>
+                                            <span class="assessment-option-caption">Very Agree</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="choice-container">
+                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_4" value="4" />
+                                        <label class="assessment-option" for="q_@(question.Id)_opt_4">
+                                            <div class="radio-circle"></div>
+                                            <span class="assessment-option-caption">Agree</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="choice-container">
+                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_3" value="3" />
+                                        <label class="assessment-option" for="q_@(question.Id)_opt_3">
+                                            <div class="radio-circle"></div>
+                                            <span class="assessment-option-caption">Not Sure</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="choice-container">
+                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_2" value="2" />
+                                        <label class="assessment-option" for="q_@(question.Id)_opt_2">
+                                            <div class="radio-circle"></div>
+                                            <span class="assessment-option-caption">Disagree</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="choice-container">
+                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_1" value="1" />
+                                        <label class="assessment-option" for="q_@(question.Id)_opt_1">
+                                            <div class="radio-circle"></div>
+                                            <span class="assessment-option-caption">Very Disagree</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="navigation-bar d-flex justify-content-between align-items-center border-top mt-4 pt-4" style="border-color: var(--tf-border) !important;">
+                <button type="button" id="prevBtn" class="btn btn-brand-outline rounded-pill px-4 py-2" disabled>
+                    <i class="bi bi-chevron-left me-1"></i> Previous
+                </button>
+
+                <button type="button" id="nextBtn" class="btn btn-brand rounded-pill px-4 py-2" disabled>
+                    Next <i class="bi bi-chevron-right ms-1"></i>
+                </button>
+
+                <button type="submit" id="submitBtn" class="btn btn-success-brand rounded-pill px-5 py-2 d-none" disabled>
+                    Submit Assessment <i class="bi bi-check-circle ms-1"></i>
+                </button>
+            </div>
+        </form>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let currentStep = 0;
+            const steps = $(".question-step");
+            const totalSteps = steps.length;
+
+            function updateUI() {
+                steps.addClass("d-none");
+                const activeStep = $(steps[currentStep]);
+                activeStep.removeClass("d-none");
+
+                const progressPercentage = Math.round(((currentStep + 1) / totalSteps) * 100);
+                $("#progressBar").css("width", progressPercentage + "%").attr("aria-valuenow", progressPercentage);
+                $("#progressPercentageLabel").text(progressPercentage + "% Completed");
+                $("#questionNumberLabel").text(`Question ${currentStep + 1} of ${totalSteps}`);
+
+                $("#prevBtn").prop("disabled", currentStep === 0);
+
+                const hasSelectedOption = activeStep.find(".choice-radio:checked").length > 0;
+
+                if (currentStep === totalSteps - 1) {
+                    $("#nextBtn").addClass("d-none");
+                    $("#submitBtn").removeClass("d-none").prop("disabled", !hasSelectedOption);
+                } else {
+                    $("#nextBtn").removeClass("d-none").prop("disabled", !hasSelectedOption);
+                    $("#submitBtn").addClass("d-none");
+                }
+            }
+
+            $(".choice-radio").on("change", function () {
+                if (currentStep === totalSteps - 1) {
+                    $("#submitBtn").prop("disabled", false);
+                } else {
+                    $("#nextBtn").prop("disabled", false);
+                }
+            });
+
+            $("#nextBtn").on("click", function () {
+                if (currentStep < totalSteps - 1) {
+                    const hasSelection = $(steps[currentStep]).find(".choice-radio:checked").length > 0;
+                    if (hasSelection) {
+                        currentStep++;
+                        updateUI();
+                    }
+                }
+            });
+
+            $("#prevBtn").on("click", function () {
+                if (currentStep > 0) {
+                    currentStep--;
+                    updateUI();
+                }
+            });
+
+            let isSubmitting = false;
+
+            $("#assessmentForm").on("submit", function (e) {
+                if (isSubmitting) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                let allChecked = true;
+                steps.each(function (index, el) {
+                    if ($(el).find(".choice-radio:checked").length === 0) {
+                        allChecked = false;
+                        return false;
+                    }
+                });
+
+                if (!allChecked) {
+                    e.preventDefault();
+                    alert("Please answer all questions before submitting.");
+                    return false;
+                }
+
+                isSubmitting = true;
+                $("#submitBtn").prop("disabled", true).html(
+                    '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Submitting...'
+                );
+                $("#prevBtn").prop("disabled", true);
+            });
+
+            if (totalSteps > 0) {
+                updateUI();
+            }
+        });
+    </script>
+}

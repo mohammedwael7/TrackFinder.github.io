@@ -1,0 +1,118 @@
+@model TrackFinder.ViewModels.Assessment_ViewModels.AssessmentResultVM
+
+@{
+    ViewData["Title"] = "Assessment Results";
+    var topTracks = Model.Tracks?.Take(3).ToList() ?? new List<TrackFinder.ViewModels.Assessment_ViewModels.AssessmentResultTracksVM>();
+}
+
+<div class="py-4">
+    <div class="result-hero p-4 p-md-5 mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-white text-brand-ink fw-bold px-3 py-2 mb-3">Assessment Complete</span>
+                <h1 class="h2 fw-bold text-white mb-2">Your Career Track Match Results</h1>
+                <p class="mb-0 text-white-50">We analyzed your responses and matched you against top engineering roles. Here are your top 3 recommended paths.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                <div class="text-white-50 small mb-1">Assessment Date</div>
+                <div class="fs-5 fw-bold text-white">@Model.at.ToString("dd MMM yyyy, HH:mm")</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="h4 fw-bold text-brand-ink mb-4"><i class="bi bi-award text-brand-ink me-2"></i> Top 3 Recommended Tracks</h2>
+
+    @if (!topTracks.Any())
+    {
+        <div class="alert alert-brand text-center rounded-4 py-4">
+            <h4 class="alert-heading fw-bold mb-2">No Matches Found</h4>
+            <p class="mb-0 text-brand-muted">We couldn't generate track recommendations. Please try retaking the assessment.</p>
+            <a asp-action="Index" class="btn btn-brand rounded-pill px-4 mt-3">Take Assessment</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4 mb-5 align-items-start">
+            @for (int i = 0; i < topTracks.Count; i++)
+            {
+                var track = topTracks[i];
+                var collapseId = $"collapse_stacks_{track.TrackId}";
+
+                <div class="col-lg-4">
+                    <div class="recommendation-card card h-100 border-0">
+                        <div class="card-body p-4 flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                <span class="step-chip">Rank #@(i + 1)</span>
+                                <span class="score-pill">@track.SimilarityScore%</span>
+                            </div>
+
+                            <h3 class="h4 fw-bold text-brand-ink mb-2">@track.TrackName</h3>
+
+                            <div class="mb-3">
+                                <div class="progress tf-progress">
+                                    <div class="progress-bar" role="progressbar" style="width: @track.SimilarityScore%;" aria-valuenow="@track.SimilarityScore" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(track.AverageSalary))
+                            {
+                                <div class="mb-3">
+                                    <span class="salary-badge">
+                                        <i class="bi bi-cash-stack"></i>
+                                        Salary: @track.AverageSalary
+                                    </span>
+                                </div>
+                            }
+
+                            <p class="text-brand-muted small mb-4">@track.TrackDescription</p>
+
+                            <div class="collapse mt-3 mb-2" id="@collapseId">
+                                <h5 class="small fw-bold text-brand-ink mb-3">Tech Stacks (Click for Details)</h5>
+                                @if (track.Stacks != null && track.Stacks.Any())
+                                {
+                                    <div class="row row-cols-1 g-2">
+                                        @foreach (var stack in track.Stacks)
+                                        {
+                                            <div class="col">
+                                                <a href="/Assessment/Stack/@stack.Id" class="stack-chip">
+                                                    @stack.StackName
+                                                </a>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="small text-brand-muted fst-italic mb-0">No stacks available for this track.</p>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="card-footer-buttons d-flex flex-wrap gap-2">
+                            <a href="/Assessment/Skills/@track.TrackId" target="_blank" class="btn btn-brand-outline btn-sm rounded-pill flex-grow-1 py-2">
+                                <i class="bi bi-award me-1"></i> Skills
+                            </a>
+
+                            @if (!string.IsNullOrWhiteSpace(track.RoadMapUrl))
+                            {
+                                <a href="@track.RoadMapUrl" target="_blank" rel="noopener noreferrer" class="btn btn-brand-outline btn-sm rounded-pill flex-grow-1 py-2">
+                                    <i class="bi bi-map me-1"></i> Roadmap
+                                </a>
+                            }
+
+                            <button type="button" class="btn btn-brand btn-sm rounded-pill flex-grow-1 py-2" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                                <i class="bi bi-layers me-1"></i> Stacks
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-action="History" class="btn btn-brand-outline rounded-pill px-5 py-2">
+                <i class="bi bi-clock-history me-1"></i> View Assessment History
+            </a>
+        </div>
+    }
+</div>
