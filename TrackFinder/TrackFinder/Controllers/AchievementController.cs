@@ -15,19 +15,18 @@ namespace TrackFinder.Controllers
             _context = context;
         }
 
-        // صفحة الطالب المصلحة والتفاعلية 100%
+        // صفحة الطالب المصلحة والتفاعلية 100% 
         public async Task<IActionResult> Index(Guid studentId)
         {
             try
             {
-                // حماية وتسهيل للتست: لو الـ ID جاي فاضي، السيرفر هيجبر الصفحة تقرأ الطالب اللي منحتله البادج في السيكوال عشان تنور فوراً
+                // حماية وتسهيل للتست: لو الـ ID جاي فاضي، السيرفر هيجبر الصفحة تقرأ الطالب اللي منحتله البادج في السيكوال عشان تنور فوراً 
                 if (studentId == Guid.Empty)
                 {
                     studentId = Guid.Parse("11111111-1111-1111-1111-111111111111");
                 }
 
                 var viewModel = new AchievementViewModel();
-
                 viewModel.StudentCertificates = await _context.StudentCertificates
                     .Include(sc => sc.Certificate)
                     .Include(sc => sc.Course)
@@ -44,7 +43,7 @@ namespace TrackFinder.Controllers
                     .Where(ub => ub.UserId == studentId && ub.IsEarned)
                     .ToListAsync();
 
-                // سطر مبسط للميلستون لمنع أي تهنيج أو تعليق في السيرفر
+                // سطر مبسط للميلستون لمنع أي تهنيج أو تعليق في السيرفر 
                 viewModel.NextMilestoneCertificate = await _context.Certificates.FirstOrDefaultAsync();
 
                 return View(viewModel);
@@ -55,7 +54,38 @@ namespace TrackFinder.Controllers
             }
         }
 
-        // ===== صفحة عرض شهادات الطالب الحالي فقط (آمنة تماماً ومصلحة) =====
+        // ===== صفحة عرض شروط واستكشاف البادجز الخاصة بالطالب الحالي فقط (مفرغة وآمنة) =====
+        public async Task<IActionResult> Badge(Guid studentId)
+        {
+            try
+            {
+                // نفس آلية التست لضمان قراءة داتا الطالب أوتوماتيك دون مشاكل
+                if (studentId == Guid.Empty)
+                {
+                    studentId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+                }
+
+                var viewModel = new AchievementViewModel();
+
+                // جلب كل البادجز المتاحة كدليل
+                viewModel.AllBadges = await _context.Badges.ToListAsync();
+
+                // فحص الشارات المكتسبة للطالب الحالي لتنور أوتوماتيك
+                viewModel.EarnedBadges = await _context.UserBadges
+                    .Include(ub => ub.Badge)
+                    .Where(ub => ub.UserId == studentId && ub.IsEarned)
+                    .ToListAsync();
+
+                // التوجيه لصفحة الفيو المفردة النظيفة
+                return View("Badge", viewModel);
+            }
+            catch (Exception ex)
+            {
+                return Content("Error: " + ex.Message);
+            }
+        }
+
+        // ===== صفحة عرض شهادات الطالب الحالي فقط (آمنة تماماً ومصلحة) ===== 
         public async Task<IActionResult> MyCertificates(Guid studentId)
         {
             if (studentId != Guid.Empty)
@@ -64,7 +94,6 @@ namespace TrackFinder.Controllers
                     .Include(sc => sc.Certificate)
                     .Where(sc => sc.StudentId == studentId)
                     .ToListAsync();
-
                 return View(myCerts);
             }
             else
@@ -74,8 +103,7 @@ namespace TrackFinder.Controllers
             }
         }
 
-        // ===== BADGES =====
-
+        // ===== BADGES ADMIN PANEL ===== 
         public async Task<IActionResult> Badges()
         {
             var badges = await _context.Badges.ToListAsync();
@@ -130,8 +158,7 @@ namespace TrackFinder.Controllers
             return RedirectToAction("Badges");
         }
 
-        // ===== CERTIFICATES =====
-
+        // ===== CERTIFICATES ADMIN PANEL ===== 
         public async Task<IActionResult> Certificates()
         {
             var certificates = await _context.Certificates.ToListAsync();
@@ -186,8 +213,7 @@ namespace TrackFinder.Controllers
             return RedirectToAction("Certificates");
         }
 
-        // ===== إعطاء Badge لـ User =====
-
+        // ===== إعطاء Badge لـ User ===== 
         public async Task<IActionResult> AssignBadge()
         {
             ViewBag.Badges = await _context.Badges.ToListAsync();
@@ -200,7 +226,6 @@ namespace TrackFinder.Controllers
         {
             var exists = await _context.UserBadges
                 .AnyAsync(ub => ub.UserId == userId && ub.BadgeId == badgeId);
-
             if (!exists)
             {
                 _context.UserBadges.Add(new UserBadge
@@ -212,12 +237,10 @@ namespace TrackFinder.Controllers
                 });
                 await _context.SaveChangesAsync();
             }
-
             return RedirectToAction("Badges");
         }
 
-        // ===== إعطاء Certificate لـ Student =====
-
+        // ===== إعطاء Certificate لـ Student ===== 
         public async Task<IActionResult> AssignCertificate()
         {
             ViewBag.Certificates = await _context.Certificates.ToListAsync();
@@ -231,7 +254,6 @@ namespace TrackFinder.Controllers
         {
             var exists = await _context.StudentCertificates
                 .AnyAsync(sc => sc.StudentId == studentId && sc.CertificateId == certificateId);
-
             if (!exists)
             {
                 _context.StudentCertificates.Add(new StudentCertificate
@@ -245,7 +267,6 @@ namespace TrackFinder.Controllers
                 });
                 await _context.SaveChangesAsync();
             }
-
             return RedirectToAction("Certificates");
         }
     }
