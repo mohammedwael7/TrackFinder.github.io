@@ -1,4 +1,4 @@
-﻿namespace TrackFinder.ViewModels.Admin_ViewModels
+namespace TrackFinder.ViewModels.Admin_ViewModels
 {
     public class AdminDashboardVM
     {
@@ -66,4 +66,10 @@
 
         public DateTime CreatedAt { get; set; }
     }
+}
+
+// Alias namespace so Razor views using TrackFinder.ViewModels.Admin work
+namespace TrackFinder.ViewModels.Admin
+{
+    public class AdminDashboardViewModel : TrackFinder.ViewModels.Admin_ViewModels.AdminDashboardVM { }
 }

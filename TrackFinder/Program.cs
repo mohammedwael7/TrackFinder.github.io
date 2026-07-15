@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Context;
+using TrackFinder.Filters;
 using TrackFinder.Models.UserModels;
 using TrackFinder.Providers.Common.EmailService;
 using TrackFinder.Providers.Private.AuthProviders;
@@ -21,7 +21,7 @@ namespace TrackFinder
                 ?? throw new ArgumentNullException("DefaultConnection", "Invalid Connection String");
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(connectionString));
-            builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            builder.Services.AddIdentity<User, Role>(options =>
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireUppercase = false;
@@ -31,33 +31,20 @@ namespace TrackFinder
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            // IMPORTANT: AddIdentity() above registers its own "Identity.Application"
-            // scheme and sets it as the DefaultAuthenticateScheme / DefaultChallengeScheme
-            // (with its own default LoginPath = "/Account/Login"). If we only set
-            // DefaultScheme here (as before), [Authorize] challenges still go through
-            // "Identity.Application" -> "/Account/Login", which doesn't exist in this
-            // project -> 404. We must explicitly set ALL four scheme properties below
-            // so our "Cookies" scheme (with LoginPath = "/Login") is actually used
-            // for authentication/challenge, not just as the "default" fallback.
-            builder.Services.AddAuthentication(options =>
+            // Configure the Identity application cookie (used by SignInManager)
+            // instead of adding a separate cookie scheme that SignInManager ignores.
+            builder.Services.ConfigureApplicationCookie(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-                {
-                    options.LoginPath = "/Login";
-                    options.LogoutPath = "/Login/Logout";
-                    options.AccessDeniedPath = "/Login";
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
-                    options.SlidingExpiration = true;
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.Cookie.Name = "tf_auth";
-                });
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Login/Logout";
+                options.AccessDeniedPath = "/Login";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+                options.SlidingExpiration = true;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.Name = "tf_auth";
+            });
             builder.Services.AddMemoryCache();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
@@ -66,7 +53,10 @@ namespace TrackFinder
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<ProfilePictureFilter>();
+            });
             builder.Services.AddScoped<IEncryptPasswordProvider, EncryptPasswordProvider>();
             builder.Services.AddScoped<ITokenProvider, TokenProvider>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();

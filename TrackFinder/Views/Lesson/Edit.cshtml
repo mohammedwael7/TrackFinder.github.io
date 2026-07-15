@@ -2,19 +2,18 @@
 
 @{
     ViewData["Title"] = "Edit Lesson";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
-
-<link rel="stylesheet" href="~/css/Lesson/edit.css" asp-append-version="true" />
 
 <!-- Page Header -->
 <div class="page-header">
     <div class="page-header-text">
         <div class="header-breadcrumb">
-            <a asp-controller="Course" asp-action="Index">Courses</a>
+            <a asp-controller="CourseCreation" asp-action="Index">Courses</a>
             @* @if (Model.CourseId.HasValue) *@
             @* { *@
             <span>›</span>
-            <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId">Course Details</a>
+            <a asp-controller="CourseCreation" asp-action="Details" asp-route-id="@Model.CourseId">Course Details</a>
             @* } *@
             <span>›</span>
             <a asp-controller="Lesson" asp-action="Details" asp-route-id="@Model.Id">@Model.Name</a>

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-
 using TrackFinder.Services.AuthServices.Interfaces;
 using TrackFinder.ViewModels.Auth_ViewModels;
 
@@ -34,6 +33,7 @@ namespace TrackFinder.Controllers
             if (!ModelState.IsValid)
                 return View(dto);
 
+            dto.ConfirmPassword = dto.Password;
             var result = await _registrationService.RegisterAsync(dto, _env.WebRootPath);
 
             if (!result.Success)

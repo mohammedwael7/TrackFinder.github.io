@@ -23,4 +23,9 @@ namespace TrackFinder.ViewModels.Settings
         public string Key { get; set; } = string.Empty;
         public string Value { get; set; } = string.Empty;
     }
+
+    // ViewModel-suffixed aliases for Razor Views
+    public class SettingsViewModel : SettingsVM { }
+    public class SettingListViewModel : SettingListVM { }
+    public class SettingDetailsViewModel : SettingDetailsVM { }
 }

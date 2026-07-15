@@ -37,7 +37,7 @@ namespace TrackFinder.Controllers.Admin
             var model = await _context.TrackStacks
                 .Include(ts => ts.RelatedTrack)
                 .Include(ts => ts.Courses)
-                .Select(ts => new TrackStackListVM
+                .Select(ts => new TrackStackListViewModel
                 {
                     Id = ts.Id,
                     StackName = ts.StackName,
@@ -62,7 +62,7 @@ namespace TrackFinder.Controllers.Admin
             if (stack == null)
                 return NotFound();
 
-            var model = new TrackStackDetailsVM
+            var model = new TrackStackDetailsViewModel
             {
                 Id = stack.Id,
                 StackName = stack.StackName,
@@ -80,7 +80,7 @@ namespace TrackFinder.Controllers.Admin
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new CreateTrackStackVM();
+            var model = new CreateTrackStackViewModel();
 
             model.Tracks = _context.Tracks
                 .Select(t => new SelectListItem
@@ -95,7 +95,7 @@ namespace TrackFinder.Controllers.Admin
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateTrackStackVM model)
+        public async Task<IActionResult> Create(CreateTrackStackViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -141,7 +141,7 @@ namespace TrackFinder.Controllers.Admin
                 return NotFound();
 
 
-            var model = new EditTrackStackVM
+            var model = new EditTrackStackViewModel
             {
                 Id = stack.Id,
                 StackName = stack.StackName,
@@ -163,7 +163,7 @@ namespace TrackFinder.Controllers.Admin
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EditTrackStackVM model)
+        public async Task<IActionResult> Edit(int id, EditTrackStackViewModel model)
         {
             if (id != model.Id)
                 return BadRequest();
@@ -203,7 +203,7 @@ namespace TrackFinder.Controllers.Admin
             if (stack == null)
                 return NotFound();
 
-            var model = new TrackStackDetailsVM
+            var model = new TrackStackDetailsViewModel
             {
                 Id = stack.Id,
                 StackName = stack.StackName,

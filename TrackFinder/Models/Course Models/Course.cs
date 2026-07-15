@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using TrackFinder.Models.AssessmentModels;
 using TrackFinder.Models.UserModels;
+using TrackFinderDb.Models.TeachingModels;
 
 namespace TrackFinder.Models.CourseModels;
 
@@ -42,15 +43,15 @@ public class Course
     public double? Discount { get; set; }
 
     public Guid InstructorId { get; set; }
-    public virtual Instructor Instructor { get; set; } = null!;
+    public virtual Instructor? Instructor { get; set; }
 
     public int? TrackStackId { get; set; }
     public virtual TrackStack? TrackStack { get; set; }
 
     public virtual ICollection<Material>? Materials { get; set; }
     public virtual ICollection<Enrollment>? Enrollments { get; set; }
-    public virtual ICollection<Lesson> Lessons { get; set; } = null!;
-    public virtual ICollection<CourseSkill> CourseSkills { get; set; } = null!;
+    public virtual ICollection<Lesson>? Lessons { get; set; }
+    public virtual ICollection<CourseSkill>? CourseSkills { get; set; }
 
     public void MapFrom(Course course)
     {

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -225,7 +226,9 @@ public class CommunityController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteComment(Guid id)
     {
-        var comment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == id);
+        var comment = await _context.Comments
+            .Include(c => c.Replies)
+            .FirstOrDefaultAsync(c => c.Id == id);
         if (comment is null)
         {
             return NotFound();
@@ -235,6 +238,11 @@ public class CommunityController : Controller
         if (currentUser?.Id != comment.UserId && currentUser?.Role != UserRole.Admin)
         {
             return Forbid();
+        }
+
+        if (comment.Replies?.Any() == true)
+        {
+            _context.Comments.RemoveRange(comment.Replies);
         }
 
         _context.Comments.Remove(comment);
@@ -301,12 +309,13 @@ public class CommunityController : Controller
     
     private async Task<User?> GetCurrentUserAsync()
     {
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            return null;
+
         return await _context.Users
             .AsNoTracking()
-            .Where(u => !u.IsBanned)
-            .OrderBy(u => u.Role == UserRole.Student ? 0 : 1)
-            .ThenBy(u => u.CreatedAt)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(u => u.Id == userId && !u.IsBanned);
     }
 
     private async Task<Guid?> GetCurrentStudentIdAsync(Guid? userId)

@@ -31,7 +31,7 @@ public class InstructorsController : Controller
         if (item == null)
             return NotFound();
 
-        var vm = new InstructorDetailsVM
+        var vm = new InstructorDetailsViewModel
         {
             UserId = item.UserId,
             InstructorName = item.User.FirstName + " " + item.User.LastName,
@@ -67,13 +67,13 @@ public class InstructorsController : Controller
 
         return View(
             "~/Views/Admin/Instructors/Create.cshtml",
-            new CreateInstructorVM()
+            new CreateInstructorViewModel()
         );
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CreateInstructorVM model)
+    public async Task<IActionResult> Create(CreateInstructorViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -109,7 +109,7 @@ public class InstructorsController : Controller
             GithubLink = model.GithubLink,
             LinkedInLink = model.LinkedInLink,
             Rating = model.Rating,
-          
+            CommunityId = model.CommunityId
         };
 
         _context.Instructors.Add(instructor);
@@ -134,7 +134,7 @@ public class InstructorsController : Controller
 
    
 
-    var model = new EditInstructorVM
+    var model = new EditInstructorViewModel
     {
         UserId = item.UserId,
         Title = item.Title,
@@ -148,7 +148,7 @@ public class InstructorsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid userId, EditInstructorVM model)
+    public async Task<IActionResult> Edit(Guid userId, EditInstructorViewModel model)
     {
         if (userId != model.UserId) return BadRequest();
         if (!ModelState.IsValid)

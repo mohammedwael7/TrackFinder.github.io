@@ -1,6 +1,8 @@
-﻿using TrackFinder.Models.UserModels;
+﻿using System.ComponentModel.DataAnnotations;
+using TrackFinder.Models.CourseModels;
+using TrackFinder.Models.UserModels;
 
-namespace TrackFinder.Models.CourseModels
+namespace TrackFinderDb.Models.TeachingModels
 {
     public enum EnrollmentStatus
     {
@@ -13,14 +15,25 @@ namespace TrackFinder.Models.CourseModels
     {
         public int Progress { get; set; }
         public EnrollmentStatus Status { get; set; }
-        public DateTime EnrollmentDate { get; set; } = DateTime.Now;
-        public DateTime? CompletionDate { get; set; } = DateTime.Now;
-        public DateTime? LastActiveDate { get; set; } = DateTime.Now;
+        public DateTime EnrollmentDate { get; set; }
+        public DateTime? CompletionDate { get; set; }
+        public DateTime? LastActiveDate { get; set; }
         public int CompletedLessons { get; set; }
 
         public Guid CourseId { get; set; }
         public Guid UserId { get; set; }
-        public virtual Course Course { get; set; } = null!;
-        public virtual User User { get; set; } = null!;
+        public virtual Course Course { get; set; } = new Course();
+        public virtual User User { get; set; } = new User();
+
+        [Required(ErrorMessage = "Card Number is required")]
+        [StringLength(14, MinimumLength = 14, ErrorMessage = "Card Number  must be 14 digits")]
+        public string? CardNumber { get; set; }
+
+        [Required(ErrorMessage = "Date is required")]
+        public DateTime? ExpiryDate { get; set; }
+
+        [Required(ErrorMessage = "CVV is required")]
+        [StringLength(3, MinimumLength = 3, ErrorMessage = "CVV must be 3 digits")]
+        public string? CVV { get; set; }
     }
 }

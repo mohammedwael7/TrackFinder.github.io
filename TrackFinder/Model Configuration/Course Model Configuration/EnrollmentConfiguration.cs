@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TrackFinder.Models.CourseModels;
+using TrackFinderDb.Models.TeachingModels;
 
 namespace TrackFinder.Infrastructure.Model_Validation.Course_Model_Configuration;
 

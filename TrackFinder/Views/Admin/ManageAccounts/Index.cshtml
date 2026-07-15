@@ -1,0 +1,193 @@
+@model IEnumerable<TrackFinder.Models.UserModels.User>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold">Instructor Requests</h2>
+        <p class="text-muted mb-0">
+            Review and manage pending instructor accounts.
+        </p>
+    </div>
+
+    <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+        @Model.Count() Pending
+    </span>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success rounded-3">
+        @TempData["Success"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="card border-0 shadow rounded-4">
+        <div class="card-body text-center py-5">
+
+            <i class="bi bi-patch-check-fill text-success display-3"></i>
+
+            <h3 class="mt-3 fw-bold">
+                No Pending Requests
+            </h3>
+
+            <p class="text-muted">
+                All instructor requests have been reviewed.
+            </p>
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-6 mb-4">
+
+                <div class="card border-0 shadow-lg rounded-4 h-100">
+
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-center">
+
+                            @if (!string.IsNullOrEmpty(item.ProfilePictureUrl))
+                            {
+                                <img src="@item.ProfilePictureUrl"
+                                     class="rounded-circle me-3"
+                                     style="width:90px;height:90px;object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <img src="https://ui-avatars.com/api/?name=@item.FirstName+@item.LastName&background=4f46e5&color=fff"
+                                     class="rounded-circle me-3"
+                                     style="width:90px;height:90px;" />
+                            }
+
+                            <div class="flex-grow-1">
+
+                                <h4 class="fw-bold mb-1">
+                                    @item.FirstName @item.LastName
+                                </h4>
+
+                                <div class="text-muted">
+                                    @@@item.UserName
+                                </div>
+
+                                <div class="mt-2">
+
+                                    <div>
+                                        <i class="bi bi-envelope"></i>
+                                        @item.Email
+                                    </div>
+
+                                    <div>
+                                        <i class="bi bi-person-badge"></i>
+                                        @(item.Instructor?.Title ?? "-")
+                                    </div>
+
+                                    <div>
+                                        <i class="bi bi-calendar-event"></i>
+                                        @item.CreatedAt.ToString("dd MMM yyyy")
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <hr />
+
+                        <div class="mb-3">
+
+                            @if (item.EmailVerified)
+                            {
+                                <span class="badge bg-success">
+                                    Email Verified
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    Email Not Verified
+                                </span>
+                            }
+
+                        </div>
+
+                        <div class="d-flex gap-2 mb-4">
+
+                            @if (!string.IsNullOrWhiteSpace(item.Instructor?.GithubLink))
+                            {
+                                <a href="@item.Instructor.GithubLink"
+                                   target="_blank"
+                                   class="btn btn-outline-dark">
+                                    <i class="bi bi-github"></i>
+                                    GitHub
+                                </a>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(item.Instructor?.LinkedInLink))
+                            {
+                                <a href="@item.Instructor.LinkedInLink"
+                                   target="_blank"
+                                   class="btn btn-outline-primary">
+                                    <i class="bi bi-linkedin"></i>
+                                    LinkedIn
+                                </a>
+                            }
+
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+
+                            <form asp-action="Reject"
+                                  method="post"
+                                  class="me-2">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="id"
+                                       value="@item.Id" />
+
+                                <button class="btn btn-outline-danger rounded-pill px-4">
+                                    <i class="bi bi-x-circle"></i>
+                                    Reject
+                                </button>
+
+                            </form>
+
+                            <form asp-action="Accept"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="id"
+                                       value="@item.Id" />
+
+                                <button class="btn btn-success rounded-pill px-4">
+                                    <i class="bi bi-check-circle"></i>
+                                    Accept
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}

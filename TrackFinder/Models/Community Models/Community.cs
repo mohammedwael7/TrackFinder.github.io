@@ -9,7 +9,7 @@ namespace TrackFinder.Models.CommunityModels
         public string? Description { get; set; }
 
         public Guid AdminId { get; set; }
-        public virtual Instructor Admin { get; set; } = new Instructor();
+        public virtual Instructor Admin { get; set; } = null!;
         public virtual ICollection<JoinedMembers> JoinedMembers { get; set; } = null!;
         public virtual ICollection<Post> Posts { get; set; } = null!;
         public virtual ICollection<Instructor>? Moderators { get; set; } = null!;

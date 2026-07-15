@@ -35,4 +35,10 @@ namespace TrackFinder.ViewModels.Tracks
         public string? TrackDescription { get; set; }
         public string? RoadMapUrl { get; set; }
     }
+
+    // ViewModel-suffixed aliases for Razor Views
+    public class TrackListViewModel : TrackListVM { }
+    public class CreateTrackViewModel : CreateTrackVM { }
+    public class EditTrackViewModel : EditTrackVM { }
+    public class TrackDetailsViewModel : TrackDetailsVM { }
 }

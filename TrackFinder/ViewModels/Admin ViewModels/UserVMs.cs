@@ -93,4 +93,10 @@ namespace TrackFinder.ViewModels.Users
         public DateTime CreatedAt { get; set; }
         public UserRole Role { get; set; }
     }
+
+    // ViewModel-suffixed aliases for Razor Views
+    public class UserListViewModel : UserListVM { }
+    public class CreateUserViewModel : CreateUserVM { }
+    public class EditUserViewModel : EditUserVM { }
+    public class UserDetailsViewModel : UserDetailsVM { }
 }

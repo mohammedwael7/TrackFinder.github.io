@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Models.AchievementModels;
 using TrackFinder.Models.AssessmentModels;
@@ -5,17 +6,17 @@ using TrackFinder.Models.CommunityModels;
 using TrackFinder.Models.CourseModels;
 using TrackFinder.Models.OrdersAndPaymentsModels;
 using TrackFinder.Models.UserModels;
+using TrackFinderDb.Models.TeachingModels;
 
 namespace TrackFinder.Context;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<User, Role, Guid>
 {
 	public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
 	#region DbSets
 
 	// ── User Module ──────────────────────────────────────────────
-	public virtual DbSet<User> Users { get; set; }
 	public virtual DbSet<Student> Students { get; set; }
 	public virtual DbSet<Instructor> Instructors { get; set; }
 

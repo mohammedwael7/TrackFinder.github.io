@@ -1,87 +1,516 @@
 ﻿@model List<TrackFinder.ViewModels.Assessment_ViewModels.QuestionOnAssessmentVM>
 @{
     ViewData["Title"] = "Career Assessment";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
-<div class="assessment-container py-4" style="max-width: 800px; margin: 0 auto;">
-    <div class="mb-4 text-center">
-        <h1 class="h2 fw-bold text-brand-ink mb-2">TrackFinder Assessment</h1>
-        <p class="text-brand-muted mb-4">Answer these simple questions to find your perfect technology track match.</p>
+<style>
+    .take-container {
+        max-width: 760px;
+        margin: 0 auto;
+    }
 
-        <div class="progress tf-progress mb-2">
-            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+    /* ── Header ──────────────────────────────────────────── */
+    .take-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .take-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .take-header-text h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--secondary);
+        margin: 0 0 6px;
+    }
+
+    .take-header-text p {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin: 0;
+    }
+
+    .take-history-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        color: var(--text);
+        background: var(--bg);
+        border: 1px solid var(--border);
+        transition: var(--transition);
+        flex-shrink: 0;
+    }
+
+    .take-history-link:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    /* ── Stepper ─────────────────────────────────────────── */
+    .stepper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+    .step-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--border);
+        transition: var(--transition);
+        flex-shrink: 0;
+    }
+
+    .step-dot.active {
+        background: var(--primary);
+        width: 28px;
+        border-radius: 99px;
+    }
+
+    .step-dot.completed {
+        background: var(--primary-light);
+    }
+
+    .step-dot-line {
+        width: 20px;
+        height: 2px;
+        background: var(--border);
+        flex-shrink: 0;
+    }
+
+    .step-dot-line.completed {
+        background: var(--primary-light);
+    }
+
+    .progress-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 28px;
+        font-size: 13px;
+    }
+
+    .progress-label {
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    .progress-pct {
+        color: var(--primary);
+        font-weight: 700;
+    }
+
+    /* ── Progress Bar ────────────────────────────────────── */
+    .progress-track {
+        height: 6px;
+        background: var(--border);
+        border-radius: 99px;
+        overflow: hidden;
+        margin-bottom: 4px;
+    }
+
+    .progress-track .bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        border-radius: 99px;
+        transition: width 0.5s ease;
+        width: 0%;
+    }
+
+    /* ── Question Card ───────────────────────────────────── */
+    .question-step {
+        animation: qFadeIn 0.35s ease-out;
+    }
+
+    @@keyframes qFadeIn {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .q-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 32px;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 24px;
+    }
+
+    .q-number {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--primary);
+        background: rgba(0, 97, 145, 0.06);
+        padding: 4px 12px;
+        border-radius: 99px;
+        margin-bottom: 16px;
+    }
+
+    .q-text {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--secondary);
+        line-height: 1.4;
+        margin-bottom: 28px;
+    }
+
+    /* ── Options ─────────────────────────────────────────── */
+    .options-grid {
+        display: grid;
+        gap: 10px;
+    }
+
+    .option-item {
+        position: relative;
+    }
+
+    .option-item input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .option-label {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 18px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: var(--transition);
+        background: var(--surface);
+    }
+
+    .option-label:hover {
+        border-color: rgba(0, 97, 145, 0.3);
+        background: rgba(0, 97, 145, 0.02);
+    }
+
+    .option-item input[type="radio"]:checked + .option-label {
+        border-color: var(--primary);
+        background: rgba(0, 97, 145, 0.04);
+        box-shadow: 0 0 0 3px rgba(0, 97, 145, 0.08);
+    }
+
+    .option-radio {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: var(--transition);
+        background: white;
+    }
+
+    .option-radio::after {
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--primary);
+        transform: scale(0);
+        transition: transform 0.2s ease;
+    }
+
+    .option-item input[type="radio"]:checked + .option-label .option-radio {
+        border-color: var(--primary);
+    }
+
+    .option-item input[type="radio"]:checked + .option-label .option-radio::after {
+        transform: scale(1);
+    }
+
+    .option-text {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .option-item input[type="radio"]:checked + .option-label .option-text {
+        color: var(--primary-dark);
+    }
+
+    .option-desc {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 2px;
+    }
+
+    /* ── Navigation ──────────────────────────────────────── */
+    .nav-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+    }
+
+    .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: var(--transition);
+        font-family: inherit;
+    }
+
+    .nav-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    .nav-btn-prev {
+        background: var(--bg);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+
+    .nav-btn-prev:hover:not(:disabled) {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .nav-btn-next {
+        background: var(--primary);
+        color: white;
+    }
+
+    .nav-btn-next:hover:not(:disabled) {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 97, 145, 0.2);
+    }
+
+    .nav-btn-submit {
+        background: #10b981;
+        color: white;
+    }
+
+    .nav-btn-submit:hover:not(:disabled) {
+        background: #059669;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+
+    /* ── Empty State ─────────────────────────────────────── */
+    .empty-state-card {
+        text-align: center;
+        padding: 48px 24px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .empty-state-card .icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+        opacity: 0.5;
+    }
+
+    .empty-state-card h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 6px;
+    }
+
+    .empty-state-card p {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin: 0;
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @@media (max-width: 640px) {
+        .q-card {
+            padding: 20px;
+        }
+
+        .q-text {
+            font-size: 16px;
+        }
+
+        .option-label {
+            padding: 12px 14px;
+        }
+
+        .option-text {
+            font-size: 14px;
+        }
+
+        .nav-bar {
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            justify-content: center;
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+
+        .nav-btn:first-child {
+            order: 2;
+        }
+        .nav-btn:last-child {
+            order: 1;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="take-container">
+    <div class="take-header">
+        <div class="take-header-text">
+            <h1>Career Assessment</h1>
+            <p>Answer each question to find your ideal technology track match.</p>
         </div>
-        <div class="d-flex justify-content-between align-items-center">
-            <span class="small text-brand-muted fw-semibold" id="questionNumberLabel">Question 1 of @Model.Count</span>
-            <span class="small text-brand-ink fw-bold" id="progressPercentageLabel">20% Completed</span>
-        </div>
+        <a asp-controller="Assessment" asp-action="History" class="take-history-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Assessment History
+        </a>
     </div>
 
     @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-brand text-center rounded-4 py-4">
-            <h4 class="alert-heading fw-bold mb-2">No Questions Available</h4>
-            <p class="mb-0 text-brand-muted">The database doesn't seem to contain any questions for this assessment right now.</p>
+        <div class="empty-state-card">
+            <div class="icon">📋</div>
+            <h3>No Questions Available</h3>
+            <p>The assessment database doesn't contain any questions right now.</p>
         </div>
     }
     else
     {
         <form id="assessmentForm" asp-controller="Assessment" asp-action="Take" method="post">
             @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 mb-4"></div>
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
 
-            <div class="question-wrapper">
+            <!-- Stepper Dots -->
+            <div class="stepper" id="stepper">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        <div class="step-dot-line" data-index="@i"></div>
+                    }
+                    <div class="step-dot @(i == 0 ? "active" : "")" data-index="@i"></div>
+                }
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-stats">
+                <span class="progress-label" id="questionNumberLabel">Question 1 of @Model.Count</span>
+                <span class="progress-pct" id="progressPercentageLabel">0% Complete</span>
+            </div>
+            <div class="progress-track">
+                <div class="bar" id="progressBar"></div>
+            </div>
+
+            <!-- Questions -->
+            <div class="question-wrapper" style="margin-top: 28px;">
                 @for (int i = 0; i < Model.Count; i++)
                 {
                     var question = Model[i];
-                    <div class="question-step step-fade @(i == 0 ? "" : "d-none")" data-step-index="@i">
+                    <div class="question-step @(i == 0 ? "" : "d-none")" data-step-index="@i">
                         <input type="hidden" name="Answers[@i].QuestionId" value="@question.Id" />
 
-                        <div class="question-card card p-4 p-md-5">
-                            <div class="card-body p-0">
-                                <span class="badge tf-badge-soft px-3 py-2 mb-3">Question @(i + 1) of @Model.Count</span>
-                                <h2 class="h3 fw-bold text-brand-ink mb-4">@question.QuestionText</h2>
+                        <div class="q-card">
+                            <div class="q-number">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                Question @(i + 1) of @Model.Count
+                            </div>
+                            <div class="q-text">@question.QuestionText</div>
 
-                                <div class="d-grid gap-3">
-                                    <div class="choice-container">
-                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_5" value="5" />
-                                        <label class="assessment-option" for="q_@(question.Id)_opt_5">
-                                            <div class="radio-circle"></div>
-                                            <span class="assessment-option-caption">Very Agree</span>
-                                        </label>
-                                    </div>
+                            <div class="options-grid">
+                                <div class="option-item">
+                                    <input type="radio" class="choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_5" value="5" />
+                                    <label class="option-label" for="q_@(question.Id)_opt_5">
+                                        <div class="option-radio"></div>
+                                        <div>
+                                            <div class="option-text">Very Agree</div>
+                                            <div class="option-desc">Strongly matches my skills and interests</div>
+                                        </div>
+                                    </label>
+                                </div>
 
-                                    <div class="choice-container">
-                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_4" value="4" />
-                                        <label class="assessment-option" for="q_@(question.Id)_opt_4">
-                                            <div class="radio-circle"></div>
-                                            <span class="assessment-option-caption">Agree</span>
-                                        </label>
-                                    </div>
+                                <div class="option-item">
+                                    <input type="radio" class="choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_4" value="4" />
+                                    <label class="option-label" for="q_@(question.Id)_opt_4">
+                                        <div class="option-radio"></div>
+                                        <div>
+                                            <div class="option-text">Agree</div>
+                                            <div class="option-desc">Generally aligns with my experience</div>
+                                        </div>
+                                    </label>
+                                </div>
 
-                                    <div class="choice-container">
-                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_3" value="3" />
-                                        <label class="assessment-option" for="q_@(question.Id)_opt_3">
-                                            <div class="radio-circle"></div>
-                                            <span class="assessment-option-caption">Not Sure</span>
-                                        </label>
-                                    </div>
+                                <div class="option-item">
+                                    <input type="radio" class="choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_3" value="3" />
+                                    <label class="option-label" for="q_@(question.Id)_opt_3">
+                                        <div class="option-radio"></div>
+                                        <div>
+                                            <div class="option-text">Not Sure</div>
+                                            <div class="option-desc">Neutral or uncertain about this area</div>
+                                        </div>
+                                    </label>
+                                </div>
 
-                                    <div class="choice-container">
-                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_2" value="2" />
-                                        <label class="assessment-option" for="q_@(question.Id)_opt_2">
-                                            <div class="radio-circle"></div>
-                                            <span class="assessment-option-caption">Disagree</span>
-                                        </label>
-                                    </div>
+                                <div class="option-item">
+                                    <input type="radio" class="choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_2" value="2" />
+                                    <label class="option-label" for="q_@(question.Id)_opt_2">
+                                        <div class="option-radio"></div>
+                                        <div>
+                                            <div class="option-text">Disagree</div>
+                                            <div class="option-desc">Not really part of my skill set</div>
+                                        </div>
+                                    </label>
+                                </div>
 
-                                    <div class="choice-container">
-                                        <input type="radio" class="btn-check choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_1" value="1" />
-                                        <label class="assessment-option" for="q_@(question.Id)_opt_1">
-                                            <div class="radio-circle"></div>
-                                            <span class="assessment-option-caption">Very Disagree</span>
-                                        </label>
-                                    </div>
+                                <div class="option-item">
+                                    <input type="radio" class="choice-radio" name="Answers[@i].OptionNumber" id="q_@(question.Id)_opt_1" value="1" />
+                                    <label class="option-label" for="q_@(question.Id)_opt_1">
+                                        <div class="option-radio"></div>
+                                        <div>
+                                            <div class="option-text">Very Disagree</div>
+                                            <div class="option-desc">Does not describe me at all</div>
+                                        </div>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -89,17 +518,27 @@
                 }
             </div>
 
-            <div class="navigation-bar d-flex justify-content-between align-items-center border-top mt-4 pt-4" style="border-color: var(--tf-border) !important;">
-                <button type="button" id="prevBtn" class="btn btn-brand-outline rounded-pill px-4 py-2" disabled>
-                    <i class="bi bi-chevron-left me-1"></i> Previous
+            <!-- Navigation -->
+            <div class="nav-bar">
+                <button type="button" id="prevBtn" class="nav-btn nav-btn-prev" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"/>
+                    </svg>
+                    Previous
                 </button>
 
-                <button type="button" id="nextBtn" class="btn btn-brand rounded-pill px-4 py-2" disabled>
-                    Next <i class="bi bi-chevron-right ms-1"></i>
+                <button type="button" id="nextBtn" class="nav-btn nav-btn-next" disabled>
+                    Next
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
                 </button>
 
-                <button type="submit" id="submitBtn" class="btn btn-success-brand rounded-pill px-5 py-2 d-none" disabled>
-                    Submit Assessment <i class="bi bi-check-circle ms-1"></i>
+                <button type="submit" id="submitBtn" class="nav-btn nav-btn-submit d-none" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Submit Assessment
                 </button>
             </div>
         </form>
@@ -108,72 +547,93 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            let currentStep = 0;
-            const steps = $(".question-step");
-            const totalSteps = steps.length;
+        (function () {
+            var currentStep = 0;
+            var steps = document.querySelectorAll(".question-step");
+            var totalSteps = steps.length;
+            var dots = document.querySelectorAll(".step-dot");
+            var lines = document.querySelectorAll(".step-dot-line");
+            var progressBar = document.getElementById("progressBar");
+            var progressPct = document.getElementById("progressPercentageLabel");
+            var questionLabel = document.getElementById("questionNumberLabel");
+            var prevBtn = document.getElementById("prevBtn");
+            var nextBtn = document.getElementById("nextBtn");
+            var submitBtn = document.getElementById("submitBtn");
+            var form = document.getElementById("assessmentForm");
+            var isSubmitting = false;
 
             function updateUI() {
-                steps.addClass("d-none");
-                const activeStep = $(steps[currentStep]);
-                activeStep.removeClass("d-none");
+                steps.forEach(function (s) { s.classList.add("d-none"); });
+                steps[currentStep].classList.remove("d-none");
 
-                const progressPercentage = Math.round(((currentStep + 1) / totalSteps) * 100);
-                $("#progressBar").css("width", progressPercentage + "%").attr("aria-valuenow", progressPercentage);
-                $("#progressPercentageLabel").text(progressPercentage + "% Completed");
-                $("#questionNumberLabel").text(`Question ${currentStep + 1} of ${totalSteps}`);
+                var pct = Math.round(((currentStep + 1) / totalSteps) * 100);
+                progressBar.style.width = pct + "%";
+                progressPct.textContent = pct + "% Complete";
+                questionLabel.textContent = "Question " + (currentStep + 1) + " of " + totalSteps;
 
-                $("#prevBtn").prop("disabled", currentStep === 0);
+                dots.forEach(function (d, i) {
+                    d.classList.remove("active", "completed");
+                    if (i === currentStep) d.classList.add("active");
+                    else if (i < currentStep) d.classList.add("completed");
+                });
 
-                const hasSelectedOption = activeStep.find(".choice-radio:checked").length > 0;
+                lines.forEach(function (l, i) {
+                    l.classList.remove("completed");
+                    if (i <= currentStep) l.classList.add("completed");
+                });
+
+                prevBtn.disabled = currentStep === 0;
+
+                var hasSel = steps[currentStep].querySelector(".choice-radio:checked") !== null;
 
                 if (currentStep === totalSteps - 1) {
-                    $("#nextBtn").addClass("d-none");
-                    $("#submitBtn").removeClass("d-none").prop("disabled", !hasSelectedOption);
+                    nextBtn.classList.add("d-none");
+                    submitBtn.classList.remove("d-none");
+                    submitBtn.disabled = !hasSel;
                 } else {
-                    $("#nextBtn").removeClass("d-none").prop("disabled", !hasSelectedOption);
-                    $("#submitBtn").addClass("d-none");
+                    nextBtn.classList.remove("d-none");
+                    nextBtn.disabled = !hasSel;
+                    submitBtn.classList.add("d-none");
                 }
             }
 
-            $(".choice-radio").on("change", function () {
-                if (currentStep === totalSteps - 1) {
-                    $("#submitBtn").prop("disabled", false);
-                } else {
-                    $("#nextBtn").prop("disabled", false);
+            document.addEventListener("change", function (e) {
+                if (e.target.classList.contains("choice-radio")) {
+                    if (currentStep === totalSteps - 1) {
+                        submitBtn.disabled = false;
+                    } else {
+                        nextBtn.disabled = false;
+                    }
                 }
             });
 
-            $("#nextBtn").on("click", function () {
+            nextBtn.addEventListener("click", function () {
                 if (currentStep < totalSteps - 1) {
-                    const hasSelection = $(steps[currentStep]).find(".choice-radio:checked").length > 0;
-                    if (hasSelection) {
+                    var hasSel = steps[currentStep].querySelector(".choice-radio:checked") !== null;
+                    if (hasSel) {
                         currentStep++;
                         updateUI();
                     }
                 }
             });
 
-            $("#prevBtn").on("click", function () {
+            prevBtn.addEventListener("click", function () {
                 if (currentStep > 0) {
                     currentStep--;
                     updateUI();
                 }
             });
 
-            let isSubmitting = false;
-
-            $("#assessmentForm").on("submit", function (e) {
+            form.addEventListener("submit", function (e) {
                 if (isSubmitting) {
                     e.preventDefault();
                     return false;
                 }
 
-                let allChecked = true;
-                steps.each(function (index, el) {
-                    if ($(el).find(".choice-radio:checked").length === 0) {
+                var allChecked = true;
+                steps.forEach(function (step) {
+                    if (step.querySelector(".choice-radio:checked") === null) {
                         allChecked = false;
-                        return false;
                     }
                 });
 
@@ -184,15 +644,13 @@
                 }
 
                 isSubmitting = true;
-                $("#submitBtn").prop("disabled", true).html(
-                    '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Submitting...'
-                );
-                $("#prevBtn").prop("disabled", true);
+                submitBtn.disabled = true;
+                submitBtn.innerHTML =
+                    '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Submitting...';
+                prevBtn.disabled = true;
             });
 
-            if (totalSteps > 0) {
-                updateUI();
-            }
-        });
+            if (totalSteps > 0) updateUI();
+        })();
     </script>
 }

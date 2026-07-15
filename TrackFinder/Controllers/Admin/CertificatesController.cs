@@ -27,7 +27,7 @@ public class CertificatesController : Controller
     public async Task<IActionResult> Index()
     {
         var certificates = await _context.Certificates
-            .Select(c => new CertificateListVM
+            .Select(c => new CertificateListViewModel
             {
                 Id = c.Id,
                 Title = c.Title,
@@ -72,7 +72,7 @@ public class CertificatesController : Controller
     {
         return View(
             "~/Views/Admin/Certificates/Create.cshtml",
-            new CreateCertificateVM()
+            new CreateCertificateViewModel()
         );
     }
 
@@ -85,7 +85,7 @@ public class CertificatesController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        CreateCertificateVM model)
+        CreateCertificateViewModel model)
     {
 
         if (!ModelState.IsValid)
@@ -141,7 +141,7 @@ public class CertificatesController : Controller
 
 
 
-        var model = new EditCertificateVM
+        var model = new EditCertificateViewModel
         {
             Id = certificate.Id,
             Title = certificate.Title,
@@ -164,7 +164,7 @@ public class CertificatesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
         int id,
-        EditCertificateVM model)
+        EditCertificateViewModel model)
     {
 
         if (id != model.Id)
@@ -228,7 +228,7 @@ public class CertificatesController : Controller
         if (item == null)
             return NotFound();
 
-        var vm = new CertificateDetailsVM
+        var vm = new CertificateDetailsViewModel
         {
             Id = item.Id,
             Title = item.Title,
@@ -266,10 +266,10 @@ public class CertificatesController : Controller
    
 
 
-    private CertificateDetailsVM MapToDetailsViewModel(
+    private CertificateDetailsViewModel MapToDetailsViewModel(
         Certificate certificate)
     {
-        return new CertificateDetailsVM
+        return new CertificateDetailsViewModel
         {
             Id = certificate.Id,
             Title = certificate.Title,

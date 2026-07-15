@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Context;
 using TrackFinder.Models.CourseModels;
@@ -45,6 +45,9 @@ public class LessonController : Controller
 	[HttpPost]
 	public async Task<IActionResult> Create(Lesson lesson)
 	{
+		// Force a new Guid to prevent ASP.NET Core from binding the route '{id}' (Course ID) to 'lesson.Id'
+		lesson.Id = Guid.NewGuid();
+
 		if (!ModelState.IsValid)
 			return View(lesson);
 
@@ -57,7 +60,7 @@ public class LessonController : Controller
 		await _context.Lessons.AddAsync(lesson);
 		await _context.SaveChangesAsync();
 
-		return RedirectToAction("Index", "Course", new { id = lesson.CourseId });
+		return RedirectToAction("Details", "CourseCreation", new { id = lesson.CourseId });
 	}
 
 	[HttpGet]
@@ -102,6 +105,6 @@ public class LessonController : Controller
 		_context.Lessons.Remove(lesson);
 		await _context.SaveChangesAsync();
 
-		return RedirectToAction("Details", "Course", new { id = lesson.CourseId });
+		return RedirectToAction("Details", "CourseCreation", new { id = lesson.CourseId });
 	}
 }

@@ -3,22 +3,10 @@
 
 @{
     ViewData["Title"] = "Community";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
 <div class="community-page">
-    <aside class="portal-sidebar" id="portalSidebar">
-
-        <nav class="portal-nav" aria-label="Portal navigation">
-            <a href="#"><span class="fa-solid fa-table-columns"></span> Dashboard</a>
-            <a asp-controller="Home" asp-action="Index"><span class="fa-solid fa-book-open"></span> Courses</a>
-            <a class="active" asp-controller="Community" asp-action="Index"><span class="fa-solid fa-users"></span> Community</a>
-            <a href="#"><span class="fa-solid fa-file-circle-check"></span> Assessments</a>
-            <a href="#"><span class="fa-solid fa-book-bookmark"></span> Course Management</a>
-            <a href="#"><span class="fa-solid fa-user"></span> Profile</a>
-        </nav>
-        <a class="lesson-button" href="#"><span class="fa-solid fa-plus" aria-hidden="true"></span> Start New Lesson</a>
-    </aside>
-
     <main class="community-main">
         @if (TempData["CommunityMessage"] is string message)
         {
@@ -78,12 +66,12 @@
                                 </div>
                             </div>
                             <div class="dropdown post-menu ">
-                                @if (post.CanManage)
-                                {
-                                    <button type="button" class="post-menu__trigger" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Post options">
-                                        <span class="fa-solid fa-ellipsis-h" aria-hidden="true"></span>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end post-menu__dropdown">
+                                <button type="button" class="post-menu__trigger" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Post options">
+                                    <span class="fa-solid fa-ellipsis-h" aria-hidden="true"></span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end post-menu__dropdown">
+                                    @if (post.CanManage)
+                                    {
                                         <a class="dropdown-item" asp-action="EditPost" asp-route-id="@post.Id">
                                             <span class="fa-solid fa-pen" aria-hidden="true"></span> Edit
                                         </a>
@@ -94,23 +82,20 @@
                                                 <span class="fa-solid fa-trash" aria-hidden="true"></span> Delete
                                             </button>
                                         </form>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <button type="button" class="post-menu__trigger" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Post options">
-                                        <span class="fa-solid fa-ellipsis-h" aria-hidden="true"></span>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end post-menu__dropdown ">
-                                        <form asp-action="Report" method="post">
-                                            @Html.AntiForgeryToken()
-                                            <input type="hidden" name="id" value="@post.Id" />
-                                            <button type="submit" class="dropdown-item">
-                                                <span class="fa-solid fa-flag" aria-hidden="true"></span> Report
-                                            </button>
-                                        </form>
-                                    </div>
-                                }
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    <span class="dropdown-item-text" style="font-size:12px;font-weight:600;color:var(--text-muted);padding:6px 16px;">Report as…</span>
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault();reportPost('@post.Id','Spam')"><span class="fa-solid fa-flag"></span> Spam</a>
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault();reportPost('@post.Id','Harassment')"><span class="fa-solid fa-flag"></span> Harassment</a>
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault();reportPost('@post.Id','OffensiveContent')"><span class="fa-solid fa-flag"></span> Offensive Content</a>
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault();reportPost('@post.Id','FakeInformation')"><span class="fa-solid fa-flag"></span> Fake Information</a>
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault();reportPost('@post.Id','Other')"><span class="fa-solid fa-flag"></span> Other</a>
+                                </div>
+                                <form id="report-form-@post.Id" asp-action="Report" method="post" style="display:none;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@post.Id" />
+                                    <input type="hidden" name="reason" id="report-reason-@post.Id" value="Other" />
+                                </form>
                             </div>
                         </div>
 
@@ -142,16 +127,24 @@
                                             <strong>@FullName(comment.User)</strong>
                                             <span>@RelativeTime(comment.CreatedAt)</span>
                                             <p>@comment.Content</p>
+                                            <button type="button" class="reply-btn" data-reply-to="@comment.Id" style="background:none;border:none;color:var(--primary);font-size:12px;font-weight:600;cursor:pointer;padding:2px 0;">Reply</button>
                                         </div>
                                         @if (comment.CanManage)
                                         {
                                             <form asp-action="DeleteComment" method="post">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="id" value="@comment.Id" />
-                                                <button type="submit">Delete</button>
+                                                <button type="submit" class="delete-comment-btn">Delete</button>
                                             </form>
                                         }
                                     </div>
+                                    <form asp-action="AddComment" method="post" class="comment-form is-collapsed" id="reply-form-@comment.Id" style="margin-left:44px;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="PostId" value="@post.Id" />
+                                        <input type="hidden" name="ParentCommentId" value="@comment.Id" />
+                                        <input name="Content" placeholder="Write a reply..." />
+                                        <button type="submit">Reply</button>
+                                    </form>
                                 }
                             </div>
                         }
@@ -236,6 +229,43 @@
         </section>
     </aside>
 </div>
+
+
+@section Scripts {
+    <script>
+        (function () {
+            // ── Toggle comment form ────────────────────────────
+            document.querySelectorAll('[data-toggle-comment]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var formId = this.getAttribute('data-toggle-comment');
+                    var form = document.getElementById(formId);
+                    if (form) {
+                        var expanded = this.getAttribute('aria-expanded') === 'true';
+                        form.classList.toggle('is-collapsed');
+                        this.setAttribute('aria-expanded', !expanded);
+                    }
+                });
+            });
+
+            // ── Reply: show reply form inline ──────────────────
+            document.querySelectorAll('[data-reply-to]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var commentId = this.getAttribute('data-reply-to');
+                    var replyForm = document.getElementById('reply-form-' + commentId);
+                    if (replyForm) {
+                        replyForm.classList.toggle('is-collapsed');
+                    }
+                });
+            });
+        })();
+
+        // ── Report post with reason ───────────────────────────
+        function reportPost(postId, reason) {
+            document.getElementById('report-reason-' + postId).value = reason;
+            document.getElementById('report-form-' + postId).submit();
+        }
+    </script>
+}
 
 @functions {
     private static string FullName(User? user)

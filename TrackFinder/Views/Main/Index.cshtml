@@ -1,4 +1,5 @@
 @model TrackFinder.ViewModels.Profile_ViewModels.DashboardVM
+@using TrackFinder.Models.CommunityModels
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
@@ -507,7 +508,7 @@
 @{
     // Show full-page empty state when there is zero data
     bool hasNoData = Model.Role.Equals("Student", StringComparison.OrdinalIgnoreCase)
-        ? !Model.EnrolledCourses.Any() && !Model.RecommendedTracks.Any() && !Model.RecentPosts.Any()
+        ? !Model.EnrolledCourses.Any() && (Model.RecommendedTracks == null || !Model.RecommendedTracks.Any()) && !Model.RecentPosts.Any()
         : !Model.CreatedCourses.Any() && !Model.RecentPosts.Any();
 }
 
@@ -734,7 +735,7 @@ else if (Model.Role.Equals("Student", StringComparison.OrdinalIgnoreCase))
     
     <!-- Section 1: Track & Roadmap -->
     <div class="roadmap-container">
-        @if (Model.RecommendedTracks.Any())
+        @if (Model.RecommendedTracks != null && Model.RecommendedTracks.Any())
         {
             var activeTrack = Model.RecommendedTracks.First();
             <div class="roadmap-promo">
@@ -946,7 +947,180 @@ else
     }
 }
 
-<!-- Section 3: Community -->
+@if (Model.Role.Equals("Instructor", StringComparison.OrdinalIgnoreCase) && Model.ManagedCommunities.Any())
+{
+    <!-- Section 3: Instructor Community Management -->
+    <div style="margin-bottom: 32px;">
+        <h2 class="section-title" style="margin-bottom: 20px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            My Communities
+            <span>(@Model.ManagedCommunities.Count total)</span>
+        </h2>
+
+        @foreach (var community in Model.ManagedCommunities)
+        {
+            var orderedPosts = community.Posts.OrderByDescending(p => p.CreatedAt).ToList();
+            var communityTotalComments = community.Posts.Sum(p => p.Comments.Count);
+            var communityReportedPostCount = community.Posts.Count(p => p.ReportsCount > 0);
+
+            <div class="community-section" style="margin-bottom: 24px;">
+                <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    @community.Name
+                </h3>
+
+                <!-- Stats row -->
+                <div class="stats-grid" style="margin-bottom: 24px;">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(0, 97, 145, 0.08);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="stat-num">@community.Posts.Count</div>
+                            <div class="stat-label">Total Posts</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(0, 97, 145, 0.08);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="stat-num">@communityTotalComments</div>
+                            <div class="stat-label">Total Comments</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(220, 38, 38, 0.08); color: #dc2626;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="stat-num">@communityReportedPostCount</div>
+                            <div class="stat-label">Reported Posts</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.08); color: #10b981;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="stat-num">@community.Posts.Count(p => p.Status == PostStatus.Approved)</div>
+                            <div class="stat-label">Approved Posts</div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (orderedPosts.Any())
+                {
+                    <div style="border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                            <thead>
+                                <tr style="background: var(--bg); text-align: left;">
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border);">Author</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border);">Content</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border);">Date</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border);">Status</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border);">Comments</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border);">Reports</th>
+                                    <th style="padding: 12px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border);">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var post in orderedPosts)
+                                {
+                                    var authorName = $"{post.Author.FirstName} {post.Author.LastName}";
+                                    <tr style="border-bottom: 1px solid var(--border);">
+                                        <td style="padding: 14px 16px; vertical-align: top;">
+                                            <div style="font-weight: 600; color: var(--secondary);">@authorName</div>
+                                            <div style="font-size: 12px; color: var(--text-muted);">@@@post.Author.UserName</div>
+                                        </td>
+                                        <td style="padding: 14px 16px; vertical-align: top; max-width: 300px;">
+                                            <div class="post-preview-text">@(post.Content.Length > 120 ? post.Content.Substring(0, 120) + "..." : post.Content)</div>
+                                            @if (post.Content.Length > 120)
+                                            {
+                                                <button type="button" class="view-post-btn" onclick="togglePostContent('@post.Id')" style="background: none; border: none; color: var(--primary); font-size: 12px; font-weight: 600; cursor: pointer; padding: 0; margin-top: 4px;">View full content</button>
+                                                <div id="post-full-@post.Id" class="post-full-content" style="display: none; margin-top: 8px; padding: 12px; background: var(--bg); border-radius: var(--radius-sm); font-size: 13px; line-height: 1.6; white-space: pre-wrap;">@post.Content</div>
+                                            }
+                                        </td>
+                                        <td style="padding: 14px 16px; vertical-align: top; white-space: nowrap; color: var(--text-muted); font-size: 13px;">@post.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                        <td style="padding: 14px 16px; vertical-align: top;">
+                                            @switch (post.Status)
+                                            {
+                                                case PostStatus.Approved:
+                                                    <span style="display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; background: rgba(16, 185, 129, 0.1); color: #10b981;">Approved</span>
+                                                    break;
+                                                case PostStatus.PendingReview:
+                                                    <span style="display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; background: rgba(245, 158, 11, 0.1); color: #f59e0b;">Pending</span>
+                                                    break;
+                                                case PostStatus.Rejected:
+                                                    <span style="display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; background: rgba(220, 38, 38, 0.1); color: #dc2626;">Rejected</span>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td style="padding: 14px 16px; vertical-align: top; text-align: center; color: var(--text-muted);">@post.Comments.Count</td>
+                                        <td style="padding: 14px 16px; vertical-align: top; text-align: center;">
+                                            @if (post.ReportsCount > 0)
+                                            {
+                                                <span style="color: #dc2626; font-weight: 600;">@post.ReportsCount</span>
+                                            }
+                                            else
+                                            {
+                                                <span style="color: var(--text-muted);">0</span>
+                                            }
+                                        </td>
+                                        <td style="padding: 14px 16px; vertical-align: top; white-space: nowrap;">
+                                            @if (post.Status != PostStatus.Approved)
+                                            {
+                                                <form asp-action="ApprovePost" asp-controller="Main" method="post" style="display: inline;">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="postId" value="@post.Id" />
+                                                    <button type="submit" style="background: none; border: 1px solid #bbf7d0; color: #16a34a; padding: 4px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); margin-right: 4px;">Approve</button>
+                                                </form>
+                                            }
+                                            @if (post.Status != PostStatus.Rejected)
+                                            {
+                                                <form asp-action="RejectPost" asp-controller="Main" method="post" style="display: inline;">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="postId" value="@post.Id" />
+                                                    <button type="submit" style="background: none; border: 1px solid #fecaca; color: #dc2626; padding: 4px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); margin-right: 4px;">Reject</button>
+                                                </form>
+                                            }
+                                            <form asp-action="DeletePost" asp-controller="Main" method="post" style="display: inline;" onsubmit="return confirm('Delete this post permanently?');">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="postId" value="@post.Id" />
+                                                <button type="submit" style="background: none; border: 1px solid #e5e7eb; color: #6b7280; padding: 4px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition);">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div style="text-align: center; padding: 32px; color: var(--text-muted); border: 1.5px dashed var(--border); border-radius: var(--radius-md);">
+                        <h3 style="font-size: 15px; color: var(--secondary); margin-bottom: 4px;">No posts yet</h3>
+                        <p style="font-size: 13px;">This community has no posts. Encourage members to start posting!</p>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+
+<!-- Section 4: Community Activities -->
 <div class="community-section">
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <h2 class="section-title" style="margin-bottom: 0;">Community Activities</h2>
@@ -997,3 +1171,19 @@ else
         </div>
     }
 </div>
+
+@section Scripts {
+<script>
+    function togglePostContent(postId) {
+        var full = document.getElementById('post-full-' + postId);
+        var btn = full.previousElementSibling;
+        if (full.style.display === 'none') {
+            full.style.display = 'block';
+            btn.textContent = 'Show less';
+        } else {
+            full.style.display = 'none';
+            btn.textContent = 'View full content';
+        }
+    }
+</script>
+}

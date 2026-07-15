@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using TrackFinder.Context;
 using TrackFinder.Models.UserModels;
@@ -12,42 +12,48 @@ namespace TrackFinder.Services.AuthServices.Implementations
 {
     public class RegistrationService : IRegistrationService
     {
-        private readonly AppDbContext _db;
-        private readonly IEncryptPasswordProvider _passwordProvider;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly ITokenProvider _tokenProvider;
         private readonly IEmailSender _emailSender;
         private readonly IMemoryCache _cache;
+        private readonly AppDbContext _db;
+        private readonly ILogger<RegistrationService> _logger;
         private const int OtpExpiryMinutes = 10;
 
         public RegistrationService(
-            AppDbContext db,
-            IEncryptPasswordProvider passwordProvider,
+            UserManager<User> userManager,
+            RoleManager<Role> roleManager,
             ITokenProvider tokenProvider,
             IEmailSender emailSender,
-            IMemoryCache cache)
+            IMemoryCache cache,
+            AppDbContext db,
+            ILogger<RegistrationService> logger)
         {
-            _db = db;
-            _passwordProvider = passwordProvider;
+            _userManager = userManager;
+            _roleManager = roleManager;
             _tokenProvider = tokenProvider;
             _emailSender = emailSender;
             _cache = cache;
+            _db = db;
+            _logger = logger;
         }
 
         private static string CacheKey(string email) => $"otp:{email.ToLower()}";
 
         public async Task<AuthResultVM> RegisterAsync(RegisterVM dto, string webRootPath)
         {
-            var existUserEmail = await _db.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
-            if (existUserEmail is not null)
+            var ExistUserEmail = await _userManager.FindByEmailAsync(dto.Email);
+
+            if (ExistUserEmail is not null)
                 return AuthResultVM.Fail("Email is already registered. Please use a different email.");
 
-            var existUserName = await _db.Users.FirstOrDefaultAsync(u => u.UserName == dto.Username);
-            if (existUserName is not null)
+            var ExistUserName = await _userManager.FindByNameAsync(dto.Username);
+
+            if (ExistUserName is not null)
                 return AuthResultVM.Fail("Username is already taken. Please choose a different username.");
 
-            if (!Enum.TryParse<Gender>(dto.Gender, true, out var parsedGender))
-                return AuthResultVM.Fail("Invalid gender value.");
-
+            // ── 1. Instructor: validate and save CV ───────────────────────
             string? cvFilePath = null;
             bool isInstructor = string.Equals(dto.Role, "Instructor", StringComparison.OrdinalIgnoreCase);
 
@@ -75,40 +81,39 @@ namespace TrackFinder.Services.AuthServices.Implementations
                 cvFilePath = $"/uploads/InstructorsCVs/{fileName}";
             }
 
+            // ── 2. Build and create the User via Identity ──────────────────
             var user = new User
             {
-                Id = Guid.NewGuid(),
                 UserName = dto.Username,
-                NormalizedUserName = dto.Username.ToUpperInvariant(),
                 Email = dto.Email,
-                NormalizedEmail = dto.Email.ToUpperInvariant(),
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                Gender = parsedGender,
+                Gender = dto.Gender,
                 Birthdate = dto.Birthdate,
-                PasswordHash = _passwordProvider.HashPassword(dto.Password),
-                // Identity's UserManager requires these to be non-null for any
-                // later UserManager.UpdateAsync() call to succeed (e.g. from
-                // UserProfileService when editing a profile). Since this user
-                // is created via direct EF Core insert rather than
-                // UserManager.CreateAsync(), we must generate them ourselves.
-                SecurityStamp = Guid.NewGuid().ToString("N"),
-                ConcurrencyStamp = Guid.NewGuid().ToString("N"),
-                Role = isInstructor ? UserRole.Instructor : UserRole.Student,
-                EmailConfirmed = false,
-                IsBanned = false,
-                CreatedAt = DateTime.UtcNow
             };
 
-            _db.Users.Add(user);
+            var createResult = await _userManager.CreateAsync(user, dto.Password);
+            if (!createResult.Succeeded)
+            {
+                var errorMessage = string.Join(" ", createResult.Errors.Select(e => e.Description));
+                return AuthResultVM.Fail(errorMessage);
+            }
 
+            // ── 3. Ensure role exists, then assign it ──────────────────────
+            var roleName = isInstructor ? "Instructor" : "Student";
+            if (!await _roleManager.RoleExistsAsync(roleName))
+                await _roleManager.CreateAsync(new Role { Name = roleName });
+
+            await _userManager.AddToRoleAsync(user, roleName);
+
+            // ── 4. Create role-specific profile row ────────────────────────
             if (isInstructor)
             {
                 _db.Instructors.Add(new Instructor
                 {
                     UserId = user.Id,
                     CvFilePath = cvFilePath,
-                    AdminApproved = false
+                    AdminApproved = false   // must be approved by admin before login
                 });
             }
             else
@@ -121,12 +126,16 @@ namespace TrackFinder.Services.AuthServices.Implementations
 
             await _db.SaveChangesAsync();
 
+            // ── 5. Generate + cache OTP, send email ─────────────────────────
             var otpCode = _tokenProvider.GenerateOtpCode();
             _cache.Set(CacheKey(dto.Email), otpCode, TimeSpan.FromMinutes(OtpExpiryMinutes));
+
+            _logger.LogInformation("OTP for {Email}: {OtpCode}", dto.Email, otpCode);
 
             var emailBody = OtpMessage.Build(dto.FirstName, otpCode, OtpExpiryMinutes);
             _emailSender.SendEmail(dto.Email, emailBody, "Verify your Track Finder account");
 
+            // ── 6. Redirect to OTP verification page ────────────────────────
             var encodedEmail = Uri.EscapeDataString(dto.Email);
             return AuthResultVM.Ok(
                 $"/Login/VerifyOtp?email={encodedEmail}",

@@ -9,16 +9,12 @@
   <ItemGroup>
     <Compile Remove="ViewModels\Orders And Payments ViewModels\**" />
     <Compile Remove="ViewModels\User ViewModels\**" />
-    <Compile Remove="Views\Assessment\**" />
     <Content Remove="ViewModels\Orders And Payments ViewModels\**" />
     <Content Remove="ViewModels\User ViewModels\**" />
-    <Content Remove="Views\Assessment\**" />
     <EmbeddedResource Remove="ViewModels\Orders And Payments ViewModels\**" />
     <EmbeddedResource Remove="ViewModels\User ViewModels\**" />
-    <EmbeddedResource Remove="Views\Assessment\**" />
     <None Remove="ViewModels\Orders And Payments ViewModels\**" />
     <None Remove="ViewModels\User ViewModels\**" />
-    <None Remove="Views\Assessment\**" />
   </ItemGroup>
 
   <ItemGroup>

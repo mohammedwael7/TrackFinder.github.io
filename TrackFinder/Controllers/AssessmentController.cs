@@ -32,7 +32,7 @@ namespace TrackFinder.Controllers
         [HttpGet("Index")]
         public IActionResult Index()
         {
-            return View();
+            return View("~/Views/Assessment/Index.cshtml");
         }
 
         [HttpGet("Take")]

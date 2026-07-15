@@ -70,4 +70,10 @@ namespace TrackFinder.ViewModels.Courses
         public string? InstructorName { get; set; }
         public string? TrackStackName { get; set; }
     }
+
+    // ViewModel-suffixed aliases for Razor Views
+    public class CourseListViewModel : CourseListVM { }
+    public class CreateCourseViewModel : CreateCourseVM { }
+    public class EditCourseViewModel : EditCourseVM { }
+    public class CourseDetailsViewModel : CourseDetailsVM { }
 }

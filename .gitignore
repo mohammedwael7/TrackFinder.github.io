@@ -1,0 +1,65 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.sln.docstates
+*.userprefs
+*.csproj.user
+*.dbmdl
+*.jfm
+*.vs/
+*.DotSettings
+.vscode/
+
+## ASP.NET
+wwwroot/lib/
+[Ee]xpress/
+App_Data/
+*.log
+*.tmp
+*.cache
+*.bak
+
+## NuGet
+packages/
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio
+.vs/
+*.sln.ide/
+*.sln.ide.opened/
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## Node / npm
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## Secrets
+appsettings.*.local.json
+appsettings.local.json
+secrets.json
+*.Development.json

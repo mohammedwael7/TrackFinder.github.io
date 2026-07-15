@@ -13,9 +13,9 @@ public class Instructor
 
     [Key]
     public Guid UserId { get; set; }
-    public Guid CommunityId { get; set; }
+    public Guid? CommunityId { get; set; }
     public virtual User User { get; set; } = null!;
     public virtual Community? AdminstratedCommunity { get; set; }
-    public virtual Community ModeratedCommunity { get; set; } = null!;
+    public virtual Community? ModeratedCommunity { get; set; }
     public ICollection<Course>? CreatedCourses { get; set; } = null!;
 }

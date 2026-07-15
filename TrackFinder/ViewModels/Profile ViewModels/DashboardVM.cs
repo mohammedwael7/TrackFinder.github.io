@@ -2,6 +2,7 @@ using TrackFinder.Models.AssessmentModels;
 using TrackFinder.Models.CommunityModels;
 using TrackFinder.Models.CourseModels;
 using TrackFinder.Models.UserModels;
+using TrackFinderDb.Models.TeachingModels;
 
 namespace TrackFinder.ViewModels.Profile_ViewModels
 {
@@ -18,5 +19,7 @@ namespace TrackFinder.ViewModels.Profile_ViewModels
         public int TotalStudentsCount { get; set; }
 
         public List<Post> RecentPosts { get; set; } = new List<Post>();
+
+        public List<Community> ManagedCommunities { get; set; } = new();
     }
 }

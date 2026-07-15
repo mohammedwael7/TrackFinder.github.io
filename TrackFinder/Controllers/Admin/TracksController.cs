@@ -18,7 +18,7 @@ public class TracksController : Controller
     public async Task<IActionResult> Index()
     {
         var tracks = await _context.Tracks.ToListAsync();
-        var vm = tracks.Select(t => new TrackListVM
+        var vm = tracks.Select(t => new TrackListViewModel
         {
             Id = t.Id,
             TrackName = t.TrackName,
@@ -43,12 +43,12 @@ public class TracksController : Controller
 
     public IActionResult Create()
     {
-        return View("~/Views/Admin/Tracks/Create.cshtml", new CreateTrackVM());
+        return View("~/Views/Admin/Tracks/Create.cshtml", new CreateTrackViewModel());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CreateTrackVM model)
+    public async Task<IActionResult> Create(CreateTrackViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -65,7 +65,7 @@ public class TracksController : Controller
     {
         var track = await _context.Tracks.FindAsync(id);
         if (track == null) return NotFound();
-        var vm = new EditTrackVM
+        var vm = new EditTrackViewModel
         {
             Id = track.Id,
             TrackName = track.TrackName,
@@ -77,7 +77,7 @@ public class TracksController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, EditTrackVM model)
+    public async Task<IActionResult> Edit(int id, EditTrackViewModel model)
     {
         if (id != model.Id) return BadRequest();
         if (!ModelState.IsValid)

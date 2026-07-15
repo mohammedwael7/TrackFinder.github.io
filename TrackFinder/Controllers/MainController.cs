@@ -90,5 +90,33 @@ namespace TrackFinder.Controllers
             TempData["SuccessMessage"] = result.SuccessMessage;
             return RedirectToAction(nameof(Index));
         }
+
+        // ── GET /Main/Search?query=... ──────────────────────────────────────
+        [HttpGet]
+        public async Task<IActionResult> Search(string query)
+        {
+            var userIdString = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+                return RedirectToAction("Index", "Login");
+
+            var results = await _profileService.SearchUsersAsync(query, userId);
+            ViewBag.Query = query;
+            return View(results);
+        }
+
+        // ── GET /Main/ViewProfile/{userId} ──────────────────────────────────
+        [HttpGet("ViewProfile/{userId:guid}")]
+        public async Task<IActionResult> ViewProfile(Guid userId)
+        {
+            try
+            {
+                var profile = await _profileService.GetPublicProfileAsync(userId);
+                return View(profile);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
     }
 }

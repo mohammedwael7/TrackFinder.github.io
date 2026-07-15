@@ -36,7 +36,7 @@ public class StudentsController : Controller
     {
         var students = await _context.Students
     .Include(s => s.User)
-    .Select(s => new StudentListVM
+    .Select(s => new StudentListViewModel
     {
         UserId = s.UserId,
         StudentName = s.User.FirstName + " " + s.User.LastName,
@@ -63,7 +63,7 @@ public class StudentsController : Controller
         if (student == null)
             return NotFound();
 
-        var model = new StudentDetailsVM
+        var model = new StudentDetailsViewModel
         {
             UserId = student.UserId,
             StudentName = student.User.FirstName + " " + student.User.LastName,
@@ -86,12 +86,12 @@ public class StudentsController : Controller
     public IActionResult Create()
     {
         LoadUsers();
-        return View("~/Views/Admin/Students/Create.cshtml", new CreateStudentVM());
+        return View("~/Views/Admin/Students/Create.cshtml", new CreateStudentViewModel());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CreateStudentVM model)
+    public async Task<IActionResult> Create(CreateStudentViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -131,7 +131,7 @@ public class StudentsController : Controller
 
         LoadUsers(student.UserId);
 
-        var model = new EditStudentVM
+        var model = new EditStudentViewModel
         {
             UserId = student.UserId,
             EducationState = student.EducationState,
@@ -149,7 +149,7 @@ public class StudentsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid userId, EditStudentVM model)
+    public async Task<IActionResult> Edit(Guid userId, EditStudentViewModel model)
     {
         if (userId != model.UserId)
             return BadRequest();
@@ -193,7 +193,7 @@ public class StudentsController : Controller
         if (student == null)
             return NotFound();
 
-        var model = new StudentDetailsVM
+        var model = new StudentDetailsViewModel
         {
             UserId = student.UserId,
             StudentName = student.User.FirstName + " " + student.User.LastName,

@@ -1,3 +1,5 @@
+wwwroot\css\admin.css
+wwwroot\css\dashboard.css
 wwwroot\css\site.css
 wwwroot\favicon.ico
 wwwroot\images\logo.png
@@ -6,9 +8,20 @@ wwwroot\lib\bootstrap\LICENSE
 wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
 wwwroot\lib\jquery-validation\LICENSE.md
 wwwroot\lib\jquery\LICENSE.txt
-G:\Mohamed\Projects\Not Completed\TrackFinder.github.io\TrackFinder\wwwroot\css\site.css
-G:\Mohamed\Projects\Not Completed\TrackFinder.github.io\TrackFinder\wwwroot\favicon.ico
-G:\Mohamed\Projects\Not Completed\TrackFinder.github.io\TrackFinder\wwwroot\js\site.js
-G:\Mohamed\Projects\Not Completed\TrackFinder.github.io\TrackFinder\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
-G:\Mohamed\Projects\Not Completed\TrackFinder.github.io\TrackFinder\wwwroot\lib\jquery-validation\LICENSE.md
-G:\Mohamed\Projects\Not Completed\TrackFinder.github.io\TrackFinder\wwwroot\lib\jquery\LICENSE.txt
+wwwroot\uploads\badge_29b28e6a-2e24-4d27-938c-4bffac5d7aaa.png
+wwwroot\uploads\certificate_4c9ea15c-85f5-46ea-b06b-854e2c0694ef.jpeg
+wwwroot\uploads\course_f780893f-0170-4432-9fff-d87c1f8139ff.png
+wwwroot\uploads\InstructorsCVs\6e835215-042f-4ce7-9f3e-390b3e359621.pdf
+wwwroot\uploads\InstructorsCVs\c8ccb03b-2dec-4ec5-8ae0-24b9f6030666.pdf
+wwwroot\uploads\InstructorsCVs\d9dea486-7239-4d00-b210-823035dcaede.pdf
+wwwroot\uploads\profiles\73699f9e-55c3-4e42-a3cb-ca396d9b704f.png
+wwwroot\uploads\profiles\7e6e88c8-834f-44e2-9f22-cf6fb1f2d588.jpeg
+wwwroot\uploads\profiles\bdd0b017-faf2-41a3-9867-2b06a2c1c5a7.png
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\lib\jquery\LICENSE.txt
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\lib\jquery-validation\LICENSE.md
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\js\site.js
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\favicon.ico
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\site.css
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\dashboard.css
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\admin.css

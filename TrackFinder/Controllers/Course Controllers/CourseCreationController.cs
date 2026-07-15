@@ -1,154 +1,191 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TrackFinder.Context;
 using TrackFinder.Models.CourseModels;
 
 namespace TrackFinder.Controllers;
 
+/// <summary>
+/// Handles course creation, editing, and management for the authenticated instructor.
+/// Every action that reads or modifies course data is scoped to the current instructor's
+/// UserId (stored in ClaimTypes.NameIdentifier by the login service).
+/// </summary>
+[Authorize(Roles = "Instructor")]
 public class CourseCreationController : Controller
 {
-	private readonly AppDbContext _context;
+    private readonly AppDbContext _context;
 
-	public CourseCreationController(AppDbContext context)
-	{
-		_context = context;
-	}
+    public CourseCreationController(AppDbContext context)
+    {
+        _context = context;
+    }
 
-	public async Task<IActionResult> Index()
-	{
-		var courses = await _context.Courses
-			.AsNoTracking()
-			.ToListAsync();
+    // ── Helper: get the logged-in instructor's Guid ────────────────────────
+    private Guid GetCurrentInstructorId()
+    {
+        var raw = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return Guid.TryParse(raw, out var id) ? id : Guid.Empty;
+    }
 
-		return View(courses);
-	}
+    // ── GET /CourseCreation ────────────────────────────────────────────────
+    /// <summary>Lists only courses owned by the logged-in instructor.</summary>
+    public async Task<IActionResult> Index()
+    {
+        var instructorId = GetCurrentInstructorId();
 
-	[HttpGet]
-	public async Task<IActionResult> Create()
-	{
-		ViewBag.GainedSkills = await _context.GainedSkills
-			.AsNoTracking()
-			.ToListAsync();
+        var courses = await _context.Courses
+            .Where(c => c.InstructorId == instructorId)
+            .AsNoTracking()
+            .ToListAsync();
 
-		return View();
-	}
+        return View(courses);
+    }
 
-	[ValidateAntiForgeryToken]
-	[HttpPost]
-	public async Task<IActionResult> Create(Course request, List<int> selectedSkillIds)
-	{
-		if (!ModelState.IsValid)
-		{
-			ViewBag.GainedSkills = await _context.GainedSkills
-			.AsNoTracking()
-			.ToListAsync();
-			return View(request);
-		}
+    // ── GET /CourseCreation/Create ─────────────────────────────────────────
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        ViewBag.GainedSkills = await _context.GainedSkills
+            .AsNoTracking()
+            .ToListAsync();
 
-		request.CourseSkills = (selectedSkillIds ?? [])
-			.Distinct()
-			.Select(skillId => new CourseSkill { GainedSkillId = skillId })
-			.ToList();
+        return View();
+    }
 
-		await _context.Courses.AddAsync(request);
-		await _context.SaveChangesAsync();
+    // ── POST /CourseCreation/Create ────────────────────────────────────────
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    public async Task<IActionResult> Create(Course request, List<int> selectedSkillIds)
+    {
+        if (!ModelState.IsValid)
+        {
+            ViewBag.GainedSkills = await _context.GainedSkills
+                .AsNoTracking()
+                .ToListAsync();
+            return View(request);
+        }
 
-		return RedirectToAction(nameof(Index));
-	}
+        // Tie the new course to the logged-in instructor
+        request.InstructorId = GetCurrentInstructorId();
 
-	public async Task<IActionResult> Delete(Guid id)
-	{
-		var course = await _context.Courses
-			.FirstOrDefaultAsync(c => c.Id == id);
+        request.CourseSkills = (selectedSkillIds ?? [])
+            .Distinct()
+            .Select(skillId => new CourseSkill { GainedSkillId = skillId })
+            .ToList();
 
-		if (course is null)
-			return NotFound();
+        await _context.Courses.AddAsync(request);
+        await _context.SaveChangesAsync();
 
-		_context.Courses.Remove(course);
-		await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
 
-		return RedirectToAction(nameof(Index));
-	}
+    // ── GET /CourseCreation/Details/{id} ───────────────────────────────────
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var instructorId = GetCurrentInstructorId();
 
-	public async Task<IActionResult> Details(Guid id)
-	{
-		var course = await _context.Courses
-			.Include(c => c.Lessons)
-			.Include(c => c.CourseSkills)
-				.ThenInclude(cs => cs.GainedSkill)
-			.AsNoTracking()
-			.FirstOrDefaultAsync(c => c.Id == id);
+        var course = await _context.Courses
+            .Include(c => c.Lessons)
+            .Include(c => c.CourseSkills)!
+                .ThenInclude(cs => cs.GainedSkill)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id && c.InstructorId == instructorId);
 
-		if (course is null)
-			return NotFound();
+        if (course is null)
+            return NotFound();
 
-		return View(course);
-	}
+        return View(course);
+    }
 
-	[HttpGet]
-	public async Task<IActionResult> Edit(Guid id)
-	{
-		var course = await _context.Courses
-			.Include(c => c.CourseSkills)
-			.AsNoTracking()
-			.FirstOrDefaultAsync(c => c.Id == id);
+    // ── GET /CourseCreation/Edit/{id} ──────────────────────────────────────
+    [HttpGet]
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        var instructorId = GetCurrentInstructorId();
 
-		if (course is null)
-			return NotFound();
+        var course = await _context.Courses
+            .Include(c => c.CourseSkills)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id && c.InstructorId == instructorId);
 
-		ViewBag.GainedSkills = await _context.GainedSkills
-			.AsNoTracking()
-			.ToListAsync();
+        if (course is null)
+            return NotFound();
 
-		ViewBag.SelectedSkillIds = course.CourseSkills
-			.Select(cs => cs.GainedSkillId)
-			.ToList();
+        ViewBag.GainedSkills = await _context.GainedSkills
+            .AsNoTracking()
+            .ToListAsync();
 
-		return View(course);
-	}
+        ViewBag.SelectedSkillIds = course.CourseSkills
+            .Select(cs => cs.GainedSkillId)
+            .ToList();
 
-	[ValidateAntiForgeryToken]
-	[HttpPost]
-	public async Task<IActionResult> Edit(Guid id, Course request, List<int> selectedSkillIds)
-	{
-		if (!ModelState.IsValid)
-		{
-			ViewBag.GainedSkills = await _context.GainedSkills
-				.AsNoTracking()
-				.ToListAsync();
+        return View(course);
+    }
 
-			ViewBag.SelectedSkillIds = selectedSkillIds;
+    // ── POST /CourseCreation/Edit/{id} ─────────────────────────────────────
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    public async Task<IActionResult> Edit(Guid id, Course request, List<int> selectedSkillIds)
+    {
+        if (!ModelState.IsValid)
+        {
+            ViewBag.GainedSkills = await _context.GainedSkills
+                .AsNoTracking()
+                .ToListAsync();
 
-			return View(request);
-		}
+            ViewBag.SelectedSkillIds = selectedSkillIds;
 
-		var course = await _context.Courses
-			.Include(c => c.CourseSkills)
-			.FirstOrDefaultAsync(c => c.Id == id);
+            return View(request);
+        }
 
-		if (course is null)
-			return NotFound();
+        var instructorId = GetCurrentInstructorId();
 
-		course.MapFrom(request);
+        var course = await _context.Courses
+            .Include(c => c.CourseSkills)
+            .FirstOrDefaultAsync(c => c.Id == id && c.InstructorId == instructorId);
 
-		var distinctSkillIds = (selectedSkillIds ?? []).Distinct().ToHashSet();
+        if (course is null)
+            return NotFound();
 
-		var skillsToRemove = course.CourseSkills
-			.Where(cs => !distinctSkillIds.Contains(cs.GainedSkillId))
-			.ToList();
+        course.MapFrom(request);
 
-		foreach (var skill in skillsToRemove)
-			course.CourseSkills.Remove(skill);
+        var distinctSkillIds = (selectedSkillIds ?? []).Distinct().ToHashSet();
 
-		var existingSkillIds = course.CourseSkills
-			.Select(cs => cs.GainedSkillId)
-			.ToHashSet();
+        var skillsToRemove = course.CourseSkills!
+            .Where(cs => !distinctSkillIds.Contains(cs.GainedSkillId!))
+            .ToList();
 
-		foreach (var skillId in distinctSkillIds.Where(sId => !existingSkillIds.Contains(sId)))
-			course.CourseSkills.Add(new CourseSkill { CourseId = course.Id, GainedSkillId = skillId });
+        foreach (var skill in skillsToRemove)
+            course.CourseSkills.Remove(skill);
 
-		await _context.SaveChangesAsync();
+        var existingSkillIds = course.CourseSkills
+            .Select(cs => cs.GainedSkillId)
+            .ToHashSet();
 
-		return RedirectToAction(nameof(Details), new { id });
-	}
+        foreach (var skillId in distinctSkillIds.Where(sId => !existingSkillIds.Contains(sId)))
+            course.CourseSkills.Add(new CourseSkill { CourseId = course.Id, GainedSkillId = skillId });
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    // ── GET /CourseCreation/Delete/{id} ────────────────────────────────────
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var instructorId = GetCurrentInstructorId();
+
+        var course = await _context.Courses
+            .FirstOrDefaultAsync(c => c.Id == id && c.InstructorId == instructorId);
+
+        if (course is null)
+            return NotFound();
+
+        _context.Courses.Remove(course);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
 }

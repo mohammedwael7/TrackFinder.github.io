@@ -1,57 +1,48 @@
 ﻿@model TrackFinder.Models.AchievementModels.Certificate
 @{
     ViewData["Title"] = "Add Certificate";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
-<div style="background-color: #f8fafc; padding: 2rem 0; font-family: sans-serif;">
-    <div style="max-width: 650px; margin: 0 auto; padding: 0 15px;">
-
-        <!-- Header -->
-        <div style="margin-bottom: 1.5rem;">
-            <h5 style="color: #1a3a5c; font-weight: 700; margin-bottom: 0.25rem; font-size: 1.35rem;">Add New Certificate</h5>
-            <p style="color: #7a8fa6; font-size: 0.85rem; margin: 0;">Create a formal recognition document for mastery paths.</p>
-        </div>
-
-        <!-- Card Container -->
-        <div style="background: #ffffff; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02); border: none;">
-            <form asp-action="CreateCertificate" method="post">
-
-                <!-- Field 1: Title -->
-                <div style="margin-bottom: 1.25rem;">
-                    <label style="display: block; color: #1a3a5c; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; margin-bottom: 0.5rem;">CERTIFICATE TITLE</label>
-                    <input asp-for="Title" style="width: 100%; border-radius: 10px; border: 1.5px solid #dde3ea; font-size: 0.88rem; padding: 0.7rem 1rem; background-color: #fcfdfe; box-sizing: border-box;" placeholder="e.g. Advanced Data Structures & Algorithms" />
-                </div>
-
-                <!-- Field 2: Description -->
-                <div style="margin-bottom: 1.25rem;">
-                    <label style="display: block; color: #1a3a5c; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; margin-bottom: 0.5rem;">DESCRIPTION</label>
-                    <textarea asp-for="Description" rows="3" style="width: 100%; border-radius: 10px; border: 1.5px solid #dde3ea; font-size: 0.88rem; padding: 0.7rem 1rem; background-color: #fcfdfe; box-sizing: border-box; resize: vertical;" placeholder="Mastered complex algorithmic complexity, graph theory, and dynamic programming..."></textarea>
-                </div>
-
-                <!-- Field 3: Template URL -->
-                <div style="margin-bottom: 1.25rem;">
-                    <label style="display: block; color: #1a3a5c; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; margin-bottom: 0.5rem;">CERTIFICATE TEMPLATE URL / FILE PATH</label>
-                    <input asp-for="CertificateUrl" style="width: 100%; border-radius: 10px; border: 1.5px solid #dde3ea; font-size: 0.88rem; padding: 0.7rem 1rem; background-color: #fcfdfe; box-sizing: border-box;" placeholder="/certificates/templates/advanced-ds.pdf" />
-                </div>
-
-                <!-- Field 4: Requirement -->
-                <div style="margin-bottom: 1.75rem;">
-                    <label style="display: block; color: #1a3a5c; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; margin-bottom: 0.5rem;">UNLOCK REQUIREMENT TEXT</label>
-                    <input asp-for="UnlockRequirement" style="width: 100%; border-radius: 10px; border: 1.5px solid #dde3ea; font-size: 0.88rem; padding: 0.7rem 1rem; background-color: #fcfdfe; box-sizing: border-box;" placeholder="Finish Machine Learning Path to unlock" />
-                </div>
-
-                <!-- Action Buttons -->
-                <div style="display: flex; gap: 0.75rem;">
-                    <button type="submit" style="background: linear-gradient(135deg, #2c5282 0%, #3a8fc4 100%); color: white; border: none; border-radius: 10px; font-weight: 600; padding: 0.75rem 1.75rem; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 12px rgba(44,82,130,0.15);">
-                        Save Certificate
-                    </button>
-                    <a asp-action="Certificates" style="background: #f0f4f8; color: #1a3a5c; border-radius: 10px; font-weight: 600; padding: 0.75rem 1.75rem; font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
-                        Cancel
-                    </a>
-                </div>
-
-            </form>
-        </div>
-
+<div class="page-header">
+    <div>
+        <div class="breadcrumb"><a asp-action="Certificates">Certificates</a><span>›</span><span>Add</span></div>
+        <h1 class="page-title">Add New Certificate</h1>
+        <p class="page-sub">Create a formal recognition document for mastery paths.</p>
     </div>
+</div>
+
+<div class="card" style="max-width:650px;">
+    <form asp-action="CreateCertificate" method="post">
+        <div class="form-grid">
+            <div class="form-group full">
+                <label asp-for="Title">Certificate Title <span class="req">*</span></label>
+                <input asp-for="Title" class="form-control" placeholder="e.g. Advanced Data Structures & Algorithms" />
+                <span asp-validation-for="Title" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="Description">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Mastered complex algorithmic complexity, graph theory, and dynamic programming..."></textarea>
+                <span asp-validation-for="Description" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="CertificateUrl">Certificate Template URL</label>
+                <input asp-for="CertificateUrl" class="form-control" placeholder="/certificates/templates/advanced-ds.pdf" />
+                <span asp-validation-for="CertificateUrl" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="UnlockRequirement">Unlock Requirement</label>
+                <input asp-for="UnlockRequirement" class="form-control" placeholder="Finish Machine Learning Path to unlock" />
+                <span asp-validation-for="UnlockRequirement" class="field-validation-error"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Certificate</button>
+            <a asp-action="Certificates" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
 </div>

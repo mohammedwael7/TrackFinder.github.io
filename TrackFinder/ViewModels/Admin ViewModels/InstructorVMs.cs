@@ -11,13 +11,12 @@ namespace TrackFinder.ViewModels.Instructors
         public string? GithubLink { get; set; }
         public string? LinkedInLink { get; set; }
         public double Rating { get; set; }
-        [Required]
-        public Guid CommunityId { get; set; }
+        public Guid? CommunityId { get; set; }
     }
 
     public class EditInstructorVM : CreateInstructorVM
     {
-        public Guid UserId { get; set; }
+        public new Guid UserId { get; set; }
     }
     public class InstructorDetailsVM
     {
@@ -33,4 +32,10 @@ namespace TrackFinder.ViewModels.Instructors
 
         public double Rating { get; set; }
     }
+
+    // ViewModel-suffixed aliases for Razor Views
+    public class CreateInstructorViewModel : CreateInstructorVM { }
+    public class EditInstructorViewModel : EditInstructorVM { }
+    public class InstructorDetailsViewModel : InstructorDetailsVM { }
+    public class InstructorListViewModel : InstructorDetailsVM { }
 }

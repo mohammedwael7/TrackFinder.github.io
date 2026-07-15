@@ -34,7 +34,7 @@ namespace TrackFinder.Controllers.Admin
             if (admin == null)
                 return NotFound();
 
-            var model = new UserDetailsVM
+            var model = new UserDetailsViewModel
             {
                 Id = admin.Id,
                 FirstName = admin.FirstName,
@@ -57,7 +57,7 @@ namespace TrackFinder.Controllers.Admin
      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(UserDetailsVM model, IFormFile? Image)
+        public async Task<IActionResult> Index(UserDetailsViewModel model, IFormFile? Image)
         {
             if (!ModelState.IsValid)
                 return View("~/Views/Admin/Profile/Index.cshtml", model);

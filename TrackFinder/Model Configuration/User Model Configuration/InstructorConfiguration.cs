@@ -29,6 +29,6 @@ public class InstructorConfiguration : IEntityTypeConfiguration<Instructor>
 		builder.HasOne(i => i.ModeratedCommunity)
 			  .WithMany(c => c.Moderators)
 			  .HasForeignKey(i => i.CommunityId)
-			  .OnDelete(DeleteBehavior.Restrict);
+			  .OnDelete(DeleteBehavior.SetNull);
 	}
 }

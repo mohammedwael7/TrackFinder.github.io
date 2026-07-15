@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,7 +23,7 @@ public class CommunitiesController : Controller
     .Include(c => c.Admin)
     .Include(c => c.JoinedMembers)
     .ToListAsync();
-        var vm = items.Select(c => new CommunityListVM
+        var vm = items.Select(c => new CommunityListViewModel
         {
             Id = c.Id,
             Name = c.Name,
@@ -41,7 +42,7 @@ public class CommunitiesController : Controller
     .Include(c => c.JoinedMembers)
     .FirstOrDefaultAsync(c => c.Id == id);
         if (item == null) return NotFound();
-        var vm = new CommunityDetailsVM
+        var vm = new CommunityDetailsViewModel
         {
             Id = item.Id,
             Name = item.Name,
@@ -57,15 +58,16 @@ public class CommunitiesController : Controller
     public IActionResult Create()
     {
         ViewBag.Instructors = new SelectList(_context.Instructors.Include(i => i.User).Select(i => new { UserId = i.UserId, Name = i.User.FirstName + " " + i.User.LastName }), "UserId", "Name");
-        return View("~/Views/Admin/Communities/Create.cshtml", new CreateCommunityVM());
+        return View("~/Views/Admin/Communities/Create.cshtml", new CreateCommunityViewModel());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CreateCommunityVM model)
+    public async Task<IActionResult> Create(CreateCommunityViewModel model)
     {
         if (!ModelState.IsValid)
         {
+            ViewBag.Instructors = new SelectList(_context.Instructors.Include(i => i.User).Select(i => new { UserId = i.UserId, Name = i.User.FirstName + " " + i.User.LastName }), "UserId", "Name");
             return View("~/Views/Admin/Communities/Create.cshtml", model);
         }
 
@@ -76,7 +78,7 @@ public class CommunitiesController : Controller
             Description = model.Description,
 
             
-            AdminId = Guid.Parse(HttpContext.Session.GetString("UserId")!)
+            AdminId = model.AdminId
 
          
         };
@@ -93,7 +95,7 @@ public class CommunitiesController : Controller
         if (item == null)
             return NotFound();
 
-        var vm = new EditCommunityVM
+        var vm = new EditCommunityViewModel
         {
             Id = item.Id,
             Name = item.Name,
@@ -104,7 +106,7 @@ public class CommunitiesController : Controller
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, EditCommunityVM model)
+    public async Task<IActionResult> Edit(Guid id, EditCommunityViewModel model)
     {
         if (id != model.Id)
             return BadRequest();
@@ -132,7 +134,7 @@ public class CommunitiesController : Controller
     {
         var item = await _context.Communities.FindAsync(id);
         if (item == null) return NotFound();
-        var vm = new CommunityDetailsVM
+        var vm = new CommunityDetailsViewModel
         {
             Id = item.Id,
             Name = item.Name,

@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using TrackFinder.Context;
 using TrackFinder.Models.UserModels;
-using TrackFinder.Providers.Private.AuthProviders;
 using TrackFinder.Services.AuthServices.Interfaces;
 using TrackFinder.ViewModels.Auth_ViewModels;
 
@@ -12,64 +9,66 @@ namespace TrackFinder.Services.AuthServices.Implementations
 {
     public class LoginService : ILoginService
     {
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly AppDbContext _db;
-        private readonly IEncryptPasswordProvider _passwordProvider;
 
-        public LoginService(AppDbContext db, IEncryptPasswordProvider passwordProvider)
+        public LoginService(UserManager<User> userManager, SignInManager<User> signInManager, AppDbContext db)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
             _db = db;
-            _passwordProvider = passwordProvider;
         }
 
         public async Task<AuthResultVM> LoginAsync(LoginVM dto, HttpContext httpContext)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user is null)
                 return AuthResultVM.Fail("Invalid email or password.");
 
             if (user.IsBanned)
                 return AuthResultVM.Fail("This account has been banned.");
 
+            // ── 1. Verify email first ────────────────────────────────────────
             if (!user.EmailConfirmed)
-                return AuthResultVM.UnverifiedEmail(user.Email);
+                return AuthResultVM.UnverifiedEmail(user.Email!);
 
-            if (!_passwordProvider.VerifyPassword(dto.Password, user.PasswordHash))
+            // ── 2. Validate password ─────────────────────────────────────────
+            var result = await _signInManager.PasswordSignInAsync(
+                user, dto.Password, isPersistent: false, lockoutOnFailure: true);
+
+            if (result.IsLockedOut)
+                return AuthResultVM.Fail("Too many failed attempts. Try again in 15 minutes.");
+
+            if (!result.Succeeded)
                 return AuthResultVM.Fail("Invalid email or password.");
 
-            if (user.Role == UserRole.Instructor)
+            // ── 3. Admin approval gate — only after credentials are valid ────
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Contains("Instructor"))
             {
-                var instructor = await _db.Instructors.FirstOrDefaultAsync(i => i.UserId == user.Id);
+                var instructor = await _db.Instructors
+                    .FirstOrDefaultAsync(i => i.UserId == user.Id);
+
                 if (instructor == null || !instructor.AdminApproved)
+                {
+                    // Sign back out — password was correct but account not approved yet
+                    await _signInManager.SignOutAsync();
                     return AuthResultVM.Fail("Your account is pending admin approval. You will be notified once approved.");
+                }
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
-                new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
-            {
-                IsPersistent = false,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(120)
-            });
-
-            return AuthResultVM.Ok("/Main/Index");
+            return AuthResultVM.Ok("/Main");
         }
 
         public async Task LogoutAsync(HttpContext httpContext)
         {
-            await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _signInManager.SignOutAsync();
         }
 
         public Task<AuthResultVM> RefreshTokenAsync(HttpContext httpContext)
         {
+            // Not needed anymore — cookie auth renews itself via SlidingExpiration.
             return Task.FromResult(AuthResultVM.Fail("Not used with cookie authentication."));
         }
     }

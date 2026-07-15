@@ -62,4 +62,10 @@ namespace TrackFinder.ViewModels.TrackStacks
         [Display(Name = "Related Track")]
         public int RelatedTrackId { get; set; }
     }
+
+    // ViewModel-suffixed aliases for Razor Views
+    public class TrackStackListViewModel : TrackStackListVM { }
+    public class TrackStackDetailsViewModel : TrackStackDetailsVM { }
+    public class CreateTrackStackViewModel : CreateTrackStackVM { }
+    public class EditTrackStackViewModel : EditTrackStackVM { }
 }

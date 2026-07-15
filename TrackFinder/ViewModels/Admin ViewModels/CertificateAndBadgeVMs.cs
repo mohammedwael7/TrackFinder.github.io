@@ -59,4 +59,14 @@ namespace TrackFinder.ViewModels.Achievements
         public string? BadgeDescription { get; set; }
         public string? BadgeImageUrl { get; set; }
     }
+
+    // ViewModel-suffixed aliases for Razor Views
+    public class CreateCertificateViewModel : CreateCertificateVM { }
+    public class EditCertificateViewModel : EditCertificateVM { }
+    public class CertificateListViewModel : CertificateListVM { }
+    public class CertificateDetailsViewModel : CertificateDetailsVM { }
+    public class CreateBadgeViewModel : CreateBadgeVM { }
+    public class EditBadgeViewModel : EditBadgeVM { }
+    public class BadgeListViewModel : BadgeListVM { }
+    public class BadgeDetailsViewModel : BadgeDetailsVM { }
 }

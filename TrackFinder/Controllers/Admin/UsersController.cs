@@ -24,7 +24,7 @@ public class UsersController : Controller
     public async Task<IActionResult> Index()
     {
         var users = await _context.Users
-            .Select(u => new UserListVM
+            .Select(u => new UserListViewModel
             {
                 Id = u.Id,
                 Username = u.UserName,
@@ -48,7 +48,7 @@ public class UsersController : Controller
         if (user == null)
             return NotFound();
 
-        var model = new UserDetailsVM
+        var model = new UserDetailsViewModel
         {
             Id = user.Id,
             Username = user.UserName,
@@ -74,7 +74,7 @@ public class UsersController : Controller
     public IActionResult Create()
     {
         return View("~/Views/Admin/Users/Create.cshtml",
-            new CreateUserVM
+            new CreateUserViewModel
             {
                 Birthdate = DateTime.Today
             });
@@ -82,7 +82,7 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CreateUserVM model)
+    public async Task<IActionResult> Create(CreateUserViewModel model)
     {
         if (!ModelState.IsValid)
             return View("~/Views/Admin/Users/Create.cshtml", model);
@@ -150,7 +150,7 @@ public class UsersController : Controller
         if (user == null)
             return NotFound();
 
-        var model = new EditUserVM
+        var model = new EditUserViewModel
         {
             Id = user.Id,
             Username = user.UserName,
@@ -170,7 +170,7 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, EditUserVM model)
+    public async Task<IActionResult> Edit(Guid id, EditUserViewModel model)
     {
         if (id != model.Id)
             return BadRequest();
@@ -243,7 +243,7 @@ public class UsersController : Controller
         if (user == null)
             return NotFound();
 
-        var model = new UserDetailsVM
+        var model = new UserDetailsViewModel
         {
             Id = user.Id,
             Username = user.UserName,

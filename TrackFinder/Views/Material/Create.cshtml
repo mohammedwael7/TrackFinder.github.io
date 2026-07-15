@@ -1,28 +1,25 @@
 @model TrackFinder.ViewModels.MaterialUploadVM
 @{
     ViewData["Title"] = "Upload Material";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
-<link rel="stylesheet" href="~/css/material/style.css" />
+<div class="card" style="max-width:520px;">
+    <div class="card-title">Upload Material</div>
+    <div class="card-subtitle">Only .rar and .zip files are allowed.</div>
 
-<div class="material-container">
-    <div class="material-card">
-        <h2 class="material-title">Upload Material</h2>
-        <p class="material-subtitle">Only .rar and .zip files are allowed</p>
+    <form asp-action="Create" asp-controller="Material" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="LessonId" />
 
-        <form asp-action="Create" asp-controller="Material" method="post" enctype="multipart/form-data" class="material-form">
-            <input type="hidden" asp-for="LessonId" />
+        <div class="form-group">
+            <label asp-for="File">File</label>
+            <input asp-for="File" type="file" class="form-control" accept=".rar,.zip" />
+            <span asp-validation-for="File" class="field-validation-error"></span>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="File" class="form-label"></label>
-                <input asp-for="File" type="file" class="form-input-file" accept=".rar,.zip" />
-                <span asp-validation-for="File" class="text-danger"></span>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn-primary">Upload</button>
-                <a asp-controller="Lesson" asp-action="Details" asp-route-id="@Model.LessonId" class="btn-secondary">Cancel</a>
-            </div>
-        </form>
-    </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Upload</button>
+            <a asp-controller="Lesson" asp-action="Details" asp-route-id="@Model.LessonId" class="btn btn-ghost">Cancel</a>
+        </div>
+    </form>
 </div>

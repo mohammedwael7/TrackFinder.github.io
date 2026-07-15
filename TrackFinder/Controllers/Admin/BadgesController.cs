@@ -20,7 +20,7 @@ public class BadgesController : Controller
     public async Task<IActionResult> Index()
     {
         var items = await _context.Badges.ToListAsync();
-        var vm = items.Select(b => new BadgeListVM
+        var vm = items.Select(b => new BadgeListViewModel
         {
             BadgeId = b.BadgeId,
             BadgeName = b.BadgeName,
@@ -34,7 +34,7 @@ public class BadgesController : Controller
     {
         var item = await _context.Badges.FindAsync(id);
         if (item == null) return NotFound();
-        var vm = new BadgeDetailsVM
+        var vm = new BadgeDetailsViewModel
         {
             BadgeId = item.BadgeId,
             BadgeName = item.BadgeName,
@@ -46,12 +46,12 @@ public class BadgesController : Controller
 
     public IActionResult Create()
     {
-        return View("~/Views/Admin/Badges/Create.cshtml", new CreateBadgeVM());
+        return View("~/Views/Admin/Badges/Create.cshtml", new CreateBadgeViewModel());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CreateBadgeVM model)
+    public async Task<IActionResult> Create(CreateBadgeViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -81,7 +81,7 @@ public class BadgesController : Controller
     {
         var item = await _context.Badges.FindAsync(id);
         if (item == null) return NotFound();
-        var vm = new EditBadgeVM
+        var vm = new EditBadgeViewModel
         {
             BadgeId = item.BadgeId,
             BadgeName = item.BadgeName,
@@ -92,7 +92,7 @@ public class BadgesController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, EditBadgeVM model)
+    public async Task<IActionResult> Edit(int id, EditBadgeViewModel model)
     {
         if (id != model.BadgeId) return BadRequest();
         if (!ModelState.IsValid)
@@ -126,7 +126,7 @@ public class BadgesController : Controller
     {
         var item = await _context.Badges.FindAsync(id);
         if (item == null) return NotFound();
-        var vm = new BadgeDetailsVM
+        var vm = new BadgeDetailsViewModel
         {
             BadgeId = item.BadgeId,
             BadgeName = item.BadgeName,

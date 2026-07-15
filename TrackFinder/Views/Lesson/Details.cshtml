@@ -2,23 +2,22 @@
 
 @{
     ViewData["Title"] = Model.Name;
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 
     var discountedPrice = Model.Discount.HasValue && Model.Discount > 0
         ? Model.Price * (1 - (int)(Model.Discount.Value / 100))
         : (double)Model.Price;
 }
 
-<link rel="stylesheet" href="~/css/Lesson/Details.css" asp-append-version="true" />
-
 <!-- Page Header -->
 <div class="page-header">
     <div class="page-header-text">
         <div class="header-breadcrumb">
-            <a asp-controller="Course" asp-action="Index">Courses</a>
+            <a asp-controller="CourseCreation" asp-action="Index">Courses</a>
             @* @if (Model.CourseId.HasValue)
             { *@
             <span>›</span>
-            <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId">Course Details</a>
+            <a asp-controller="CourseCreation" asp-action="Details" asp-route-id="@Model.CourseId">Course Details</a>
             @* } *@
             <span>›</span>
             <span>Lesson</span>
@@ -29,7 +28,7 @@
     <div class="action-row">
         @* @if (Model.CourseId.HasValue)
         { *@
-        <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId" class="btn btn-ghost btn-sm">← Course</a>
+        <a asp-controller="CourseCreation" asp-action="Details" asp-route-id="@Model.CourseId" class="btn btn-ghost btn-sm">← Course</a>
         @* } *@
         <a asp-controller="Lesson" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success btn-sm">Edit Lesson</a>
         <a asp-controller="Lesson" asp-action="Delete" asp-route-id="@Model.Id"
@@ -94,7 +93,7 @@
         </a>
         @* @if (Model.CourseId.HasValue)
         { *@
-        <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId" class="btn btn-secondary">
+        <a asp-controller="CourseCreation" asp-action="Details" asp-route-id="@Model.CourseId" class="btn btn-secondary">
             View Full Course
         </a>
         <a asp-controller="Lesson" asp-action="Create" asp-route-id="@Model.CourseId" class="btn btn-ghost">

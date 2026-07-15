@@ -3,6 +3,7 @@ using TrackFinder.Models.AchievementModels;
 using TrackFinder.Models.AssessmentModels;
 using TrackFinder.Models.CommunityModels;
 using TrackFinder.Models.CourseModels;
+using TrackFinderDb.Models.TeachingModels;
 
 namespace TrackFinder.Models.UserModels
 {

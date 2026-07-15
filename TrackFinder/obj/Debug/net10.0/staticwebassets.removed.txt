@@ -1,6 +1,0 @@
-G:\Mohamed\Projects\Not Completed\TrackFinder Features\Main\wwwroot\css\site.css
-G:\Mohamed\Projects\Not Completed\TrackFinder Features\Main\wwwroot\favicon.ico
-G:\Mohamed\Projects\Not Completed\TrackFinder Features\Main\wwwroot\js\site.js
-G:\Mohamed\Projects\Not Completed\TrackFinder Features\Main\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
-G:\Mohamed\Projects\Not Completed\TrackFinder Features\Main\wwwroot\lib\jquery-validation\LICENSE.md
-G:\Mohamed\Projects\Not Completed\TrackFinder Features\Main\wwwroot\lib\jquery\LICENSE.txt

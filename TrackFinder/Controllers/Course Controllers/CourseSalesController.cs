@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using TrackFinder.Context;
 using TrackFinder.Models.CourseModels;
+using TrackFinderDb.Models.TeachingModels;
 namespace TrackFinderDb.Controllers
 {
-    public class CourseController : Controller
+    public class CourseSalesController : Controller
     {
 
         private readonly AppDbContext _context;
-        public CourseController(AppDbContext context)
+        public CourseSalesController(AppDbContext context)
         {
             _context = context;
         }

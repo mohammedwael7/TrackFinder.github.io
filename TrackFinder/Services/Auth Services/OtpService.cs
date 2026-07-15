@@ -1,6 +1,5 @@
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
-using TrackFinder.Context;
 using TrackFinder.Models.UserModels;
 using TrackFinder.Providers.Common.EmailService;
 using TrackFinder.Providers.Common.EmailService.Messages;
@@ -12,29 +11,32 @@ namespace TrackFinder.Services.AuthServices.Implementations
 {
     public class OtpService : IOtpService
     {
-        private readonly AppDbContext _db;
+        private readonly UserManager<User> _userManager;
         private readonly ITokenProvider _tokenProvider;
         private readonly IEmailSender _emailSender;
         private readonly IMemoryCache _cache;
+        private readonly ILogger<OtpService> _logger;
         private const int OtpExpiryMinutes = 10;
 
         private static string CacheKey(string email) => $"otp:{email.ToLower()}";
 
         public OtpService(
-            AppDbContext db,
+            UserManager<User> userManager,
             ITokenProvider tokenProvider,
             IEmailSender emailSender,
-            IMemoryCache cache)
+            IMemoryCache cache,
+            ILogger<OtpService> logger)
         {
-            _db = db;
+            _userManager = userManager;
             _tokenProvider = tokenProvider;
             _emailSender = emailSender;
             _cache = cache;
+            _logger = logger;
         }
 
         public async Task<AuthResultVM> VerifyOtpAsync(VerifyOtpVM dto)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user is null)
                 return AuthResultVM.Fail("Account not found.");
 
@@ -45,10 +47,15 @@ namespace TrackFinder.Services.AuthServices.Implementations
                 return AuthResultVM.Fail("Invalid verification code.");
 
             user.EmailConfirmed = true;
-            await _db.SaveChangesAsync();
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+                return AuthResultVM.Fail("Something went wrong verifying your email.");
+
             _cache.Remove(CacheKey(dto.Email));
 
-            return user.Role == UserRole.Instructor
+            bool isInstructor = await _userManager.IsInRoleAsync(user, "Instructor");
+
+            return isInstructor
                 ? AuthResultVM.Ok("/Login/PendingApproval",
                     "Email verified! Your account is now pending admin review.")
                 : AuthResultVM.Ok("/Login",
@@ -57,7 +64,7 @@ namespace TrackFinder.Services.AuthServices.Implementations
 
         public async Task<AuthResultVM> ResendOtpAsync(string email)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _userManager.FindByEmailAsync(email);
             if (user is null)
                 return AuthResultVM.Fail("Account not found.");
 
@@ -67,14 +74,10 @@ namespace TrackFinder.Services.AuthServices.Implementations
             var otpCode = _tokenProvider.GenerateOtpCode();
             _cache.Set(CacheKey(email), otpCode, TimeSpan.FromMinutes(OtpExpiryMinutes));
 
-            var emailBody = OtpMessage.Build(user.FirstName, otpCode, OtpExpiryMinutes);
-            var emailSent = _emailSender.SendEmail(email, emailBody, "Verify your Track Finder account");
+            _logger.LogInformation("OTP for {Email}: {OtpCode}", email, otpCode);
 
-            if (!emailSent)
-            {
-                _cache.Remove(CacheKey(email));
-                return AuthResultVM.Fail("Failed to send verification email. Please try again shortly.");
-            }
+            var emailBody = OtpMessage.Build(user.FirstName, otpCode, OtpExpiryMinutes);
+            _emailSender.SendEmail(email, emailBody, "Verify your Track Finder account");
 
             return AuthResultVM.Ok(
                 $"/Login/VerifyOtp?email={Uri.EscapeDataString(email)}",

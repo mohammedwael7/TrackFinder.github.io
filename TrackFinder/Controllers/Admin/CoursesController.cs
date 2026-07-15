@@ -23,7 +23,7 @@ public class CoursesController : Controller
         var courses = await _context.Courses
             .Include(c => c.Instructor)
             .ThenInclude(i => i.User)
-            .Select(c => new CourseListVM
+            .Select(c => new CourseListViewModel
             {
                 Id = c.Id,
                 Name = c.Name,
@@ -48,7 +48,7 @@ public class CoursesController : Controller
         if (course == null)
         return NotFound();
 
-        var model = new CourseDetailsVM
+        var model = new CourseDetailsViewModel
         {
             Id = course.Id,
             Name = course.Name,
@@ -85,13 +85,13 @@ public class CoursesController : Controller
 
         return View(
             "~/Views/Admin/Courses/Create.cshtml",
-            new CreateCourseVM()
+            new CreateCourseViewModel()
         );
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CreateCourseVM model)
+    public async Task<IActionResult> Create(CreateCourseViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -151,7 +151,7 @@ public class CoursesController : Controller
 
         PopulateSelectLists();
 
-        var model = new EditCourseVM
+        var model = new EditCourseViewModel
         {
             Id = course.Id,
             Name = course.Name,
@@ -172,7 +172,7 @@ public class CoursesController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, EditCourseVM model)
+    public async Task<IActionResult> Edit(Guid id, EditCourseViewModel model)
     {
         if (id != model.Id)
             return BadRequest();
@@ -242,7 +242,7 @@ public class CoursesController : Controller
             return NotFound();
 
 
-        var model = new CourseDetailsVM
+        var model = new CourseDetailsViewModel
         {
             Id = course.Id,
             Name = course.Name,

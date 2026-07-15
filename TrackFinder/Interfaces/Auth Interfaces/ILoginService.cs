@@ -1,5 +1,6 @@
 using TrackFinder.ViewModels.Auth_ViewModels;
 
+
 namespace TrackFinder.Services.AuthServices.Interfaces
 {
     /// <summary>
@@ -16,8 +17,7 @@ namespace TrackFinder.Services.AuthServices.Interfaces
         Task<AuthResultVM> LoginAsync(LoginVM dto, HttpContext httpContext);
 
         /// <summary>
-        /// Signs the user out, clears auth cookie and refresh token cookie,
-        /// and removes the refresh token from the database.
+        /// Signs the user out, clears auth cookie
         /// </summary>
         Task LogoutAsync(HttpContext httpContext);
 

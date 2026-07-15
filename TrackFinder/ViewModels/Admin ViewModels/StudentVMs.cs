@@ -82,4 +82,10 @@ namespace TrackFinder.ViewModels.Students
     public class EditStudentVM : CreateStudentVM
     {
     }
+
+    // ViewModel-suffixed aliases for Razor Views
+    public class StudentListViewModel : StudentListVM { }
+    public class StudentDetailsViewModel : StudentDetailsVM { }
+    public class CreateStudentViewModel : CreateStudentVM { }
+    public class EditStudentViewModel : EditStudentVM { }
 }
