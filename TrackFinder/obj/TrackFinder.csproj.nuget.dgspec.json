@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder Features\\Main\\TrackFinder.csproj": {}
+    "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder.github.io\\TrackFinder\\TrackFinder.csproj": {}
   },
   "projects": {
-    "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder Features\\Main\\TrackFinder.csproj": {
+    "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder.github.io\\TrackFinder\\TrackFinder.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder Features\\Main\\TrackFinder.csproj",
+        "projectUniqueName": "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder.github.io\\TrackFinder\\TrackFinder.csproj",
         "projectName": "TrackFinder",
-        "projectPath": "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder Features\\Main\\TrackFinder.csproj",
+        "projectPath": "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder.github.io\\TrackFinder\\TrackFinder.csproj",
         "packagesPath": "C:\\Users\\moham\\.nuget\\packages\\",
-        "outputPath": "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder Features\\Main\\obj\\",
+        "outputPath": "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder.github.io\\TrackFinder\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

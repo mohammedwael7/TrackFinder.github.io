@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrackFinder")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a87bfa4ec38940985b146a0e53e564f7aff748c")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrackFinder")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrackFinder")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Xh1QJuL8C/k=",
+  "dgSpecHash": "UIUcN62cvs0=",
   "success": true,
-  "projectFilePath": "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder Features\\Main\\TrackFinder.csproj",
+  "projectFilePath": "G:\\Mohamed\\Projects\\Not Completed\\TrackFinder.github.io\\TrackFinder\\TrackFinder.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\moham\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\moham\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
