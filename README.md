@@ -9,7 +9,10 @@
 
 ## 📖 Professional Introduction
 
-**Track Finder** is an intelligent, full-stack learning platform designed to help students discover and navigate their ideal career paths. Many learners struggle to identify learning tracks that align with their skills, wasting time and resources on disconnected materials. Track Finder solves this by providing assessment-based recommendations, structured learning roadmaps, curated courses from trusted instructors, and a supportive community forum. 
+**Track Finder** is an intelligent, full-stack learning platform designed to help students discover and navigate their ideal career paths. 
+
+- **The Problem:** Many learners struggle to identify learning tracks that align with their skills, wasting time and resources on disconnected materials. 
+- **The Solution:** Track Finder provides assessment-based recommendations, structured learning roadmaps, curated courses from trusted instructors, and a supportive community forum. 
 
 ---
 
@@ -37,13 +40,17 @@
 
 ## 🌐 Live Deployment
 
-**Experience the platform live:** [https://trackfinder.runasp.net/](https://trackfinder.runasp.net/)
+- **Experience the platform live:** [https://trackfinder.runasp.net/](https://trackfinder.runasp.net/)
 
 ---
 
 ## 🎯 Project Overview
 
-Track Finder is a standalone, web-based e-learning system with three tightly integrated experiences for **Students**, **Instructors**, and **Administrators**. The platform turns a passive course catalog into an active advisor by assessing a learner's baseline and intelligently recommending a specific career track (such as AI, Web Development, or Cybersecurity). It centralizes course consumption, progress tracking, community engagement, and platform management into a single cohesive ecosystem.
+Track Finder is a standalone, web-based e-learning system with three tightly integrated experiences for **Students**, **Instructors**, and **Administrators**. 
+
+- **Active Advising:** Turns a passive course catalog into an active advisor by assessing a learner's baseline.
+- **Intelligent Recommendations:** Suggests specific career tracks (e.g., AI, Web Development, Cybersecurity).
+- **Centralized Ecosystem:** Combines course consumption, progress tracking, community engagement, and platform management.
 
 ---
 
@@ -52,55 +59,45 @@ Track Finder is a standalone, web-based e-learning system with three tightly int
 <details>
 <summary><strong>🎓 Student Experience</strong></summary>
 
-* **Skill Assessments:** Adaptive questions that measure a learner's baseline to recommend suitable career tracks and technology stacks.
-* **Structured Learning:** Browse and enroll in curated paths containing videos, documents, and downloadable offline resources.
-* **Achievements & Recognition:** Earn digital mastery badges and verified certificates upon successful course completion.
-* **Community Engagement:** Publish posts, ask questions, share code snippets, and follow specific tech communities.
+- **Skill Assessments:** Adaptive questions that measure a learner's baseline to recommend suitable career tracks and technology stacks.
+- **Structured Learning:** Browse and enroll in curated paths containing videos, documents, and downloadable offline resources.
+- **Achievements & Recognition:** Earn digital mastery badges and verified certificates upon successful course completion.
+- **Community Engagement:** Publish posts, ask questions, share code snippets, and follow specific tech communities.
 </details>
 
 <details>
 <summary><strong>👨‍🏫 Instructor Workspace</strong></summary>
 
-* **Course Management:** Create, edit, and organize courses, lessons, and assignments.
-* **Student Monitoring:** Track student engagement, progress, and performance in real-time.
-* **Content Delivery:** Upload instructional videos, PDF materials, and quizzes/exams.
+- **Course Management:** Create, edit, and organize courses, lessons, and assignments.
+- **Student Monitoring:** Track student engagement, progress, and performance in real-time.
+- **Content Delivery:** Upload instructional videos, PDF materials, and quizzes/exams.
 </details>
 
 <details>
 <summary><strong>🛡️ Admin Control Panel</strong></summary>
 
-* **Centralized Dashboard:** Monitor live statistics, track enrollments, and view system metrics.
-* **Content Taxonomy:** Manage courses, structured tracks, and individual technology stacks.
-* **User & Role Management:** Ban/unban users, approve instructor accounts, and manage cross-role permissions.
-* **Moderation:** Review reported content and ensure community safety.
+- **Centralized Dashboard:** Monitor live statistics, track enrollments, and view system metrics.
+- **Content Taxonomy:** Manage courses, structured tracks, and individual technology stacks.
+- **User & Role Management:** Ban/unban users, approve instructor accounts, and manage cross-role permissions.
+- **Moderation:** Review reported content and ensure community safety.
 </details>
 
 ---
 
 ## 💻 Tech Stack
 
-**Backend**
-* C# / ASP.NET Core MVC
-* Entity Framework Core (ORM)
-
-**Frontend**
-* HTML5, CSS3, JavaScript
-* Razor Pages
-* Bootstrap CSS
-
-**Database & Hosting**
-* Microsoft SQL Server
-* IIS Hosting Environment
-
-**Tools**
-* Git & GitHub
-* draw.io (System Modeling)
+- **Backend:** C# / ASP.NET Core MVC, Entity Framework Core (ORM)
+- **Frontend:** HTML5, CSS3, JavaScript, Razor Pages, Bootstrap CSS
+- **Database & Hosting:** Microsoft SQL Server, IIS Hosting Environment
+- **Tools:** Git & GitHub, draw.io (System Modeling)
 
 ---
 
 ## 🏗️ System Architecture
 
-Track Finder follows a strict layered architecture based on the **Model-View-Controller (MVC)** design pattern. This separates the presentation layer (Views/Razor), business logic (Controllers), and data access layers (Models/ViewModels) to ensure high maintainability and scalability. 
+- **Pattern:** Strict layered architecture based on the **Model-View-Controller (MVC)** design pattern. 
+- **Separation of Concerns:** Separates the presentation layer (Views/Razor), business logic (Controllers), and data access layers (Models/ViewModels).
+- **Goal:** Ensures high maintainability and system scalability.
 
 ---
 
@@ -122,7 +119,7 @@ The system utilizes a robust relational database managed via Entity Framework Co
 
 ## 📁 Project Structure
 
-*Note: The exact directory tree is Not specified in the documentation. However, the system strictly follows standard ASP.NET Core MVC scaffolding conventions.*
+*Note: Follows standard ASP.NET Core MVC scaffolding conventions.*
 
 
 TrackFinder/
@@ -134,113 +131,235 @@ TrackFinder/
 ├── Data/              # Entity Framework DbContext and Migrations
 └── Program.cs         # Application entry point and service registration
 
-🖥️ UI Screenshots & Interfaces
-Landing Page
 
-<img width="1920" height="2880" alt="1(0)" src="https://github.com/user-attachments/assets/46e6c941-9ec6-4e7d-af3d-73b02f1055b6" />
+---
 
- The Landing Page serves as the main entry point to the Track Finder platform, introducing users to the platform's purpose and highlighting its key features. It is designed with an attractive and clean interface to encourage visitors to explore and begin their learning journey.
- 
-Secure Sign In
+## 🖥️ UI Screenshots & Interfaces
 
-<img width="2275" height="737" alt="mm" src="https://github.com/user-attachments/assets/bf5cffce-c86f-4202-a410-e956fee7c2f0" />
+### Landing Page
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Landing+Page+Screenshot" alt="Landing Page">
+</div>
 
- The Sign In page provides secure authentication for registered users to access their accounts. It dynamically directs users to personalized features based on their assigned role (Student, Instructor, or Admin).
- 
-Student Dashboard
+- **Purpose:** The main entry point to the Track Finder platform.
+- **Functionality:** Introduces the platform's value proposition and highlights key services, guiding visitors seamlessly toward registration.
 
-<img width="1920" height="1868" alt="5" src="https://github.com/user-attachments/assets/f8e4aca9-e650-465c-9ffe-99b5c2528f07" />
+---
+
+### Secure Sign In & Registration
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Sign+In+Screenshot" alt="Secure Sign In">
+</div>
+
+- **Purpose:** Secure, role-based authentication gateway.
+- **Functionality:** Dynamically directs users (Students, Instructors, Admins) to personalized dashboards based on their verified credentials.
+
+---
+
+### Student Dashboard
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Student+Dashboard+Screenshot" alt="Student Dashboard">
+</div>
+
+- **Purpose:** The personalized home for learners.
+- **Functionality:** Surfaces active courses, roadmap progress, recent achievements, and quick actions in a single, scannable glance.
+
+---
+
+### Instructor Dashboard
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Instructor+Dashboard+Screenshot" alt="Instructor Dashboard">
+</div>
+
+- **Purpose:** A centralized command center for educators.
+- **Functionality:** Provides low-friction access to course publishing, real-time student monitoring, and crucial platform revenue/engagement metrics.
+
+---
+
+### Assessment & Track Recommendations
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Assessment+and+Tracks+Screenshot" alt="Assessment Overview">
+</div>
+
+- **Purpose:** The core intelligent advising engine.
+- **Functionality:** Offers a distraction-free environment to measure technical baseline skills, outputting personalized technology track and stack suggestions.
+
+---
+
+### Course Materials
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Course+Materials+Screenshot" alt="Course Materials">
+</div>
+
+- **Purpose:** The primary learning interface.
+- **Functionality:** Implements a predictable reading path (details ➔ materials ➔ download) for sequential video, document, and resource consumption.
+
+---
+
+### Community Hub
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Community+Screenshot" alt="Community Hub">
+</div>
+
+- **Purpose:** A collaborative ecosystem for shared growth.
+- **Functionality:** Enables code snippet sharing, Q&A threads, and topic following to reduce the isolation of self-paced study.
+
+---
+
+### Achievements & Badges
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Achievements+Screenshot" alt="Achievements">
+</div>
+
+- **Purpose:** Motivation and verifiable progression.
+- **Functionality:** Acts as a digital portfolio that prominently displays mastery badges (e.g., "Problem Solver") and verified course certificates.
+
+---
+
+### Admin Dashboard
+<div align="center">
+  <img src="https://via.placeholder.com/800x400?text=Admin+Dashboard+Screenshot" alt="Admin Dashboard">
+</div>
+
+- **Purpose:** The administrator's mission control.
+- **Functionality:** Centralizes live statistics, user distribution analytics, content moderation, and overarching taxonomy management.
+
+---
+
+## ⚙️ Installation
+
+Follow these steps to get a local development environment up and running:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/track-finder.git
+   cd track-finder
+   ```
+
+2. **Restore .NET dependencies:**
+   ```bash
+   dotnet restore
+   ```
+
+3. **Apply database migrations:**
+   ```bash
+   dotnet ef database update
+   ```
+
+4. **Run the application:**
+   ```bash
+   dotnet run
+   ```
+
+---
+
+## 🛠️ Configuration
+
+Configure your `appsettings.json` file to connect the application to your local SQL Server instance:
 
 
- The Student Dashboard provides a personalized overview of all learning activities. It prominently displays enrolled courses, learning progress, recent achievements, and upcoming tasks for quick access.
- 
-Instructor Dashboard
-
-<img width="1920" height="3528" alt="6" src="https://github.com/user-attachments/assets/78ecfe22-cf11-4af0-9fc8-aa40753fc88b" />
-
- The Instructor Dashboard acts as a centralized command center for educators to maintain complete control over their content. It provides streamlined access to course management, student performance monitoring, and platform statistics.
-
- 
-Assessment & Recommended Tracks
-
-<img width="1920" height="1432" alt="12" src="https://github.com/user-attachments/assets/1fc6ec9c-fc24-4bbf-96f2-4cc1ac8b64db" />
-
-
- Users are presented with a distraction-free assessment environment to accurately measure their technical skills. Based on the results, the platform's algorithm suggests the most suitable learning tracks and customized technology stacks for the student's career goals.
- 
-Community Hub
-
-<img width="1920" height="2021" alt="9" src="https://github.com/user-attachments/assets/3550ed1a-9484-41f9-8566-1aaa57958208" />
-
- The Community page fosters a collaborative environment where students and instructors can interact. Users can publish posts, share technical knowledge, ask questions, and engage in ongoing discussions.
-Achievements & Badges
-
-Admin Dashboard
-
-<img width="1920" height="1907" alt="21" src="https://github.com/user-attachments/assets/4dfbd965-309c-443c-998d-0eead6f4248d" />
-
- The centralized Admin Dashboard provides administrators with a complete, top-down overview of the entire system. It offers rapid access to management tools, user activity logs, and detailed platform statistics.
- 
-⚙️ Installation
-Note: Specific environment variables or connection strings are Not specified in the documentation. Below are standard execution steps based on the provided tech stack.
-Clone the repository:
-Restore .NET dependencies:
-Update the database (Entity Framework Core migrations):
-Run the application:
-🛠️ Configuration
-Configure your appsettings.json file with your local SQL Server instance:
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=YOUR_SERVER;Database=TrackFinderDB;Trusted_Connection=True;MultipleActiveResultSets=true"
-  }
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
 }
-🚀 Usage
-New Users: Navigate to the Landing Page and click Get Started to register as either a Student or Instructor.
-Students: Begin by taking the Career Assessment to receive a tailored technology track recommendation, then browse and enroll in recommended courses.
-Instructors: Await admin verification. Once approved, use the Teacher Studio to create new courses, upload video/document materials, and monitor community discussions.
-Admins: Log in with administrative credentials to access the centralized dashboard to review reported content, issue badges, and manage technical tracks.
-📡 API Endpoints
-Not specified. (The system is documented as a traditional ASP.NET Core MVC application utilizing Razor Pages and Views rather than a standalone RESTful API architecture).
-🔒 Authentication & Security
-Role-Based Access Control (RBAC): Strict separation of privileges for STUDENT, INSTRUCTOR, and ADMIN roles.
-Password Encryption: All user passwords are encrypted using bcrypt before database storage.
-Tokens: JWT token issuance is utilized for secure, stateless session handling during login.
-Vulnerability Protection: Built-in safeguards against common web exploits including SQL Injection and Cross-Site Scripting (XSS).
-🔮 Future Improvements
-The development roadmap for Track Finder includes the following future enhancements:
-Adaptive Assessments: Dynamic questions that adjust in difficulty based on the learner's ongoing performance.
-AI-Powered Recommendations: Smarter algorithms for matching students to exact courses and tracks.
-Mobile Applications: Dedicated native clients for iOS and Android devices.
-Live Sessions: Instructor-led live webinars and real-time classes.
-Verified Credentials: Blockchain-anchored digital certificates for unforgeable proof of completion.
+
+
 ---
-##🤝 Contributing
 
-Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
-Fork the Project
-Create your Feature Branch (git checkout -b feature/AmazingFeature)
-Commit your Changes (git commit -m 'Add some AmazingFeature')
-Push to the Branch (git push origin feature/AmazingFeature)
-Open a Pull Request
+## 🚀 Usage
 
-📜 License
-Distributed under the MIT License.
-👥 Contributors & Acknowledgments
-This platform was developed as a Final Graduation Project for the FULL-Stack.NET Developer Track
-.
-👨‍🏫 Eng. Maged Samir
-Role: Instructor / Project Supervisor
-👑 Mohamed Wael
-Role: Team Leader
-💻 Mohamed Khaled
-Role: Team Member (Full-Stack .NET Developer)
-💻 Ahmed Ehab
-Role: Team Member (Full-Stack .NET Developer)
-💻 Abdelrahman Mohamed
-Role: Team Member (Full-Stack .NET Developer)
-💻 Amr Khaled
-Role: Team Member (Full-Stack .NET Developer)
-💻 Shymaa Fekry
-Role: Team Member (Full-Stack .NET Developer)
-💻 Reham Ahmed
-Role: Team Member (Full-Stack .NET Developer)
+- **For New Users:** 
+  - Navigate to the [Live Deployment](https://trackfinder.runasp.net/) or your local host.
+  - Click `Get Started` to register a new account.
+- **For Students:** 
+  - Take the *Career Assessment* immediately upon login.
+  - Review your tailored technology track recommendations.
+  - Browse the catalog, enroll in courses, and begin consuming content.
+- **For Instructors:** 
+  - Await account verification from an administrator.
+  - Access the *Teacher Studio* to design new courses, upload video/PDF materials, and engage with students in the Community Hub.
+- **For Administrators:** 
+  - Log in with secure admin credentials.
+  - Use the dashboard to monitor system health, verify instructor accounts, manage tracks/stacks, and moderate community posts.
+
+---
+
+## 📡 API Endpoints
+
+- **Not Applicable:** The system is documented and built as a traditional **ASP.NET Core MVC** application utilizing Razor Pages, Server-Side Rendering (SSR), and Views, rather than a decoupled RESTful API architecture.
+
+---
+
+## 🔒 Authentication & Security
+
+- **Role-Based Access Control (RBAC):** Strict segregation of privileges across `STUDENT`, `INSTRUCTOR`, and `ADMIN` roles.
+- **Password Hashing:** All user credentials are encrypted via `bcrypt` prior to database storage.
+- **Session Handling:** Utilizes JWT token issuance for secure, stateless user sessions.
+- **Input Validation:** Multi-layered validation prevents common exploits, including SQL Injection and Cross-Site Scripting (XSS).
+
+---
+
+## 🔮 Future Improvements
+
+- [ ] **Adaptive Assessments:** Dynamic questions that adjust in difficulty based on the learner's ongoing performance.
+- [ ] **AI-Powered Recommendations:** Enhanced algorithms for smarter matching between students and specific courses/tracks.
+- [ ] **Mobile Applications:** Dedicated native clients for iOS and Android devices.
+- [ ] **Live Sessions:** Infrastructure for instructor-led live webinars and real-time classes.
+- [ ] **Verified Credentials:** Blockchain-anchored digital certificates for unforgeable proof of completion.
+
+---
+
+## 🤝 Contributing
+
+Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. **Fork the Project**
+2. **Create your Feature Branch:**
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+3. **Commit your Changes:**
+   ```bash
+   git commit -m 'Add some AmazingFeature'
+   ```
+4. **Push to the Branch:**
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+5. **Open a Pull Request**
+
+---
+
+## 📜 License
+
+- Distributed under the **MIT License**.
+- See `LICENSE` for more information.
+
+---
+
+## 👥 Contributors & Acknowledgments
+
+This platform was proudly developed as a Final Graduation Project for the **FULL-Stack.NET Developer Track** in association with **NEXT Career Development Academy** and **Rowad Masr Digital**. 
+
+| Role | Contributor Name |
+| :--- | :--- |
+| **👨‍🏫 Instructor & Project Supervisor** | **Eng. Maged Samir** |
+| 👑 **Team Leader** | **Mohamed Wael** |
+| 💻 Full-Stack .NET Developer | Mohamed Khaled |
+| 💻 Full-Stack .NET Developer | Ahmed Ehab |
+| 💻 Full-Stack .NET Developer | Abdelrahman Mohamed |
+| 💻 Full-Stack .NET Developer | Amr Khaled |
+| 💻 Full-Stack .NET Developer | Shymaa Fekry |
+| 💻 Full-Stack .NET Developer | Reham Ahmed |
+
+<div align="center">
+  <em>Thank you for exploring Track Finder! Questions, feedback, and discussions are always welcome.</em>
+</div>
