@@ -20,6 +20,14 @@
             </p>
         </div>
 
+        @if (Context.Request.Query["error"] == "1")
+        {
+            <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                <strong>Something went wrong.</strong> The previous operation did not complete successfully. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
     </div>
 
 

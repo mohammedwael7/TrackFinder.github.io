@@ -97,11 +97,13 @@ public class LessonController : Controller
 	public async Task<IActionResult> Delete(Guid id)
 	{
 		var lesson = await _context.Lessons
-			.FindAsync(id);
+			.Include(l => l.Materials)
+			.FirstOrDefaultAsync(l => l.Id == id);
 
 		if (lesson is null)
 			return NotFound();
 
+		_context.Materials.RemoveRange(lesson.Materials);
 		_context.Lessons.Remove(lesson);
 		await _context.SaveChangesAsync();
 

@@ -8,6 +8,7 @@ wwwroot\lib\bootstrap\LICENSE
 wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
 wwwroot\lib\jquery-validation\LICENSE.md
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\materials\1bf21870-1a4b-4055-9cc1-858876ea0417_L1-5 merged.rar
 wwwroot\uploads\badge_29b28e6a-2e24-4d27-938c-4bffac5d7aaa.png
 wwwroot\uploads\badge_921aa1f7-93c1-401a-a84e-4d39ab59331b.jpg
 wwwroot\uploads\badge_c081d4c1-3f3b-4b7d-89bd-f1ada5f8a480.png

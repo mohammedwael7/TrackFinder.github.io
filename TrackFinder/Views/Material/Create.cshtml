@@ -6,14 +6,14 @@
 
 <div class="card" style="max-width:520px;">
     <div class="card-title">Upload Material</div>
-    <div class="card-subtitle">Only .rar and .zip files are allowed.</div>
+    <div class="card-subtitle">Allowed: .rar, .zip, .pdf, .doc, .docx, .ppt, .pptx, .xls, .xlsx, .txt, .png, .jpg, .mp4, .avi, .mkv</div>
 
     <form asp-action="Create" asp-controller="Material" method="post" enctype="multipart/form-data">
         <input type="hidden" asp-for="LessonId" />
 
         <div class="form-group">
             <label asp-for="File">File</label>
-            <input asp-for="File" type="file" class="form-control" accept=".rar,.zip" />
+            <input asp-for="File" type="file" class="form-control" accept=".rar,.zip,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.mp4,.avi,.mkv" />
             <span asp-validation-for="File" class="field-validation-error"></span>
         </div>
 

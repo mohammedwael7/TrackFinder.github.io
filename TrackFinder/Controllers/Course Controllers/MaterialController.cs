@@ -31,13 +31,16 @@ public class MaterialController : Controller
 	[HttpGet]
 	public async Task<IActionResult> Create(Guid id)
 	{
-		var lessonExists = await _context.Lessons
-			.AnyAsync(l => l.Id == id);
+		var lesson = await _context.Lessons
+			.Select(l => new { l.Id, l.CourseId })
+			.FirstOrDefaultAsync(l => l.Id == id);
 
-		if (!lessonExists)
+		if (lesson == null)
 			return NotFound();
 
 		var model = new MaterialUploadVM { LessonId = id };
+
+		ViewBag.CourseId = lesson.CourseId;
 
 		return View(model);
 	}
@@ -46,14 +49,17 @@ public class MaterialController : Controller
 	[HttpPost]
 	public async Task<IActionResult> Create(MaterialUploadVM model)
 	{
+		var lesson = await _context.Lessons
+			.Select(l => new { l.Id, l.CourseId })
+			.FirstOrDefaultAsync(l => l.Id == model.LessonId);
+
+		if (lesson == null)
+			return NotFound();
+
+		ViewBag.CourseId = lesson.CourseId;
+
 		if (!ModelState.IsValid)
 			return View(model);
-
-		var lessonExists = await _context.Lessons
-			.AnyAsync(m => m.Id == model.LessonId);
-
-		if (!lessonExists)
-			return NotFound();
 
 		if (model.File == null || model.File.Length == 0)
 		{
@@ -62,9 +68,10 @@ public class MaterialController : Controller
 		}
 
 		var extension = Path.GetExtension(model.File.FileName).ToLower();
-		if (extension != ".rar" && extension != ".zip")
+		var allowedExtensions = new[] { ".rar", ".zip", ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".txt", ".png", ".jpg", ".jpeg", ".mp4", ".avi", ".mkv" };
+		if (!allowedExtensions.Contains(extension))
 		{
-			ModelState.AddModelError("File", "Only .rar or .zip files are allowed.");
+			ModelState.AddModelError("File", "File type not supported. Allowed: " + string.Join(", ", allowedExtensions));
 			return View(model);
 		}
 
@@ -88,7 +95,8 @@ public class MaterialController : Controller
 			FileName = model.File.FileName,
 			FileUrl = "/materials/" + uniqueFileName,
 			ContentType = model.File.ContentType,
-			LessonId = model.LessonId
+			LessonId = model.LessonId,
+			CourseId = lesson.CourseId ?? Guid.Empty
 		};
 
 		_context.Materials.Add(material);

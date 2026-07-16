@@ -68,6 +68,9 @@ namespace TrackFinder
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
             builder.Services.AddScoped<AssessmentService>();
             var app = builder.Build();
+
+            app.UseMiddleware<TrackFinder.Middleware.ExceptionHandlingMiddleware>();
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
