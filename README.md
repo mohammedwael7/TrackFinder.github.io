@@ -1,5 +1,6 @@
 # 🎓 Track Finder
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-trackfinder.runasp.net-success?style=for-the-badge&logo=googlechrome&logoColor=white)](https://trackfinder.runasp.net/)
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
 ![Entity Framework Core](https://img.shields.io/badge/Entity%20Framework-3dbfb8?style=for-the-badge&logo=dotnet&logoColor=white)
@@ -14,6 +15,7 @@
 
 ## 📑 Table of Contents
 
+- [Live Deployment](#-live-deployment)
 - [Project Overview](#-project-overview)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
@@ -30,6 +32,12 @@
 - [Contributing](#-contributing)
 - [License](#-license)
 - [Contributors & Acknowledgments](#-contributors--acknowledgments)
+
+---
+
+## 🌐 Live Deployment
+
+**Experience the platform live:** [https://trackfinder.runasp.net/](https://trackfinder.runasp.net/)
 
 ---
 
@@ -116,7 +124,7 @@ The system utilizes a robust relational database managed via Entity Framework Co
 
 *Note: The exact directory tree is Not specified in the documentation. However, the system strictly follows standard ASP.NET Core MVC scaffolding conventions.*
 
-```text
+
 TrackFinder/
 ├── Controllers/       # Handles incoming HTTP requests and business logic routing
 ├── Models/            # Database entities (User, Course, Enrollment, etc.)
@@ -125,162 +133,104 @@ TrackFinder/
 ├── wwwroot/           # Static assets (CSS, JS, Images, Bootstrap)
 ├── Data/              # Entity Framework DbContext and Migrations
 └── Program.cs         # Application entry point and service registration
-```
 
----
+🖥️ UI Screenshots & Interfaces
+Landing Page
 
-## 🖥️ UI Screenshots & Interfaces
+<img width="1920" height="2880" alt="1(0)" src="https://github.com/user-attachments/assets/46e6c941-9ec6-4e7d-af3d-73b02f1055b6" />
 
-### Landing Page
-![Landing Page](https://via.placeholder.com/800x400?text=Landing+Page+Screenshot)
-The Landing Page serves as the main entry point to the Track Finder platform, introducing users to the platform's purpose and highlighting its key features. It is designed with an attractive and clean interface to encourage visitors to explore and begin their learning journey.
+ The Landing Page serves as the main entry point to the Track Finder platform, introducing users to the platform's purpose and highlighting its key features. It is designed with an attractive and clean interface to encourage visitors to explore and begin their learning journey.
+ 
+Secure Sign In
 
-### Secure Sign In
-![Sign In](https://via.placeholder.com/800x400?text=Sign+In+Screenshot)
-The Sign In page provides secure authentication for registered users to access their accounts. It dynamically directs users to personalized features based on their assigned role (Student, Instructor, or Admin).
+<img width="2275" height="737" alt="mm" src="https://github.com/user-attachments/assets/bf5cffce-c86f-4202-a410-e956fee7c2f0" />
 
-### Student Dashboard
-![Student Dashboard](https://via.placeholder.com/800x400?text=Student+Dashboard+Screenshot)
-The Student Dashboard provides a personalized overview of all learning activities. It prominently displays enrolled courses, learning progress, recent achievements, and upcoming tasks for quick access.
+ The Sign In page provides secure authentication for registered users to access their accounts. It dynamically directs users to personalized features based on their assigned role (Student, Instructor, or Admin).
+ 
+Student Dashboard
 
-### Instructor Dashboard
-![Instructor Dashboard](https://via.placeholder.com/800x400?text=Instructor+Dashboard+Screenshot)
-The Instructor Dashboard acts as a centralized command center for educators to maintain complete control over their content. It provides streamlined access to course management, student performance monitoring, and platform statistics.
 
-### Assessment & Recommended Tracks
-![Assessment Overview](https://via.placeholder.com/800x400?text=Assessment+and+Tracks+Screenshot)
-Users are presented with a distraction-free assessment environment to accurately measure their technical skills. Based on the results, the platform's algorithm suggests the most suitable learning tracks and customized technology stacks for the student's career goals.
+ The Student Dashboard provides a personalized overview of all learning activities. It prominently displays enrolled courses, learning progress, recent achievements, and upcoming tasks for quick access.
+ 
+Instructor Dashboard
 
-### Course Materials
-![Course Materials](https://via.placeholder.com/800x400?text=Course+Materials+Screenshot)
-The Course Materials page provides a structured view of all learning resources associated with an enrolled course. Students can seamlessly browse lessons, documents, video presentations, and download materials for offline study.
 
-### Community Hub
-![Community Hub](https://via.placeholder.com/800x400?text=Community+Screenshot)
-The Community page fosters a collaborative environment where students and instructors can interact. Users can publish posts, share technical knowledge, ask questions, and engage in ongoing discussions.
+ The Instructor Dashboard acts as a centralized command center for educators to maintain complete control over their content. It provides streamlined access to course management, student performance monitoring, and platform statistics.
 
-### Achievements & Badges
-![Achievements](https://via.placeholder.com/800x400?text=Achievements+Screenshot)
-The Achievements page motivates learners by recognizing their educational milestones. It serves as a digital portfolio showcasing the user's successfully earned certificates and milestone badges.
+ 
+Assessment & Recommended Tracks
 
-### Admin Dashboard
-![Admin Dashboard](https://via.placeholder.com/800x400?text=Admin+Dashboard+Screenshot)
-The centralized Admin Dashboard provides administrators with a complete, top-down overview of the entire system. It offers rapid access to management tools, user activity logs, and detailed platform statistics.
+ Users are presented with a distraction-free assessment environment to accurately measure their technical skills. Based on the results, the platform's algorithm suggests the most suitable learning tracks and customized technology stacks for the student's career goals.
+ 
+Community Hub
 
----
+<img width="1920" height="2021" alt="9" src="https://github.com/user-attachments/assets/3550ed1a-9484-41f9-8566-1aaa57958208" />
 
-## ⚙️ Installation
+ The Community page fosters a collaborative environment where students and instructors can interact. Users can publish posts, share technical knowledge, ask questions, and engage in ongoing discussions.
+Achievements & Badges
 
-*Note: Specific environment variables or connection strings are Not specified in the documentation. Below are standard execution steps based on the provided tech stack.*
+Admin Dashboard
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/track-finder.git
-   cd track-finder
-   ```
-2. Restore .NET dependencies:
-   ```bash
-   dotnet restore
-   ```
-3. Update the database (Entity Framework Core migrations):
-   ```bash
-   dotnet ef database update
-   ```
-4. Run the application:
-   ```bash
-   dotnet run
-   ```
+<img width="1920" height="1907" alt="21" src="https://github.com/user-attachments/assets/4dfbd965-309c-443c-998d-0eead6f4248d" />
 
-## 🛠️ Configuration
-
-Configure your `appsettings.json` file with your local SQL Server instance:
-
-```json
+ The centralized Admin Dashboard provides administrators with a complete, top-down overview of the entire system. It offers rapid access to management tools, user activity logs, and detailed platform statistics.
+ 
+⚙️ Installation
+Note: Specific environment variables or connection strings are Not specified in the documentation. Below are standard execution steps based on the provided tech stack.
+Clone the repository:
+Restore .NET dependencies:
+Update the database (Entity Framework Core migrations):
+Run the application:
+🛠️ Configuration
+Configure your appsettings.json file with your local SQL Server instance:
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=YOUR_SERVER;Database=TrackFinderDB;Trusted_Connection=True;MultipleActiveResultSets=true"
   }
 }
-```
-
-## 🚀 Usage
-
-1. **New Users:** Navigate to the Landing Page and click `Get Started` to register as either a Student or Instructor.
-2. **Students:** Begin by taking the *Career Assessment* to receive a tailored technology track recommendation, then browse and enroll in recommended courses.
-3. **Instructors:** Await admin verification. Once approved, use the *Teacher Studio* to create new courses, upload video/document materials, and monitor community discussions.
-4. **Admins:** Log in with administrative credentials to access the centralized dashboard to review reported content, issue badges, and manage technical tracks.
-
----
-
-## 📡 API Endpoints
-
-**Not specified.** (The system is documented as a traditional ASP.NET Core MVC application utilizing Razor Pages and Views rather than a standalone RESTful API architecture).
-
----
-
-## 🔒 Authentication & Security
-
-* **Role-Based Access Control (RBAC):** Strict separation of privileges for `STUDENT`, `INSTRUCTOR`, and `ADMIN` roles.
-* **Password Encryption:** All user passwords are encrypted using `bcrypt` before database storage.
-* **Tokens:** JWT token issuance is utilized for secure, stateless session handling during login.
-* **Vulnerability Protection:** Built-in safeguards against common web exploits including SQL Injection and Cross-Site Scripting (XSS).
-
----
-
-## 🔮 Future Improvements
-
+🚀 Usage
+New Users: Navigate to the Live Deployment or your local environment and click Get Started to register as either a Student or Instructor.
+Students: Begin by taking the Career Assessment to receive a tailored technology track recommendation, then browse and enroll in recommended courses.
+Instructors: Await admin verification. Once approved, use the Teacher Studio to create new courses, upload video/document materials, and monitor community discussions.
+Admins: Log in with administrative credentials to access the centralized dashboard to review reported content, issue badges, and manage technical tracks.
+📡 API Endpoints
+Not specified. (The system is documented as a traditional ASP.NET Core MVC application utilizing Razor Pages and Views rather than a standalone RESTful API architecture).
+🔒 Authentication & Security
+Role-Based Access Control (RBAC): Strict separation of privileges for STUDENT, INSTRUCTOR, and ADMIN roles.
+Password Encryption: All user passwords are encrypted using bcrypt before database storage.
+Tokens: JWT token issuance is utilized for secure, stateless session handling during login.
+Vulnerability Protection: Built-in safeguards against common web exploits including SQL Injection and Cross-Site Scripting (XSS).
+🔮 Future Improvements
 The development roadmap for Track Finder includes the following future enhancements:
-1. **Adaptive Assessments:** Dynamic questions that adjust in difficulty based on the learner's ongoing performance.
-2. **AI-Powered Recommendations:** Smarter algorithms for matching students to exact courses and tracks.
-3. **Mobile Applications:** Dedicated native clients for iOS and Android devices.
-4. **Live Sessions:** Instructor-led live webinars and real-time classes.
-5. **Verified Credentials:** Blockchain-anchored digital certificates for unforgeable proof of completion.
-
----
-
-## 🤝 Contributing
-
-Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📜 License
-
-Distributed under the MIT License. 
-
----
-
-## 👥 Contributors & Acknowledgments
-
-This platform was developed as a Final Graduation Project for the **FULL-Stack.NET Developer Track**. 
-
-### 👨‍🏫 Eng. Maged Samir
-**Role:** Instructor / Project Supervisor
-
-### 👑 Mohamed Wael
-**Role:** Team Leader
-
-### 💻 Mohamed Khaled
-**Role:** Team Member (Full-Stack .NET Developer)
-
-### 💻 Ahmed Ehab
-**Role:** Team Member (Full-Stack .NET Developer)
-
-### 💻 Abdelrahman Mohamed
-**Role:** Team Member (Full-Stack .NET Developer)
-
-### 💻 Amr Khaled
-**Role:** Team Member (Full-Stack .NET Developer)
-
-### 💻 Shymaa Fekry
-**Role:** Team Member (Full-Stack .NET Developer)
-
-### 💻 Reham Ahmed
-**Role:** Team Member (Full-Stack .NET Developer)
-```
+Adaptive Assessments: Dynamic questions that adjust in difficulty based on the learner's ongoing performance.
+AI-Powered Recommendations: Smarter algorithms for matching students to exact courses and tracks.
+Mobile Applications: Dedicated native clients for iOS and Android devices.
+Live Sessions: Instructor-led live webinars and real-time classes.
+Verified Credentials: Blockchain-anchored digital certificates for unforgeable proof of completion.
+🤝 Contributing
+Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+Fork the Project
+Create your Feature Branch (git checkout -b feature/AmazingFeature)
+Commit your Changes (git commit -m 'Add some AmazingFeature')
+Push to the Branch (git push origin feature/AmazingFeature)
+Open a Pull Request
+📜 License
+Distributed under the MIT License.
+👥 Contributors & Acknowledgments
+This platform was developed as a Final Graduation Project for the FULL-Stack.NET Developer Track.
+👨‍🏫 Eng. Maged Samir
+Role: Instructor / Project Supervisor
+👑 Mohamed Wael
+Role: Team Leader
+💻 Mohamed Khaled
+Role: Team Member (Full-Stack .NET Developer)
+💻 Ahmed Ehab
+Role: Team Member (Full-Stack .NET Developer)
+💻 Abdelrahman Mohamed
+Role: Team Member (Full-Stack .NET Developer)
+💻 Amr Khaled
+Role: Team Member (Full-Stack .NET Developer)
+💻 Shymaa Fekry
+Role: Team Member (Full-Stack .NET Developer)
+💻 Reham Ahmed
+Role: Team Member (Full-Stack .NET Developer)
