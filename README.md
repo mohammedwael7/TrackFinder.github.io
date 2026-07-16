@@ -182,49 +182,39 @@ Admin Dashboard
  The centralized Admin Dashboard provides administrators with a complete, top-down overview of the entire system. It offers rapid access to management tools, user activity logs, and detailed platform statistics.
  
 ⚙️ Installation
-
 Note: Specific environment variables or connection strings are Not specified in the documentation. Below are standard execution steps based on the provided tech stack.
 Clone the repository:
 Restore .NET dependencies:
 Update the database (Entity Framework Core migrations):
 Run the application:
-
 🛠️ Configuration
-
 Configure your appsettings.json file with your local SQL Server instance:
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=YOUR_SERVER;Database=TrackFinderDB;Trusted_Connection=True;MultipleActiveResultSets=true"
   }
 }
-
 🚀 Usage
-New Users: Navigate to the Live Deployment or your local environment and click Get Started to register as either a Student or Instructor.
+New Users: Navigate to the Landing Page and click Get Started to register as either a Student or Instructor.
 Students: Begin by taking the Career Assessment to receive a tailored technology track recommendation, then browse and enroll in recommended courses.
 Instructors: Await admin verification. Once approved, use the Teacher Studio to create new courses, upload video/document materials, and monitor community discussions.
 Admins: Log in with administrative credentials to access the centralized dashboard to review reported content, issue badges, and manage technical tracks.
-
 📡 API Endpoints
-
 Not specified. (The system is documented as a traditional ASP.NET Core MVC application utilizing Razor Pages and Views rather than a standalone RESTful API architecture).
-
 🔒 Authentication & Security
-
 Role-Based Access Control (RBAC): Strict separation of privileges for STUDENT, INSTRUCTOR, and ADMIN roles.
 Password Encryption: All user passwords are encrypted using bcrypt before database storage.
 Tokens: JWT token issuance is utilized for secure, stateless session handling during login.
 Vulnerability Protection: Built-in safeguards against common web exploits including SQL Injection and Cross-Site Scripting (XSS).
-
 🔮 Future Improvements
-
 The development roadmap for Track Finder includes the following future enhancements:
 Adaptive Assessments: Dynamic questions that adjust in difficulty based on the learner's ongoing performance.
 AI-Powered Recommendations: Smarter algorithms for matching students to exact courses and tracks.
 Mobile Applications: Dedicated native clients for iOS and Android devices.
 Live Sessions: Instructor-led live webinars and real-time classes.
 Verified Credentials: Blockchain-anchored digital certificates for unforgeable proof of completion.
-
-🤝 Contributing
+---
+##🤝 Contributing
 
 Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 Fork the Project
@@ -234,12 +224,12 @@ Push to the Branch (git push origin feature/AmazingFeature)
 Open a Pull Request
 
 📜 License
-
 Distributed under the MIT License.
-
 👥 Contributors & Acknowledgments
-
-This platform was developed as a Final Graduation Project for the FULL-Stack.NET Developer Track.
+This platform was developed as a Final Graduation Project for the FULL-Stack.NET Developer Track
+.
+👨‍🏫 Eng. Maged Samir
+Role: Instructor / Project Supervisor
 👑 Mohamed Wael
 Role: Team Leader
 💻 Mohamed Khaled
