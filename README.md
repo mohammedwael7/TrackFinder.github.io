@@ -138,7 +138,8 @@ TrackFinder/
 
 ### Landing Page
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Landing+Page+Screenshot" alt="Landing Page">
+  <img width="1920" height="2880" alt="1(0)" src="https://github.com/user-attachments/assets/447b653b-21b1-4c81-8460-934835c4c02d" />
+
 </div>
 
 - **Purpose:** The main entry point to the Track Finder platform.
@@ -148,7 +149,8 @@ TrackFinder/
 
 ### Secure Sign In & Registration
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Sign+In+Screenshot" alt="Secure Sign In">
+  <img width="2275" height="737" alt="mm" src="https://github.com/user-attachments/assets/aa42878e-1c22-4bd0-9198-0530ea15be0e" />
+
 </div>
 
 - **Purpose:** Secure, role-based authentication gateway.
@@ -158,7 +160,8 @@ TrackFinder/
 
 ### Student Dashboard
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Student+Dashboard+Screenshot" alt="Student Dashboard">
+<img width="1920" height="1868" alt="5" src="https://github.com/user-attachments/assets/858a3a61-7f0b-4428-bfd4-6d891dfc7ef3" />
+
 </div>
 
 - **Purpose:** The personalized home for learners.
@@ -168,7 +171,8 @@ TrackFinder/
 
 ### Instructor Dashboard
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Instructor+Dashboard+Screenshot" alt="Instructor Dashboard">
+ <img width="1920" height="3528" alt="6" src="https://github.com/user-attachments/assets/4db38784-98cb-4c69-ba31-b701c222aa41" />
+
 </div>
 
 - **Purpose:** A centralized command center for educators.
@@ -178,7 +182,9 @@ TrackFinder/
 
 ### Assessment & Track Recommendations
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Assessment+and+Tracks+Screenshot" alt="Assessment Overview">
+<img width="1920" height="1368" alt="13" src="https://github.com/user-attachments/assets/52da9cf2-285a-4396-a150-906d10d07141" />
+<img width="1920" height="1432" alt="12" src="https://github.com/user-attachments/assets/2104cf8e-d2ff-4f6d-8ea4-72e674ff00ce" />
+
 </div>
 
 - **Purpose:** The core intelligent advising engine.
@@ -186,19 +192,10 @@ TrackFinder/
 
 ---
 
-### Course Materials
-<div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Course+Materials+Screenshot" alt="Course Materials">
-</div>
-
-- **Purpose:** The primary learning interface.
-- **Functionality:** Implements a predictable reading path (details ➔ materials ➔ download) for sequential video, document, and resource consumption.
-
----
-
 ### Community Hub
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Community+Screenshot" alt="Community Hub">
+ <img width="1920" height="2021" alt="9" src="https://github.com/user-attachments/assets/cd84ec2d-6f2e-4a13-973e-9f7efbc0b4d5" />
+
 </div>
 
 - **Purpose:** A collaborative ecosystem for shared growth.
@@ -208,7 +205,8 @@ TrackFinder/
 
 ### Achievements & Badges
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Achievements+Screenshot" alt="Achievements">
+<img width="1920" height="1222" alt="17" src="https://github.com/user-attachments/assets/c17a21e7-341c-4348-a405-6f437cc980ca" />
+
 </div>
 
 - **Purpose:** Motivation and verifiable progression.
@@ -218,7 +216,8 @@ TrackFinder/
 
 ### Admin Dashboard
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Admin+Dashboard+Screenshot" alt="Admin Dashboard">
+ <img width="1920" height="1907" alt="21" src="https://github.com/user-attachments/assets/584c46a2-e2d7-45c7-aee6-424472a7f833" />
+
 </div>
 
 - **Purpose:** The administrator's mission control.
