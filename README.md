@@ -1,6 +1,3 @@
-Here is the updated `README.md`. The rest of the document remains intact and consistent with the original style, while the **UI Screenshots** and **Contributors** sections have been significantly enhanced based on the project documentation.
-
-```markdown
 # 🎓 Track Finder
 
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
