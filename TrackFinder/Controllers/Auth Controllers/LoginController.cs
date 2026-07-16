@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using TrackFinder.Services.AuthServices.Interfaces;
 using TrackFinder.ViewModels.Auth_ViewModels;
 
 namespace TrackFinder.Controllers
 {
+    [EnableRateLimiting("Auth")]
     public class LoginController : Controller
     {
         private readonly ILoginService         _loginService;

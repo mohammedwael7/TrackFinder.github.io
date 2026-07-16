@@ -82,18 +82,34 @@ namespace TrackFinder.Controllers
 
         public async Task<IActionResult> Badges()
         {
-            var badges = await _context.Badges.ToListAsync();
-            return View(badges);
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Index", "Login");
+
+            var earnedBadges = await _context.UserBadges
+                .Include(ub => ub.Badge)
+                .Where(ub => ub.UserId == user.Id && ub.IsEarned)
+                .Select(ub => ub.Badge!)
+                .ToListAsync();
+
+            return View(earnedBadges);
         }
 
-        public IActionResult CreateBadge()
+        public async Task<IActionResult> CreateBadge()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Role != UserRole.Admin)
+                return RedirectToAction("Badges");
+
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateBadge(Badges badge)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Role != UserRole.Admin)
+                return RedirectToAction("Badges");
+
             if (ModelState.IsValid)
             {
                 _context.Badges.Add(badge);
@@ -105,6 +121,10 @@ namespace TrackFinder.Controllers
 
         public async Task<IActionResult> EditBadge(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Role != UserRole.Admin)
+                return RedirectToAction("Badges");
+
             var badge = await _context.Badges.FindAsync(id);
             if (badge == null) return NotFound();
             return View(badge);
@@ -113,6 +133,10 @@ namespace TrackFinder.Controllers
         [HttpPost]
         public async Task<IActionResult> EditBadge(Badges badge)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Role != UserRole.Admin)
+                return RedirectToAction("Badges");
+
             if (ModelState.IsValid)
             {
                 _context.Badges.Update(badge);
@@ -125,6 +149,10 @@ namespace TrackFinder.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteBadge(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Role != UserRole.Admin)
+                return RedirectToAction("Badges");
+
             var badge = await _context.Badges.FindAsync(id);
             if (badge != null)
             {
@@ -190,6 +218,10 @@ namespace TrackFinder.Controllers
 
         public async Task<IActionResult> AssignBadge()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Role != UserRole.Admin)
+                return RedirectToAction("Badges");
+
             ViewBag.Badges = await _context.Badges.ToListAsync();
             ViewBag.Users = await _context.Users.ToListAsync();
             return View();
@@ -198,6 +230,9 @@ namespace TrackFinder.Controllers
         [HttpPost]
         public async Task<IActionResult> AssignBadge(Guid userId, int badgeId)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || user.Role != UserRole.Admin)
+                return RedirectToAction("Badges");
             var exists = await _context.UserBadges
                 .AnyAsync(ub => ub.UserId == userId && ub.BadgeId == badgeId);
 

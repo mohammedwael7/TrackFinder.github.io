@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 using TrackFinder.Context;
 using TrackFinder.Filters;
 using TrackFinder.Models.UserModels;
@@ -67,6 +69,42 @@ namespace TrackFinder
             builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
             builder.Services.AddScoped<AssessmentService>();
+            builder.Services.AddRateLimiter(options =>
+            {
+                options.RejectionStatusCode = 429;
+
+                options.OnRejected = async (context, cancellationToken) =>
+                {
+                    context.HttpContext.Response.ContentType = "text/html; charset=utf-8";
+                    await context.HttpContext.Response.WriteAsync(
+                        "<!DOCTYPE html><html><head><meta charset=\"utf-8\"/><title>Too Many Requests</title>" +
+                        "<style>body{font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#f5f5f5;}" +
+                        ".card{background:#fff;padding:40px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);text-align:center;}" +
+                        "h1{color:#dc2626;margin:0 0 8px;font-size:28px;}p{color:#6b7280;margin:0;}</style></head><body>" +
+                        "<div class=\"card\"><h1>429 — Too Many Requests</h1><p>Too many requests. Please wait 10 minutes and try again.</p></div>" +
+                        "</body></html>",
+                        cancellationToken);
+                };
+
+                options.AddFixedWindowLimiter("Auth", auth =>
+                {
+                    auth.PermitLimit = 10;
+                    auth.Window = TimeSpan.FromMinutes(1);
+                    auth.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    auth.QueueLimit = 0;
+                });
+
+                options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+                    RateLimitPartition.GetFixedWindowLimiter<string>(
+                        partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 200,
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = 5
+                        }));
+            });
             var app = builder.Build();
 
             app.UseMiddleware<TrackFinder.Middleware.ExceptionHandlingMiddleware>();
@@ -79,6 +117,7 @@ namespace TrackFinder
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseRateLimiter();
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();

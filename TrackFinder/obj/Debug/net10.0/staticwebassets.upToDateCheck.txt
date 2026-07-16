@@ -9,9 +9,11 @@ wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
 wwwroot\lib\jquery-validation\LICENSE.md
 wwwroot\lib\jquery\LICENSE.txt
 wwwroot\materials\1bf21870-1a4b-4055-9cc1-858876ea0417_L1-5 merged.rar
+wwwroot\materials\c78ba873-5bb7-407f-95bb-7ceeae1e5073_Assessment.rar
 wwwroot\uploads\badge_29b28e6a-2e24-4d27-938c-4bffac5d7aaa.png
 wwwroot\uploads\badge_921aa1f7-93c1-401a-a84e-4d39ab59331b.jpg
 wwwroot\uploads\badge_c081d4c1-3f3b-4b7d-89bd-f1ada5f8a480.png
+wwwroot\uploads\badge_d86672a6-798f-4453-a51a-af8ca5afbe1c.png
 wwwroot\uploads\badge_d88091d0-e4f5-477a-8454-da9ccdb15fce.jpg
 wwwroot\uploads\certificate_19e8017b-f22d-49eb-8a93-fc7abaa70ad6.png
 wwwroot\uploads\certificate_36d5fb87-a41d-4714-abc0-b52181eeaf7b.jpeg

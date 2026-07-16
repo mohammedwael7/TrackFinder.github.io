@@ -7,47 +7,42 @@
 <div class="page-header">
     <div>
         <h1 class="page-title">Badges</h1>
-        <p class="page-sub">Manage all badges in the system.</p>
-    </div>
-    <div class="action-row">
-        <a asp-action="AssignBadge" class="btn btn-ghost">Assign Badge</a>
-        <a asp-action="CreateBadge" class="btn btn-primary">+ Add Badge</a>
+        <p class="page-sub">Badges you have earned.</p>
     </div>
 </div>
 
-<div class="table-wrapper">
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Level</th>
-                <th>Unlock Condition</th>
-                <th style="text-align:right;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var badge in Model)
-            {
+@if (Model.Count == 0)
+{
+    <div class="card" style="padding:40px;text-align:center;color:var(--text-muted);">
+        <p>No badges earned yet.</p>
+    </div>
+}
+else
+{
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
                 <tr>
-                    <td style="font-weight:600;color:var(--secondary);">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right:6px;vertical-align:middle;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-                        @badge.BadgeName
-                    </td>
-                    <td style="color:var(--text-muted);max-width:300px;">@badge.BadgeDescription</td>
-                    <td><span class="badge badge-sky">LVL @badge.Level</span></td>
-                    <td style="color:var(--text-muted);">@badge.UnlockCondition</td>
-                    <td style="text-align:right;">
-                        <div class="action-row" style="justify-content:flex-end;">
-                            <a asp-action="EditBadge" asp-route-id="@badge.BadgeId" class="btn btn-info btn-sm">Edit</a>
-                            <form asp-action="DeleteBadge" method="post" style="margin:0;display:inline;">
-                                <input type="hidden" name="id" value="@badge.BadgeId" />
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this badge?')">Delete</button>
-                            </form>
-                        </div>
-                    </td>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                    <th>Unlock Condition</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var badge in Model)
+                {
+                    <tr>
+                        <td style="font-weight:600;color:var(--secondary);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right:6px;vertical-align:middle;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+                            @badge.BadgeName
+                        </td>
+                        <td style="color:var(--text-muted);max-width:300px;">@badge.BadgeDescription</td>
+                        <td><span class="badge badge-sky">LVL @badge.Level</span></td>
+                        <td style="color:var(--text-muted);">@badge.UnlockCondition</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
