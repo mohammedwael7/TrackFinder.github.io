@@ -1,18 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Context;
 using TrackFinder.Models.AchievementModels;
+using TrackFinder.Models.UserModels;
 using TrackFinder.Models.ViewModels;
 
 namespace TrackFinder.Controllers
 {
+    [Authorize]
     public class AchievementController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly ILogger<AchievementController> _logger;
 
-        public AchievementController(AppDbContext context)
+        public AchievementController(AppDbContext context, UserManager<User> userManager, ILogger<AchievementController> logger)
         {
             _context = context;
+            _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index(Guid studentId)
@@ -21,7 +29,9 @@ namespace TrackFinder.Controllers
             {
                 if (studentId == Guid.Empty)
                 {
-                    studentId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+                    var userIdString = _userManager.GetUserId(User);
+                    if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out studentId))
+                        return RedirectToAction("Index", "Login");
                 }
 
                 var viewModel = new AchievementVM();

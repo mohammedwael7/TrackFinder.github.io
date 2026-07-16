@@ -800,7 +800,7 @@ else if (Model.Role.Equals("Student", StringComparison.OrdinalIgnoreCase))
                 var totalExams = enrollment.Course.Lessons.SelectMany(l => l.Exams!).Count();
                 var totalMaterials = enrollment.Course.Materials?.Count ?? 0;
                 
-                <div class="course-card">
+                <a asp-action="Index" asp-controller="Course" asp-route-id="@enrollment.CourseId" class="course-card" style="text-decoration:none;color:inherit;">
                     <div class="course-img-wrapper">
                         @if (!string.IsNullOrEmpty(enrollment.Course.ImageUrl))
                         {
@@ -839,7 +839,7 @@ else if (Model.Role.Equals("Student", StringComparison.OrdinalIgnoreCase))
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             }
         </div>
     }
@@ -849,7 +849,7 @@ else if (Model.Role.Equals("Student", StringComparison.OrdinalIgnoreCase))
             <div style="font-size: 32px; margin-bottom: 12px;">📚</div>
             <h3>No active enrollments</h3>
             <p style="margin-top: 4px; margin-bottom: 16px;">Enroll in courses to start practicing skills and progressing on your roadmap.</p>
-            <a href="/Home#tracks" class="btn-action btn-action-primary">Browse Course Catalog</a>
+            <a asp-action="Index" asp-controller="CourseSales" class="btn-action btn-action-primary">Browse Course Catalog</a>
         </div>
     }
 }

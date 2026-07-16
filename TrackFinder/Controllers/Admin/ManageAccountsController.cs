@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Context;
 using TrackFinder.Models.UserModels;
 
 namespace TrackFinder.Controllers.Admin;
 
+[Authorize]
 public class ManageAccountsController : Controller
 {
     private readonly AppDbContext _context;
@@ -14,61 +17,118 @@ public class ManageAccountsController : Controller
         _context = context;
     }
 
-   
+    private async Task<bool> IsAdminAsync()
+    {
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            return false;
+        var user = await _context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
+        return user != null && user.Role == UserRole.Admin;
+    }
+
+
     public async Task<IActionResult> Index()
     {
-        var requests = await _context.Users
+        if (!await IsAdminAsync()) return RedirectToAction("Index", "Login");
+        var users = await _context.Users
             .Include(u => u.Instructor)
-            .Where(u => u.Role == UserRole.Instructor && !u.EmailVerified)
+            .Include(u => u.Student)
             .OrderByDescending(u => u.CreatedAt)
             .ToListAsync();
 
-        return View("~/Views/Admin/ManageAccounts/Index.cshtml", requests);
+        return View("~/Views/Admin/ManageAccounts/Index.cshtml", users);
     }
 
-    
+
+    // Ban a user
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Accept(Guid id)
+    public async Task<IActionResult> Ban(Guid id)
     {
         var user = await _context.Users.FindAsync(id);
 
         if (user == null)
             return NotFound();
 
-        user.EmailVerified = true;
+        user.IsBanned = true;
 
         _context.Users.Update(user);
 
         await _context.SaveChangesAsync();
 
-        TempData["Success"] = "Instructor account approved successfully.";
+        TempData["Success"] = $"{user.FirstName} {user.LastName} has been banned.";
 
         return RedirectToAction(nameof(Index));
     }
 
-    
+
+    // Unban a user
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Reject(Guid id)
+    public async Task<IActionResult> Unban(Guid id)
     {
-        var user = await _context.Users
-            .Include(u => u.Instructor)
-            .FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _context.Users.FindAsync(id);
 
         if (user == null)
             return NotFound();
 
-        if (user.Instructor != null)
-        {
-            _context.Instructors.Remove(user.Instructor);
-        }
+        user.IsBanned = false;
 
-        _context.Users.Remove(user);
+        _context.Users.Update(user);
 
         await _context.SaveChangesAsync();
 
-        TempData["Success"] = "Instructor account rejected.";
+        TempData["Success"] = $"{user.FirstName} {user.LastName} has been unbanned.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
+
+    // Approve an instructor (AdminApproved = true)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ApproveInstructor(Guid id)
+    {
+        var instructor = await _context.Instructors
+            .Include(i => i.User)
+            .FirstOrDefaultAsync(i => i.UserId == id);
+
+        if (instructor == null)
+            return NotFound();
+
+        instructor.AdminApproved = true;
+
+        _context.Instructors.Update(instructor);
+
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = $"{instructor.User.FirstName} {instructor.User.LastName} has been approved as instructor.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
+
+    // Revoke instructor approval (AdminApproved = false)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RevokeInstructor(Guid id)
+    {
+        var instructor = await _context.Instructors
+            .Include(i => i.User)
+            .FirstOrDefaultAsync(i => i.UserId == id);
+
+        if (instructor == null)
+            return NotFound();
+
+        instructor.AdminApproved = false;
+
+        _context.Instructors.Update(instructor);
+
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = $"{instructor.User.FirstName} {instructor.User.LastName} instructor approval has been revoked.";
 
         return RedirectToAction(nameof(Index));
     }

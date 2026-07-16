@@ -49,7 +49,33 @@
             </div>
         </div>
 
+        <div class="col-xl-3 col-md-6">
 
+            <div class="card dashboard-card">
+
+                <div class="card-body">
+
+
+                    <div class="icon-box bg-info">
+                        <i class="bi bi-person-video3"></i>
+                    </div>
+
+
+                    <h6>
+                        Instructors
+                    </h6>
+
+
+                    <h2>
+                        @Model.InstructorsCount
+                    </h2>
+
+
+                </div>
+
+            </div>
+
+        </div>
 
         <div class="col-xl-3 col-md-6">
             <div class="card dashboard-card">
@@ -71,64 +97,24 @@
             </div>
         </div>
 
-
-
-
         <div class="col-xl-3 col-md-6">
-
             <div class="card dashboard-card">
 
                 <div class="card-body">
 
                     <div class="icon-box bg-warning">
-                        <i class="bi bi-person-badge"></i>
-                    </div>
-
-
-                    <h6>
-                        Instructors
-                    </h6>
-
-
-                    <h2>
-                        @Model.InstructorsCount
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-
-        <div class="col-xl-3 col-md-6">
-
-            <div class="card dashboard-card">
-
-                <div class="card-body">
-
-
-                    <div class="icon-box bg-danger">
                         <i class="bi bi-hourglass-split"></i>
                     </div>
 
-
-                    <h6>
-                        Pending Requests
-                    </h6>
-
+                    <h6>Pending Instructors</h6>
 
                     <h2>
                         @Model.PendingInstructors
                     </h2>
 
-
                 </div>
 
             </div>
-
         </div>
 
 
@@ -151,7 +137,7 @@
                 <div class="card-body">
 
                     <h5 class="fw-bold mb-3">
-                        Users Distribution
+                        Students vs Instructors
                     </h5>
 
 
@@ -198,7 +184,7 @@
 
 
 
-    <!-- Pending Requests -->
+    <!-- Pending Instructor Requests -->
 
 
     <div class="card shadow border-0 rounded-4 mt-4">
@@ -214,7 +200,7 @@
                 </h5>
 
 
-                <a asp-controller="ManageAccounts"
+                <a asp-controller="Instructors"
                    asp-action="Index"
                    class="btn btn-primary btn-sm">
 
@@ -253,7 +239,7 @@
                     <tbody>
 
 
-                        @foreach (var item in Model.InstructorRequests)
+                        @foreach (var item in Model.PendingInstructorRequests)
                         {
 
                             <tr>
@@ -415,8 +401,7 @@
 
                 labels:[
                     'Students',
-                    'Instructors',
-                    'Admins'
+                    'Instructors'
                 ],
 
 
@@ -424,12 +409,15 @@
 
                     data:[
 
-                        @Model.StudentsPercentage,
+                        @Model.StudentsCount,
 
-                        @Model.InstructorPercentage,
+                        @Model.InstructorsCount
 
-                        @Model.AdminPercentage
+                    ],
 
+                    backgroundColor: [
+                        '#198754',
+                        '#0dcaf0'
                     ]
 
                 }]
@@ -451,7 +439,10 @@
                 labels:[
 
                     'Courses',
-                    'Tracks',
+
+                    'Instructors',
+                    'Students',
+
                     'Communities',
                     'Certificates',
                     'Badges'
@@ -467,7 +458,8 @@
 
                         @Model.CoursesCount,
 
-                        @Model.TracksCount,
+                        @Model.InstructorsCount,
+                        @Model.StudentsCount,
 
                         @Model.CommunitiesCount,
 

@@ -1,13 +1,16 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TrackFinder.Models.CommunityModels;
+using TrackFinder.Models.UserModels;
 using TrackFinder.Context;
 using TrackFinder.ViewModels.Communities;
 
 namespace TrackFinder.Controllers.Admin;
 
+[Authorize]
 public class CommunitiesController : Controller
 {
     private readonly AppDbContext _context;
@@ -19,8 +22,10 @@ public class CommunitiesController : Controller
 
     public async Task<IActionResult> Index()
     {
+        if (!await IsAdminAsync()) return RedirectToAction("Index", "Login");
         var items = await _context.Communities
     .Include(c => c.Admin)
+        .ThenInclude(i => i.User)
     .Include(c => c.JoinedMembers)
     .ToListAsync();
         var vm = items.Select(c => new CommunityListViewModel
@@ -39,6 +44,7 @@ public class CommunitiesController : Controller
     {
         var item = await _context.Communities
     .Include(c => c.Admin)
+        .ThenInclude(i => i.User)
     .Include(c => c.JoinedMembers)
     .FirstOrDefaultAsync(c => c.Id == id);
         if (item == null) return NotFound();
@@ -132,7 +138,9 @@ public class CommunitiesController : Controller
     }
     public async Task<IActionResult> Delete(Guid id)
     {
-        var item = await _context.Communities.FindAsync(id);
+        var item = await _context.Communities
+    .Include(c => c.JoinedMembers)
+    .FirstOrDefaultAsync(c => c.Id == id);
         if (item == null) return NotFound();
         var vm = new CommunityDetailsViewModel
         {
@@ -153,5 +161,16 @@ public class CommunitiesController : Controller
         _context.Communities.Remove(item);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
+    }
+
+    private async Task<bool> IsAdminAsync()
+    {
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+            return false;
+        var user = await _context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
+        return user != null && user.Role == UserRole.Admin;
     }
 }

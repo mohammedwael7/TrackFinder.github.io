@@ -20,8 +20,8 @@ public class CommunityConfiguration : IEntityTypeConfiguration<Community>
 			  .HasMaxLength(150);
 
 		builder.HasOne(c => c.Admin)
-			  .WithOne(i => i.AdminstratedCommunity)
-			  .HasForeignKey<Community>(c => c.AdminId)
+			  .WithMany(i => i.AdminstratedCommunities)
+			  .HasForeignKey(c => c.AdminId)
 			  .OnDelete(DeleteBehavior.Restrict);
 
 		builder.HasMany(c => c.Posts)

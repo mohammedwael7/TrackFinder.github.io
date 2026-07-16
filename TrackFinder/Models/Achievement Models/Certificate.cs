@@ -6,8 +6,8 @@
         public string? Title { get; set; }
         public string? Description { get; set; }
         public string? CertificateUrl { get; set; }
+        public string? CertificateImageUrl { get; set; }
 
-        // حقل جديد
         public string? UnlockRequirement { get; set; }
 
         public virtual ICollection<StudentCertificate>? UserCertificates { get; set; }

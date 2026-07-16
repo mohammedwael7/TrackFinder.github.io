@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Models.AchievementModels;
@@ -6,6 +7,7 @@ using TrackFinder.Context;
 
 namespace TrackFinder.Controllers.Admin;
 
+[Authorize]
 public class CertificatesController : Controller
 {
     private readonly AppDbContext _context;

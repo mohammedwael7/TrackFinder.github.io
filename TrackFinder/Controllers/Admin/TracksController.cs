@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Models.AssessmentModels;
@@ -6,6 +7,7 @@ using TrackFinder.Context;
 
 namespace TrackFinder.Controllers.Admin;
 
+[Authorize]
 public class TracksController : Controller
 {
     private readonly AppDbContext _context;
@@ -31,7 +33,7 @@ public class TracksController : Controller
     {
         var track = await _context.Tracks.FirstOrDefaultAsync(t => t.Id == id);
         if (track == null) return NotFound();
-        var vm = new TrackDetailsVM
+        var vm = new TrackDetailsViewModel
         {
             Id = track.Id,
             TrackName = track.TrackName,
@@ -99,7 +101,7 @@ public class TracksController : Controller
     {
         var track = await _context.Tracks.FindAsync(id);
         if (track == null) return NotFound();
-        var vm = new TrackDetailsVM
+        var vm = new TrackDetailsViewModel
         {
             Id = track.Id,
             TrackName = track.TrackName,

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using TrackFinder.ViewModels.Students;
 
 namespace TrackFinder.Controllers.Admin;
 
+[Authorize]
 public class StudentsController : Controller
 {
     private readonly AppDbContext _context;

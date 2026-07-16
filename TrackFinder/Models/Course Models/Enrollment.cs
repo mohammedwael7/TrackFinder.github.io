@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TrackFinder.Models.CourseModels;
 using TrackFinder.Models.UserModels;
 
@@ -25,15 +26,13 @@ namespace TrackFinderDb.Models.TeachingModels
         public virtual Course Course { get; set; } = new Course();
         public virtual User User { get; set; } = new User();
 
-        [Required(ErrorMessage = "Card Number is required")]
-        [StringLength(14, MinimumLength = 14, ErrorMessage = "Card Number  must be 14 digits")]
+        [NotMapped]
         public string? CardNumber { get; set; }
 
-        [Required(ErrorMessage = "Date is required")]
+        [NotMapped]
         public DateTime? ExpiryDate { get; set; }
 
-        [Required(ErrorMessage = "CVV is required")]
-        [StringLength(3, MinimumLength = 3, ErrorMessage = "CVV must be 3 digits")]
+        [NotMapped]
         public string? CVV { get; set; }
     }
 }

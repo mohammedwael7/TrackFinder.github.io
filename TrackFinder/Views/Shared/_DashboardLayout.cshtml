@@ -354,10 +354,11 @@
             </a>
 
             <div class="navbar-links">
-                <a href="/Main" class="navbar-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">Dashboard</a>
-                <a href="@(User.IsInRole("Instructor") ? "/CourseCreation" : "/CourseSales")" class="navbar-link">Courses</a>
-                <a href="/Community" class="navbar-link">Community</a>
-                <a href="/Assessment" class="navbar-link">Assessment</a>
+                <a href="/Main" class="navbar-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Main" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">Dashboard</a>
+                <a href="@(User.IsInRole("Instructor") ? "/CourseCreation" : "/CourseSales")" class="navbar-link @(ViewContext.RouteData.Values["Controller"]?.ToString() is "CourseCreation" or "CourseSales" ? "active" : "")">Courses</a>
+                <a href="/Community" class="navbar-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Community" ? "active" : "")">Community</a>
+                <a href="/Assessment" class="navbar-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Assessment" ? "active" : "")">Assessment</a>
+                <a href="/Achievement" class="navbar-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Achievement" ? "active" : "")">Achievements</a>
                 <a href="/Main/Profile" class="navbar-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")">Profile Settings</a>
             </div>
 

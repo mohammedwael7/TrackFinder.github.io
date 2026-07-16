@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using TrackFinder.ViewModels.TrackStacks;
 
 namespace TrackFinder.Controllers.Admin
 {
+    [Authorize]
     public class TrackStacksController : Controller
     {
         private readonly AppDbContext _context;

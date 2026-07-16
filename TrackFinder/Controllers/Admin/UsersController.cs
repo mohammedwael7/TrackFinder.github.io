@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Context;
 using TrackFinder.Models.UserModels;
 using TrackFinder.ViewModels.Users;
+using TrackFinder.Models.CourseModels;
+using TrackFinder.Models.CommunityModels;
+using TrackFinder.Models.OrdersAndPaymentsModels;
+using TrackFinder.Models.AssessmentModels;
 
 namespace TrackFinder.Controllers.Admin;
 
+[Authorize]
 public class UsersController : Controller
 {
     private readonly AppDbContext _context;
@@ -31,7 +37,7 @@ public class UsersController : Controller
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Email = u.Email,
-                Role = u.Role,
+                Role = u.Instructor != null ? UserRole.Instructor : (u.Student != null ? UserRole.Student : UserRole.Admin),
                 CreatedAt = u.CreatedAt
             })
             .ToListAsync();
@@ -43,7 +49,10 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Details(Guid id)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var user = await _context.Users
+            .Include(u => u.Instructor)
+            .Include(u => u.Student)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (user == null)
             return NotFound();
@@ -62,7 +71,7 @@ public class UsersController : Controller
             EmailVerified = user.EmailVerified,
             IsBanned = user.IsBanned,
             CreatedAt = user.CreatedAt,
-            Role = user.Role
+            Role = user.Instructor != null ? UserRole.Instructor : (user.Student != null ? UserRole.Student : UserRole.Admin)
         };
 
         return View("~/Views/Admin/Users/Details.cshtml", model);
@@ -135,6 +144,24 @@ public class UsersController : Controller
         }
 
         _context.Users.Add(user);
+
+        // Add role-specific profile record
+        if (model.Role == UserRole.Instructor)
+        {
+            _context.Instructors.Add(new Instructor
+            {
+                UserId = user.Id,
+                AdminApproved = true
+            });
+        }
+        else if (model.Role == UserRole.Student)
+        {
+            _context.Students.Add(new Student
+            {
+                UserId = user.Id
+            });
+        }
+
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(Index));
@@ -145,7 +172,10 @@ public class UsersController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit(Guid id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _context.Users
+            .Include(u => u.Instructor)
+            .Include(u => u.Student)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user == null)
             return NotFound();
@@ -162,7 +192,7 @@ public class UsersController : Controller
             Bio = user.Bio,
             EmailVerified = user.EmailVerified,
             IsBanned = user.IsBanned,
-            Role = user.Role
+            Role = user.Instructor != null ? UserRole.Instructor : (user.Student != null ? UserRole.Student : UserRole.Admin)
         };
 
         return View("~/Views/Admin/Users/Edit.cshtml", model);
@@ -178,7 +208,10 @@ public class UsersController : Controller
         if (!ModelState.IsValid)
             return View("~/Views/Admin/Users/Edit.cshtml", model);
 
-        var user = await _context.Users.FindAsync(id);
+        var user = await _context.Users
+            .Include(u => u.Instructor)
+            .Include(u => u.Student)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user == null)
             return NotFound();
@@ -193,6 +226,47 @@ public class UsersController : Controller
         {
             ModelState.AddModelError("Username", "Username already exists.");
             return View("~/Views/Admin/Users/Edit.cshtml", model);
+        }
+
+        // Check if role changed
+        var currentRole = user.Instructor != null ? UserRole.Instructor : (user.Student != null ? UserRole.Student : UserRole.Admin);
+        if (currentRole != model.Role)
+        {
+            // Remove old role profile
+            if (currentRole == UserRole.Instructor && user.Instructor != null)
+            {
+                _context.PurchasedItems.RemoveRange(_context.PurchasedItems.Where(p => p.InstructorId == id));
+                _context.Communities.RemoveRange(_context.Communities.Where(c => c.AdminId == id));
+                _context.Courses.RemoveRange(_context.Courses.Where(c => c.InstructorId == id));
+                _context.Instructors.Remove(user.Instructor);
+            }
+            else if (currentRole == UserRole.Student && user.Student != null)
+            {
+                _context.StudentAnswers.RemoveRange(_context.StudentAnswers.Where(sa => sa.StudentId == id));
+                _context.StudentCertificates.RemoveRange(_context.StudentCertificates.Where(sc => sc.StudentId == id));
+                _context.AssessmentResults.RemoveRange(_context.AssessmentResults.Where(ar => ar.UserId == id));
+                _context.JoinedMembers.RemoveRange(_context.JoinedMembers.Where(jm => jm.MemberId == id));
+                _context.Enrollments.RemoveRange(_context.Enrollments.Where(e => e.UserId == id));
+                _context.PurchasedItems.RemoveRange(_context.PurchasedItems.Where(p => p.StudentId == id));
+                _context.Students.Remove(user.Student);
+            }
+
+            // Create new role profile
+            if (model.Role == UserRole.Instructor)
+            {
+                _context.Instructors.Add(new Instructor
+                {
+                    UserId = user.Id,
+                    AdminApproved = true
+                });
+            }
+            else if (model.Role == UserRole.Student)
+            {
+                _context.Students.Add(new Student
+                {
+                    UserId = user.Id
+                });
+            }
         }
 
         user.UserName = model.Username;
@@ -238,7 +312,10 @@ public class UsersController : Controller
     [HttpGet]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _context.Users
+            .Include(u => u.Instructor)
+            .Include(u => u.Student)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (user == null)
             return NotFound();
@@ -257,7 +334,7 @@ public class UsersController : Controller
             EmailVerified = user.EmailVerified,
             IsBanned = user.IsBanned,
             CreatedAt = user.CreatedAt,
-            Role = user.Role
+            Role = user.Instructor != null ? UserRole.Instructor : (user.Student != null ? UserRole.Student : UserRole.Admin)
         };
 
         return View("~/Views/Admin/Users/Delete.cshtml", model);
@@ -267,12 +344,43 @@ public class UsersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _context.Users
+            .Include(u => u.Instructor)
+            .Include(u => u.Student)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user == null)
             return NotFound();
 
+        // 1. Clean up community comments/posts/reports made by this user
+        _context.PostReports.RemoveRange(_context.PostReports.Where(pr => pr.ReporterId == id));
+        _context.Comments.RemoveRange(_context.Comments.Where(c => c.UserId == id));
+        _context.Posts.RemoveRange(_context.Posts.Where(p => p.UserId == id));
+
+        // 2. Clean up Student-specific records
+        if (user.Student != null)
+        {
+            _context.StudentAnswers.RemoveRange(_context.StudentAnswers.Where(sa => sa.StudentId == id));
+            _context.StudentCertificates.RemoveRange(_context.StudentCertificates.Where(sc => sc.StudentId == id));
+            _context.AssessmentResults.RemoveRange(_context.AssessmentResults.Where(ar => ar.UserId == id));
+            _context.JoinedMembers.RemoveRange(_context.JoinedMembers.Where(jm => jm.MemberId == id));
+            _context.Enrollments.RemoveRange(_context.Enrollments.Where(e => e.UserId == id));
+            _context.PurchasedItems.RemoveRange(_context.PurchasedItems.Where(p => p.StudentId == id));
+            _context.Students.Remove(user.Student);
+        }
+
+        // 3. Clean up Instructor-specific records
+        if (user.Instructor != null)
+        {
+            _context.PurchasedItems.RemoveRange(_context.PurchasedItems.Where(p => p.InstructorId == id));
+            _context.Communities.RemoveRange(_context.Communities.Where(c => c.AdminId == id));
+            _context.Courses.RemoveRange(_context.Courses.Where(c => c.InstructorId == id));
+            _context.Instructors.Remove(user.Instructor);
+        }
+
+        // 4. Finally, remove the User
         _context.Users.Remove(user);
+
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(Index));

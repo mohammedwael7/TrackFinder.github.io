@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Context;
 using TrackFinder.Models.UserModels;
@@ -6,6 +8,7 @@ using TrackFinder.ViewModels.Admin_ViewModels;
 
 namespace TrackFinder.Controllers.Admin
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;
@@ -18,21 +21,28 @@ namespace TrackFinder.Controllers.Admin
 
         public async Task<IActionResult> Dashboard()
         {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+                return RedirectToAction("Index", "Login");
+            var currentUser = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            if (currentUser == null || currentUser.Role != UserRole.Admin)
+                return RedirectToAction("Index", "Login");
 
             var totalUsers = await _context.Users.CountAsync();
 
-            var students = await _context.Users
-                .CountAsync(x => x.Role == UserRole.Student);
+            var verifiedEmails = await _context.Users
+                .CountAsync(x => x.EmailVerified);
 
+            var pendingUsers = totalUsers - verifiedEmails;
 
-            var instructors = await _context.Users
-                .CountAsync(x => x.Role == UserRole.Instructor);
+            var instructorsCount = await _context.Instructors.CountAsync();
 
+            var studentsCount = await _context.Students.CountAsync();
 
-            var admins = await _context.Users
-                .CountAsync(x => x.Role == UserRole.Admin);
-
-
+            var pendingInstructors = await _context.Instructors
+                .CountAsync(x => !x.AdminApproved);
 
             var model = new AdminDashboardVM
             {
@@ -41,16 +51,11 @@ namespace TrackFinder.Controllers.Admin
 
                 UsersCount = totalUsers,
 
-                StudentsCount = students,
+                InstructorsCount = instructorsCount,
 
-                InstructorsCount = instructors,
+                StudentsCount = studentsCount,
 
-
-                PendingInstructors = await _context.Users
-                    .CountAsync(x =>
-                    x.Role == UserRole.Instructor &&
-                    !x.EmailVerified),
-
+                PendingInstructors = pendingInstructors,
 
                 CoursesCount = await _context.Courses.CountAsync(),
 
@@ -63,9 +68,7 @@ namespace TrackFinder.Controllers.Admin
                 BadgesCount = await _context.Badges.CountAsync(),
 
 
-                VerifiedEmails = await _context.Users
-                    .CountAsync(x => x.EmailVerified),
-
+                VerifiedEmails = verifiedEmails,
 
                 BannedUsers = await _context.Users
                     .CountAsync(x => x.IsBanned),
@@ -74,19 +77,13 @@ namespace TrackFinder.Controllers.Admin
 
                 // Chart Percentages
 
-                StudentsPercentage =
+                VerifiedPercentage =
                     totalUsers == 0 ? 0 :
-                    students * 100 / totalUsers,
+                    verifiedEmails * 100 / totalUsers,
 
-
-                InstructorPercentage =
+                PendingPercentage =
                     totalUsers == 0 ? 0 :
-                    instructors * 100 / totalUsers,
-
-
-                AdminPercentage =
-                    totalUsers == 0 ? 0 :
-                    admins * 100 / totalUsers
+                    pendingUsers * 100 / totalUsers
 
             };
 
@@ -114,16 +111,13 @@ namespace TrackFinder.Controllers.Admin
 
 
 
-            // Pending Instructor Requests
+            // Pending User Requests
 
-            model.InstructorRequests = await _context.Users
-                .Include(x => x.Instructor)
-                .Where(x =>
-                    x.Role == UserRole.Instructor &&
-                    !x.EmailVerified)
+            model.PendingUserRequests = await _context.Users
+                .Where(x => !x.EmailVerified)
                 .OrderByDescending(x => x.CreatedAt)
                 .Take(5)
-                .Select(x => new InstructorRequestDashboardVM
+                .Select(x => new PendingUserDashboardVM
                 {
 
                     Id = x.Id,
@@ -132,12 +126,32 @@ namespace TrackFinder.Controllers.Admin
 
                     Email = x.Email,
 
-                    Title = x.Instructor != null
-                        ? x.Instructor.Title
-                        : "-",
+                    Role = x.Role.ToString(),
 
                     CreatedAt = x.CreatedAt
 
+                })
+                .ToListAsync();
+
+
+            // Pending Instructor Requests (AdminApproved = false)
+
+            model.PendingInstructorRequests = await _context.Instructors
+                .Include(x => x.User)
+                .Where(x => !x.AdminApproved)
+                .OrderByDescending(x => x.User.CreatedAt)
+                .Take(5)
+                .Select(x => new PendingInstructorDashboardVM
+                {
+                    Id = x.UserId,
+
+                    Name = x.User.FirstName + " " + x.User.LastName,
+
+                    Email = x.User.Email,
+
+                    Title = x.Title,
+
+                    CreatedAt = x.User.CreatedAt
                 })
                 .ToListAsync();
 

@@ -363,6 +363,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlU2FsZXNcTXlDb3Vyc2VzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Web Projects/TrackFinderMain/TrackFinder.github.io/TrackFinder/Views/Course/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Web Projects/TrackFinderMain/TrackFinder.github.io/TrackFinder/Views/Course/Lesson.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXExlc3Nvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Web Projects/TrackFinderMain/TrackFinder.github.io/TrackFinder/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

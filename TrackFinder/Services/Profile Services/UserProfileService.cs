@@ -41,22 +41,21 @@ namespace TrackFinder.Services.UserProfileServices
             // ── 1. Fetch Student-Specific Stats ──────────────────────────────
             if (role.Equals("Student", StringComparison.OrdinalIgnoreCase))
             {
+                model.EnrolledCourses = await _db.Enrollments
+                    .Include(e => e.Course)
+                        .ThenInclude(c => c.Lessons)
+                            .ThenInclude(l => l.Exams)
+                    .Include(e => e.Course)
+                        .ThenInclude(c => c.Materials)
+                    .Where(e => e.UserId == userId)
+                    .ToListAsync();
+
                 var student = await _db.Students
-                    .Include(s => s.Enrollments!)
-                        .ThenInclude(e => e.Course)
-                            .ThenInclude(c => c.Lessons)
-                                .ThenInclude(l => l.Exams)
-                    .Include(s => s.Enrollments!)
-                        .ThenInclude(e => e.Course)
-                            .ThenInclude(c => c.Materials)
                     .Include(s => s.AssessmentResults!)
                         .ThenInclude(ar => ar.RecommendedTracks)
                             .ThenInclude(art => art.Track)
                     .FirstOrDefaultAsync(s => s.UserId == userId);
 
-                model.EnrolledCourses = student?.Enrollments?.ToList() ?? new List<Enrollment>();
-
-                // Get all recommended tracks across all assessment results
                 model.RecommendedTracks = student?.AssessmentResults?
                     .OrderByDescending(ar => ar.CreatedAt)
                     .SelectMany(ar => ar.RecommendedTracks)

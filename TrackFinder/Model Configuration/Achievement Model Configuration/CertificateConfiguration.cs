@@ -23,5 +23,8 @@ public class CertificateConfiguration : IEntityTypeConfiguration<Certificate>
 
 		builder.Property(c => c.CertificateUrl)
 			  .HasMaxLength(500);
+
+		builder.Property(c => c.CertificateImageUrl)
+			  .HasMaxLength(500);
 	}
 }

@@ -15,7 +15,7 @@ public class Instructor
     public Guid UserId { get; set; }
     public Guid? CommunityId { get; set; }
     public virtual User User { get; set; } = null!;
-    public virtual Community? AdminstratedCommunity { get; set; }
+    public virtual ICollection<Community> AdminstratedCommunities { get; set; } = new List<Community>();
     public virtual Community? ModeratedCommunity { get; set; }
     public ICollection<Course>? CreatedCourses { get; set; } = null!;
 }

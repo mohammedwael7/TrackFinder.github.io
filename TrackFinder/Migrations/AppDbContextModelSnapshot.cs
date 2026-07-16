@@ -167,6 +167,10 @@ namespace TrackFinder.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CertificateImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("CertificateUrl")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -505,8 +509,7 @@ namespace TrackFinder.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdminId")
-                        .IsUnique();
+                    b.HasIndex("AdminId");
 
                     b.ToTable("Communities", (string)null);
                 });
@@ -1134,16 +1137,6 @@ namespace TrackFinder.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CVV")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<string>("CardNumber")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
-
                     b.Property<int>("CompletedLessons")
                         .HasColumnType("int");
 
@@ -1154,9 +1147,6 @@ namespace TrackFinder.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LastActiveDate")
                         .HasColumnType("datetime2");
@@ -1406,8 +1396,8 @@ namespace TrackFinder.Migrations
             modelBuilder.Entity("TrackFinder.Models.CommunityModels.Community", b =>
                 {
                     b.HasOne("TrackFinder.Models.UserModels.Instructor", "Admin")
-                        .WithOne("AdminstratedCommunity")
-                        .HasForeignKey("TrackFinder.Models.CommunityModels.Community", "AdminId")
+                        .WithMany("AdminstratedCommunities")
+                        .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1860,7 +1850,7 @@ namespace TrackFinder.Migrations
 
             modelBuilder.Entity("TrackFinder.Models.UserModels.Instructor", b =>
                 {
-                    b.Navigation("AdminstratedCommunity");
+                    b.Navigation("AdminstratedCommunities");
 
                     b.Navigation("CreatedCourses");
                 });
