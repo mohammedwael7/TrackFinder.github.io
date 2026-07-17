@@ -417,3 +417,144 @@ body.dark-mode a:not(.btn):not(.nav-link):not(.dropdown-item):not(.page-link) {
 body.dark-mode a:not(.btn):not(.nav-link):not(.dropdown-item):not(.page-link):hover {
     color: #7dd3fc;
 }
+
+/* ── Responsive Admin ──────────────────────────────────── */
+
+/* Sidebar toggle button */
+.admin-sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1100;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #475569;
+    font-size: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.admin-sidebar-overlay {
+    display: none;
+}
+
+@media (max-width: 991.98px) {
+    .admin-sidebar-toggle {
+        display: flex;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        width: 260px;
+        height: 100vh;
+        z-index: 1050;
+        transition: left 0.3s ease;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+    }
+
+    .admin-sidebar.open {
+        left: 0;
+    }
+
+    .admin-sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 1040;
+    }
+
+    .admin-sidebar-overlay.show {
+        display: block;
+    }
+
+    .admin-main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .admin-main main {
+        padding: 16px !important;
+    }
+
+    .admin-topbar {
+        padding-left: 56px !important;
+    }
+
+    .admin-topbar form {
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .admin-topbar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .admin-topbar form {
+        max-width: 100%;
+        width: 100%;
+        margin-right: 0 !important;
+    }
+
+    .admin-topbar .d-flex {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .admin-main main {
+        padding: 12px !important;
+    }
+}
+
+/* Responsive admin tables */
+@media (max-width: 767.98px) {
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table {
+        font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+        white-space: nowrap;
+        padding: 8px 10px !important;
+    }
+
+    .table .badge {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+
+    .btn-group .btn {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .card-body {
+        padding: 16px !important;
+    }
+
+    h2.fw-bold {
+        font-size: 20px;
+    }
+
+    .container-fluid {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}

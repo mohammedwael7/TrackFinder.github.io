@@ -1,13 +1,13 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TrackFinder.Filters;
 using TrackFinder.Context;
 using TrackFinder.ViewModels.Users;
 
 namespace TrackFinder.Controllers.Admin
 {
-    [Authorize]
+    [TypeFilter(typeof(AdminAuthorizationFilter))]
     public class AdminProfileController : Controller
     {
         private readonly AppDbContext _context;

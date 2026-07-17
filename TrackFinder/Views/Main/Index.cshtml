@@ -555,6 +555,20 @@
             gap: 14px;
             justify-content: center;
         }
+
+        @@media (max-width: 767.98px) {
+            .dashboard-header-banner { padding: 24px 20px; flex-direction: column; text-align: center; }
+            .dashboard-header-banner .banner-cta { width: 100%; }
+            .onboarding-wrapper { padding: 32px 20px; }
+            .onboarding-title { font-size: 20px; }
+            .onboarding-sub { font-size: 14px; max-width: 100%; }
+            .onboarding-icon { width: 56px; height: 56px; }
+        }
+
+        @@media (max-width: 575.98px) {
+            .dashboard-header-banner { padding: 20px 16px; }
+            .stats-grid { gap: 12px; }
+        }
         .onboarding-card {
             background: var(--bg);
             border: 1px solid var(--border);

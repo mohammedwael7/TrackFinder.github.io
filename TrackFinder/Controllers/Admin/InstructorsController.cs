@@ -1,14 +1,14 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TrackFinder.Filters;
 using TrackFinder.Models.UserModels;
 using TrackFinder.Context;
 using TrackFinder.ViewModels.Instructors;
 
 namespace TrackFinder.Controllers.Admin;
 
-[Authorize]
+[TypeFilter(typeof(AdminAuthorizationFilter))]
 public class InstructorsController : Controller
 {
     private readonly AppDbContext _context;

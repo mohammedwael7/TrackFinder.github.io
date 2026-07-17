@@ -1,14 +1,14 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TrackFinder.Filters;
 using TrackFinder.Models.CourseModels;
 using TrackFinder.ViewModels.Courses;
 using TrackFinder.Context;
 
 namespace TrackFinder.Controllers.Admin;
 
-[Authorize]
+[TypeFilter(typeof(AdminAuthorizationFilter))]
 public class CoursesController : Controller
 {
     private readonly AppDbContext _context;

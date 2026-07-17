@@ -120,7 +120,8 @@ namespace TrackFinder.Services.AuthServices.Implementations
             {
                 _db.Students.Add(new Student
                 {
-                    UserId = user.Id
+                    UserId = user.Id,
+                    AdminApproved = false
                 });
             }
 

@@ -9,6 +9,7 @@ namespace TrackFinder.Models.UserModels
 {
 	public class Student
 	{
+		public bool AdminApproved { get; set; } = false;
 		public string? EducationState { get; set; }
 		public string? SchoolOrUnversityName { get; set; }
 		public string? Major { get; set; }

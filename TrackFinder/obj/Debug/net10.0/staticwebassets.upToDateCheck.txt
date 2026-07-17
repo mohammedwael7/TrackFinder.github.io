@@ -35,6 +35,7 @@ wwwroot\uploads\InstructorsCVs\6e835215-042f-4ce7-9f3e-390b3e359621.pdf
 wwwroot\uploads\InstructorsCVs\c8ccb03b-2dec-4ec5-8ae0-24b9f6030666.pdf
 wwwroot\uploads\InstructorsCVs\d9dea486-7239-4d00-b210-823035dcaede.pdf
 wwwroot\uploads\InstructorsCVs\e4980c3f-1f4d-4baf-93b9-9256fefcffd1.pdf
+wwwroot\uploads\InstructorsCVs\ff5ffecd-815c-483f-b7d5-d668257e0942.pdf
 wwwroot\uploads\profiles\73699f9e-55c3-4e42-a3cb-ca396d9b704f.png
 wwwroot\uploads\profiles\7e6e88c8-834f-44e2-9f22-cf6fb1f2d588.jpeg
 wwwroot\uploads\profiles\806e83a9-1b2b-4961-b021-dc0f570dfa8c.jpeg
@@ -44,6 +45,6 @@ D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\lib\jq
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\js\site.js
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\favicon.ico
-D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\site.css
-D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\dashboard.css
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\admin.css
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\dashboard.css
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\site.css

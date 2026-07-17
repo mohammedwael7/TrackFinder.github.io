@@ -11,6 +11,8 @@ namespace TrackFinder.ViewModels.Admin_ViewModels
 
         public int PendingInstructors { get; set; }
 
+        public int PendingStudents { get; set; }
+
         public int CoursesCount { get; set; }
         public int TracksCount { get; set; }
         public int CommunitiesCount { get; set; }
@@ -42,6 +44,11 @@ namespace TrackFinder.ViewModels.Admin_ViewModels
         // Pending Instructor Requests
 
         public List<PendingInstructorDashboardVM> PendingInstructorRequests { get; set; }
+            = new();
+
+        // Pending Student Requests
+
+        public List<PendingStudentDashboardVM> PendingStudentRequests { get; set; }
             = new();
 
     }
@@ -85,6 +92,18 @@ namespace TrackFinder.ViewModels.Admin_ViewModels
         public string Email { get; set; } = "";
 
         public string? Title { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+    }
+
+
+    public class PendingStudentDashboardVM
+    {
+        public Guid Id { get; set; }
+
+        public string Name { get; set; } = "";
+
+        public string Email { get; set; } = "";
 
         public DateTime CreatedAt { get; set; }
     }

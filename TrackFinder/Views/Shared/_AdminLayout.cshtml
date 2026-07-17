@@ -14,8 +14,13 @@
 </head>
 <body id="adminBody">
 
+    <button class="admin-sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <i class="bi bi-list"></i>
+    </button>
+    <div class="admin-sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="admin-shell d-flex">
-        <aside class="admin-sidebar bg-light">
+        <aside class="admin-sidebar bg-light" id="adminSidebar">
             @await Html.PartialAsync("_Sidebar")
         </aside>
         <div class="admin-main flex-grow-1">
@@ -72,6 +77,25 @@
 
             };
 
+        })();
+
+        // Admin sidebar toggle for mobile
+        (function() {
+            const toggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('adminSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            if (toggle && sidebar && overlay) {
+                function open() { sidebar.classList.add('open'); overlay.classList.add('show'); }
+                function close() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+
+                toggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (sidebar.classList.contains('open')) close(); else open();
+                });
+
+                overlay.addEventListener('click', close);
+            }
         })();
     </script>
 </body>

@@ -1,13 +1,11 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TrackFinder.Filters;
 using TrackFinder.Context;
-using TrackFinder.Models.UserModels;
 
 namespace TrackFinder.Controllers.Admin;
 
-[Authorize]
+[TypeFilter(typeof(AdminAuthorizationFilter))]
 public class ManageAccountsController : Controller
 {
     private readonly AppDbContext _context;
@@ -17,21 +15,9 @@ public class ManageAccountsController : Controller
         _context = context;
     }
 
-    private async Task<bool> IsAdminAsync()
-    {
-        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-            return false;
-        var user = await _context.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Id == userId);
-        return user != null && user.Role == UserRole.Admin;
-    }
-
 
     public async Task<IActionResult> Index()
     {
-        if (!await IsAdminAsync()) return RedirectToAction("Index", "Login");
         var users = await _context.Users
             .Include(u => u.Instructor)
             .Include(u => u.Student)
@@ -129,6 +115,52 @@ public class ManageAccountsController : Controller
         await _context.SaveChangesAsync();
 
         TempData["Success"] = $"{instructor.User.FirstName} {instructor.User.LastName} instructor approval has been revoked.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ── Student approval ────────────────────────────────────────────────
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ApproveStudent(Guid id)
+    {
+        var student = await _context.Students
+            .Include(s => s.User)
+            .FirstOrDefaultAsync(s => s.UserId == id);
+
+        if (student == null)
+            return NotFound();
+
+        student.AdminApproved = true;
+
+        _context.Students.Update(student);
+
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = $"{student.User.FirstName} {student.User.LastName} has been approved as student.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RejectStudent(Guid id)
+    {
+        var student = await _context.Students
+            .Include(s => s.User)
+            .FirstOrDefaultAsync(s => s.UserId == id);
+
+        if (student == null)
+            return NotFound();
+
+        student.AdminApproved = false;
+
+        _context.Students.Update(student);
+
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = $"{student.User.FirstName} {student.User.LastName} has been rejected.";
 
         return RedirectToAction(nameof(Index));
     }

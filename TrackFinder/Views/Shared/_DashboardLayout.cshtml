@@ -312,6 +312,72 @@
             color: var(--secondary);
         }
 
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 22px;
+            transition: var(--transition);
+            border-radius: 8px;
+        }
+        .navbar-toggle:hover {
+            background: var(--bg);
+            color: var(--primary);
+        }
+        @@media (max-width: 991.98px) {
+            .navbar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .navbar-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(12px);
+                border-bottom: 1px solid var(--border);
+                flex-direction: column;
+                padding: 12px 24px;
+                gap: 4px;
+                box-shadow: var(--shadow-md);
+                z-index: 99;
+            }
+            .navbar-links.open {
+                display: flex;
+            }
+            .navbar-links .navbar-link {
+                padding: 12px 16px;
+                border-radius: var(--radius-sm);
+                width: 100%;
+            }
+            .navbar-links .navbar-link:hover {
+                background: var(--bg);
+            }
+            .navbar-links .navbar-link.active::after {
+                display: none;
+            }
+            .navbar-links .navbar-link.active {
+                background: rgba(0, 97, 145, 0.08);
+                color: var(--primary);
+            }
+            .navbar-container {
+                flex-wrap: wrap;
+                padding: 0 16px;
+            }
+            .navbar-actions {
+                margin-left: auto;
+            }
+            main {
+                padding: 24px 16px !important;
+            }
+        }
+
         /* Bootstrap-collapse support (no Bootstrap CSS) */
         .collapse:not(.show) { display: none; }
         .collapsing {
@@ -353,7 +419,10 @@
                 <span>Track Finder</span>
             </a>
 
-            <div class="navbar-links">
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="navbar-links" id="navbarLinks">
                 <a href="/Main" class="navbar-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Main" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">Dashboard</a>
                 <a href="@(User.IsInRole("Instructor") ? "/CourseCreation" : "/CourseSales")" class="navbar-link @(ViewContext.RouteData.Values["Controller"]?.ToString() is "CourseCreation" or "CourseSales" ? "active" : "")">Courses</a>
                 <a href="/Community" class="navbar-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Community" ? "active" : "")">Community</a>
@@ -428,8 +497,25 @@
     <!-- Bootstrap JS (components only, no CSS conflicts) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Dropdown Script -->
+    <!-- Responsive & Dropdown Script -->
     <script>
+        // Navbar toggle for mobile
+        (function() {
+            const toggle = document.getElementById('navbarToggle');
+            const links = document.getElementById('navbarLinks');
+            if (toggle && links) {
+                toggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    links.classList.toggle('open');
+                });
+                document.addEventListener('click', function(e) {
+                    if (!links.contains(e.target) && e.target !== toggle) {
+                        links.classList.remove('open');
+                    }
+                });
+            }
+        })();
+
         const btn = document.getElementById('avatarBtn');
         const menu = document.getElementById('dropdownMenu');
         

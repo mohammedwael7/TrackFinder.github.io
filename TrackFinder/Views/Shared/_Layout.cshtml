@@ -23,6 +23,78 @@
             margin-top: 0 !important;
             top: 0 !important;
         }
+
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.75);
+            font-size: 22px;
+            transition: opacity 0.2s;
+            border-radius: 8px;
+        }
+        .navbar-toggle:hover {
+            opacity: 1;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .navbar-link {
+            font-size: 15px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.2s, color 0.2s;
+            position: relative;
+        }
+        .navbar-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        @@media (max-width: 991.98px) {
+            .navbar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .navbar-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(15, 23, 42, 0.97);
+                backdrop-filter: blur(12px);
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+                flex-direction: column;
+                padding: 12px 24px;
+                gap: 4px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+                z-index: 99;
+            }
+            .navbar-links.open {
+                display: flex;
+            }
+            .navbar-link {
+                padding: 12px 16px;
+                width: 100%;
+                color: rgba(255,255,255,0.7);
+            }
+            .navbar-link:hover {
+                background: rgba(255,255,255,0.08);
+                color: #fff;
+            }
+        }
     </style>
     <script>
         (function () {
@@ -45,8 +117,8 @@
 </head>
 <body class="tf-app">
     <header class="tf-header">
-        <nav class="navbar navbar-expand-lg navbar-dark tf-navbar tf-navbar-fixed py-3">
-            <div class="container-xxl">
+        <nav class="tf-navbar tf-navbar-fixed py-3">
+            <div class="container-xxl d-flex align-items-center justify-content-between">
                 <a class="navbar-brand d-flex align-items-center gap-3 m-0" asp-controller="Home" asp-action="Index">
                     <img src="~/images/logo.png" alt="TrackFinder logo" class="navbar-logo" onerror="this.style.display='none'" />
                     <div class="brand-mark">
@@ -54,26 +126,15 @@
                         <span class="brand-subtitle">Track discovery platform</span>
                     </div>
                 </a>
-                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggle" id="navbarToggle" type="button" aria-label="Toggle navigation">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
-
-                <div class="collapse navbar-collapse" id="mainNavbar">
-                    <ul class="navbar-nav align-items-lg-center ms-lg-4 me-auto gap-lg-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Assessment" asp-action="Index">Assessment</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Assessment" asp-action="History">History</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+            </div>
+            <div class="navbar-links" id="navbarLinks">
+                <a class="navbar-link" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="navbar-link" asp-controller="Assessment" asp-action="Index">Assessment</a>
+                <a class="navbar-link" asp-controller="Assessment" asp-action="History">History</a>
+                <a class="navbar-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
         </nav>
     </header>
@@ -110,6 +171,23 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>window.bootstrap || document.write('<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"><\/script>');</script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (function() {
+            var toggle = document.getElementById('navbarToggle');
+            var links = document.getElementById('navbarLinks');
+            if (toggle && links) {
+                toggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    links.classList.toggle('open');
+                });
+                document.addEventListener('click', function(e) {
+                    if (!links.contains(e.target) && e.target !== toggle) {
+                        links.classList.remove('open');
+                    }
+                });
+            }
+        })();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -10,6 +10,7 @@
     var adminUsers = allUsers.Where(u => u.Instructor == null && u.Student == null).ToList();
     var bannedUsers = allUsers.Where(u => u.IsBanned).ToList();
     var pendingInstructors = allUsers.Where(u => u.Instructor != null && !u.Instructor.AdminApproved).ToList();
+    var pendingStudents = allUsers.Where(u => u.Student != null && !u.Student.AdminApproved).ToList();
 }
 
 <div class="container-fluid">
@@ -91,6 +92,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-filter="PendingStudent">
+                <i class="bi bi-hourglass-split me-1"></i>Pending Students
+                <span class="badge bg-light text-dark ms-1">@pendingStudents.Count</span>
+            </a>
+        </li>
+
     </ul>
 
 
@@ -111,6 +119,7 @@
                             <th>Role</th>
                             <th>Status</th>
                             <th>Instructor Status</th>
+                            <th>Student Status</th>
                             <th>Joined</th>
                             <th class="text-end pe-4">Actions</th>
                         </tr>
@@ -127,10 +136,13 @@
 
                             var effectiveRole = isInstructor ? "Instructor" : isStudent ? "Student" : "Admin";
 
+                            var isPendingStudent = isStudent && !user.Student!.AdminApproved;
+
                             <tr class="user-row"
                                 data-role="@effectiveRole"
                                 data-banned="@user.IsBanned.ToString()"
-                                data-pending-instructor="@isPendingInstructor.ToString()">
+                                data-pending-instructor="@isPendingInstructor.ToString()"
+                                data-pending-student="@isPendingStudent.ToString()">
 
                                 <!-- User Info -->
                                 <td class="ps-4">
@@ -226,6 +238,30 @@
                                 </td>
 
 
+                                <!-- Student Approval Status -->
+                                <td>
+                                    @if (isStudent)
+                                    {
+                                        if (user.Student!.AdminApproved)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-patch-check me-1"></i>Approved
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-hourglass-split me-1"></i>Pending Approval
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
+
+
                                 <!-- Joined Date -->
                                 <td>
                                     @user.CreatedAt.ToString("dd MMM yyyy")
@@ -294,6 +330,44 @@
                                             }
                                         }
 
+
+                                        @* Approve / Reject Student *@
+                                        @if (isStudent)
+                                        {
+                                            @if (!user.Student!.AdminApproved)
+                                            {
+                                                <form asp-action="ApproveStudent" method="post">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@user.Id" />
+                                                    <button class="btn btn-sm btn-success rounded-pill"
+                                                            title="Approve this student">
+                                                        <i class="bi bi-check-circle"></i> Approve
+                                                    </button>
+                                                </form>
+                                                <form asp-action="RejectStudent" method="post"
+                                                      onsubmit="return confirm('Reject this student? They will stay unapproved.')">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@user.Id" />
+                                                    <button class="btn btn-sm btn-outline-danger rounded-pill"
+                                                            title="Reject this student">
+                                                        <i class="bi bi-x-circle"></i> Reject
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form asp-action="RejectStudent" method="post"
+                                                      onsubmit="return confirm('Revoke student approval?')">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@user.Id" />
+                                                    <button class="btn btn-sm btn-outline-warning rounded-pill"
+                                                            title="Revoke student approval">
+                                                        <i class="bi bi-x-circle"></i> Revoke
+                                                    </button>
+                                                </form>
+                                            }
+                                        }
+
                                     </div>
 
                                 </td>
@@ -336,6 +410,7 @@
                     const role = row.dataset.role;
                     const banned = row.dataset.banned === 'True';
                     const pendingInstructor = row.dataset.pendingInstructor === 'True';
+                    const pendingStudent = row.dataset.pendingStudent === 'True';
 
                     if (filter === 'all') {
                         row.style.display = '';
@@ -343,6 +418,8 @@
                         row.style.display = banned ? '' : 'none';
                     } else if (filter === 'PendingInstructor') {
                         row.style.display = pendingInstructor ? '' : 'none';
+                    } else if (filter === 'PendingStudent') {
+                        row.style.display = pendingStudent ? '' : 'none';
                     } else {
                         row.style.display = role === filter ? '' : 'none';
                     }

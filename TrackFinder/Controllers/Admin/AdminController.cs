@@ -1,14 +1,12 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrackFinder.Context;
-using TrackFinder.Models.UserModels;
+using TrackFinder.Filters;
 using TrackFinder.ViewModels.Admin_ViewModels;
 
 namespace TrackFinder.Controllers.Admin
 {
-    [Authorize]
+    [TypeFilter(typeof(AdminAuthorizationFilter))]
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;
@@ -21,14 +19,6 @@ namespace TrackFinder.Controllers.Admin
 
         public async Task<IActionResult> Dashboard()
         {
-            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
-                return RedirectToAction("Index", "Login");
-            var currentUser = await _context.Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Id == userId);
-            if (currentUser == null || currentUser.Role != UserRole.Admin)
-                return RedirectToAction("Index", "Login");
 
             var totalUsers = await _context.Users.CountAsync();
 
@@ -44,6 +34,9 @@ namespace TrackFinder.Controllers.Admin
             var pendingInstructors = await _context.Instructors
                 .CountAsync(x => !x.AdminApproved);
 
+            var pendingStudents = await _context.Students
+                .CountAsync(x => !x.AdminApproved);
+
             var model = new AdminDashboardVM
             {
 
@@ -56,6 +49,8 @@ namespace TrackFinder.Controllers.Admin
                 StudentsCount = studentsCount,
 
                 PendingInstructors = pendingInstructors,
+
+                PendingStudents = pendingStudents,
 
                 CoursesCount = await _context.Courses.CountAsync(),
 
@@ -150,6 +145,26 @@ namespace TrackFinder.Controllers.Admin
                     Email = x.User.Email,
 
                     Title = x.Title,
+
+                    CreatedAt = x.User.CreatedAt
+                })
+                .ToListAsync();
+
+
+            // Pending Student Requests (AdminApproved = false)
+
+            model.PendingStudentRequests = await _context.Students
+                .Include(x => x.User)
+                .Where(x => !x.AdminApproved)
+                .OrderByDescending(x => x.User.CreatedAt)
+                .Take(5)
+                .Select(x => new PendingStudentDashboardVM
+                {
+                    Id = x.UserId,
+
+                    Name = x.User.FirstName + " " + x.User.LastName,
+
+                    Email = x.User.Email,
 
                     CreatedAt = x.User.CreatedAt
                 })

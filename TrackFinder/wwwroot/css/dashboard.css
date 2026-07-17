@@ -1457,7 +1457,428 @@ select.form-control {
     }
 }
 
-/* ── Bootstrap Utility Overrides (minimal, no global conflict) ── */
+/* ── Responsive Dashboard ──────────────────────────────────── */
+
+/* Navbar hamburger toggle */
+
+
+@media (max-width: 767.98px) {
+    main {
+        padding: 16px 12px !important;
+    }
+
+    .navbar {
+        padding: 10px 0;
+    }
+
+    .navbar-brand {
+        font-size: 17px;
+    }
+
+    .navbar-logo {
+        width: 28px;
+        height: 28px;
+    }
+
+    .avatar-image,
+    .avatar-placeholder {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+
+    .page-header h1.page-title {
+        font-size: 20px;
+    }
+
+    .page-header .page-sub {
+        font-size: 13px;
+    }
+}
+
+/* Page header */
+@media (max-width: 575.98px) {
+    .page-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .page-header .action-row {
+        width: 100%;
+    }
+
+    .action-row {
+        flex-wrap: wrap;
+    }
+
+    .action-row .btn,
+    .action-row .btn-sm {
+        flex: 1;
+        justify-content: center;
+        min-width: 0;
+    }
+}
+
+/* Cards */
+@media (max-width: 575.98px) {
+    .card {
+        padding: 16px;
+    }
+
+    .card .card-subtitle {
+        margin-bottom: 16px;
+    }
+}
+
+/* Stats strip */
+@media (max-width: 575.98px) {
+    .stats-strip {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 14px 16px;
+    }
+
+    .stat-card .stat-value {
+        font-size: 20px;
+    }
+}
+
+/* Form grid */
+@media (max-width: 767.98px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Duration row */
+@media (max-width: 575.98px) {
+    .duration-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Data table */
+@media (max-width: 767.98px) {
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table {
+        font-size: 13px;
+    }
+
+    .data-table thead th,
+    .data-table tbody td {
+        padding: 10px 12px;
+        white-space: nowrap;
+    }
+
+    .data-table .btn-sm {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+}
+
+/* Info grid 2 columns */
+@media (max-width: 575.98px) {
+    .info-grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .info-block {
+        padding: 14px;
+    }
+
+    .info-block .ib-value {
+        font-size: 18px;
+    }
+}
+
+/* Section card */
+@media (max-width: 575.98px) {
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .section-card {
+        padding: 16px;
+    }
+}
+
+/* Course grid */
+@media (max-width: 767.98px) {
+    .course-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .course-sales-card {
+        padding: 20px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .course-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Course details sales */
+@media (max-width: 767.98px) {
+    .course-details-sales .detail-header h1 {
+        font-size: 22px;
+    }
+
+    .course-details-sales .detail-header .price-large {
+        font-size: 20px;
+    }
+
+    .course-details-sales .detail-header .icon {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+    }
+}
+
+/* My learning cards */
+@media (max-width: 575.98px) {
+    .my-learning-card {
+        padding: 20px;
+    }
+
+    .my-learning-card h3 {
+        font-size: 16px;
+    }
+}
+
+/* Enrollment card */
+@media (max-width: 575.98px) {
+    .enrollment-card {
+        padding: 0 8px;
+    }
+}
+
+/* Course cell */
+@media (max-width: 575.98px) {
+    .course-cell .thumb,
+    .course-cell .thumb-placeholder {
+        width: 40px;
+        height: 40px;
+    }
+
+    .course-desc {
+        max-width: 160px;
+    }
+}
+
+/* Composer */
+@media (max-width: 575.98px) {
+    .composer-card {
+        flex-direction: column;
+        padding: 14px;
+    }
+}
+
+/* Feed tabs */
+@media (max-width: 575.98px) {
+    .feed-tabs {
+        padding: 4px;
+        gap: 2px;
+    }
+
+    .feed-tabs a {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
+/* Post card */
+@media (max-width: 575.98px) {
+    .post-card {
+        padding: 14px;
+    }
+
+    .post-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .post-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+
+/* Community rail */
+@media (max-width: 575.98px) {
+    .rail-card {
+        padding: 14px;
+    }
+}
+
+/* Comment form */
+@media (max-width: 575.98px) {
+    .comment-form {
+        flex-direction: column;
+    }
+
+    .comment-form input {
+        width: 100%;
+    }
+
+    .comment-form button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Composer tools */
+@media (max-width: 575.98px) {
+    .composer-tools {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .composer-tools select,
+    .composer-tools input,
+    .composer-tools button {
+        width: 100%;
+    }
+}
+
+/* Edit post */
+@media (max-width: 575.98px) {
+    .edit-post-card {
+        padding: 20px;
+    }
+
+    .edit-post-card .edit-actions {
+        flex-direction: column;
+    }
+
+    .edit-post-card .edit-actions a,
+    .edit-post-card .edit-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Skills grid */
+@media (max-width: 575.98px) {
+    .skill-option {
+        font-size: 13px;
+        padding: 5px 12px;
+    }
+}
+
+/* Lesson cell */
+@media (max-width: 575.98px) {
+    .lesson-name {
+        font-size: 13px;
+    }
+}
+
+/* Price row */
+@media (max-width: 575.98px) {
+    .price-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .price-final {
+        font-size: 18px;
+    }
+}
+
+/* Rating row */
+@media (max-width: 575.98px) {
+    .rating-row {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .rating-num {
+        font-size: 26px;
+    }
+}
+
+/* Course sales card buttons */
+@media (max-width: 575.98px) {
+    .course-sales-card .buttons {
+        flex-direction: column;
+    }
+}
+
+/* Form actions */
+@media (max-width: 575.98px) {
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-actions .btn {
+        justify-content: center;
+    }
+}
+
+/* Toast container */
+@media (max-width: 575.98px) {
+    .toast-container {
+        right: 12px;
+        left: 12px;
+        max-width: none;
+        width: auto;
+    }
+}
+
+/* Footer */
+@media (max-width: 575.98px) {
+    footer .footer-container {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+}
+
+/* Profile dropdown on mobile */
+@media (max-width: 575.98px) {
+    .profile-dropdown-container .dropdown-menu {
+        width: 220px;
+        right: -10px;
+    }
+}
+
+/* Empty state */
+@media (max-width: 575.98px) {
+    .empty-state {
+        padding: 32px 16px;
+    }
+
+    .empty-state .empty-icon {
+        font-size: 28px;
+    }
+}
+
+/* Current URL hint */
+@media (max-width: 575.98px) {
+    .current-url-hint {
+        font-size: 11px;
+    }
+}
+
+/* Post content images */
+.post-image {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Bootstrap Utility Overrides (minimal, no global conflict) ── */
 .d-none { display: none !important; }
 .collapse:not(.show) { display: none; }
 .collapsing {
