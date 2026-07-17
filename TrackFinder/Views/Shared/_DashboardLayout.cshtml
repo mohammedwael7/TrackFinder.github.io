@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Track Finder Portal</title>
+    <link rel="icon" type="image/png" href="~/images/Logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -78,11 +79,10 @@
         }
 
         .navbar-logo {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: var(--secondary);
-            padding: 2px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .navbar-links {
@@ -266,6 +266,15 @@
         .footer-logo {
             font-weight: 700;
             color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-logo-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         /* ── Toasts ──────────────────────────────────────────────── */
@@ -415,7 +424,7 @@
     <nav class="navbar">
         <div class="navbar-container">
             <a class="navbar-brand" href="/Main">
-                <img src="/DesignUIUX/Logo.png" alt="Track Finder" class="navbar-logo" onerror="this.style.display='none'" />
+                <img src="~/images/Logo.png" alt="Track Finder" class="navbar-logo" onerror="this.style.display='none'" />
                 <span>Track Finder</span>
             </a>
 
@@ -489,7 +498,10 @@
     <!-- ── Footer ────────────────────────────────────────── -->
     <footer>
         <div class="footer-container">
-            <span class="footer-logo">Track Finder</span>
+            <span class="footer-logo">
+                <img src="~/images/Logo.png" alt="Track Finder" class="footer-logo-img" onerror="this.style.display='none'" />
+                Track Finder
+            </span>
             <span>&copy; @DateTime.Now.Year. All rights reserved.</span>
         </div>
     </footer>

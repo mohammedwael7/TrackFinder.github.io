@@ -556,7 +556,7 @@ D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net1
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\TrackFinder.pdb
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\TrackFinder.genruntimeconfig.cache
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\ref\TrackFinder.dll
-D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\compressed\9xtrhr0nfq-{0}-i2ixe4ex8t-i2ixe4ex8t.gz
-D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\compressed\1srabkdbvx-{0}-87o3n4f2qi-87o3n4f2qi.gz
-D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\compressed\tt1wpr0477-{0}-p57og9edsg-p57og9edsg.gz
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\compressed\1srabkdbvx-{0}-mgbws0tamc-mgbws0tamc.gz
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\compressed\9xtrhr0nfq-{0}-32nx42eglz-32nx42eglz.gz
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\compressed\tt1wpr0477-{0}-kcjmj387ut-kcjmj387ut.gz
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

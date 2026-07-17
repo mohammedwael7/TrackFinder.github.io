@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Track Finder</title>
+    <link rel="icon" type="image/png" href="~/images/Logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -108,6 +109,15 @@
         }
 
         .auth-footer a:hover { color: var(--primary); }
+
+        .auth-footer-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
 
         /* ── Form elements ──────────────────────────────────────── */
         .form-group {
@@ -400,7 +410,10 @@
     </div>
 
     <footer class="auth-footer">
-        <p>&copy; @DateTime.Now.Year Track Finder. All rights reserved.</p>
+        <p>
+            <img src="~/images/Logo.png" alt="Track Finder" class="auth-footer-logo" onerror="this.style.display='none'" />
+            &copy; @DateTime.Now.Year Track Finder. All rights reserved.
+        </p>
         <div>
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>

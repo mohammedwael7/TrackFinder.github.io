@@ -17,7 +17,7 @@
             <div class="avatar">@Initials("Current", "User")</div>
             <form asp-action="CreatePost" method="post" class="composer-form">
                 @Html.AntiForgeryToken()
-                <textarea style="width:85%" asp-for="NewPost.Content" name="Content" placeholder="Share a coding breakthrough or ask a question..."></textarea>
+                <textarea asp-for="NewPost.Content" name="Content" placeholder="Share a coding breakthrough or ask a question..."></textarea>
                 <div class="composer-tools">
                     <select asp-for="NewPost.GroupId" name="GroupId" asp-items="Model.CommunityOptions" aria-label="Community"></select>
                     <input asp-for="NewPost.ImageUrl" name="ImageUrl" placeholder="Image URL" />

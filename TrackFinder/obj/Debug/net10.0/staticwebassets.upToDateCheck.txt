@@ -2,7 +2,7 @@ wwwroot\css\admin.css
 wwwroot\css\dashboard.css
 wwwroot\css\site.css
 wwwroot\favicon.ico
-wwwroot\images\logo.png
+wwwroot\images\Logo.png
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\LICENSE
 wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
@@ -45,6 +45,6 @@ D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\lib\jq
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\js\site.js
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\favicon.ico
-D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\admin.css
-D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\dashboard.css
 D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\site.css
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\dashboard.css
+D:\Web Projects\TrackFinderMain\TrackFinder.github.io\TrackFinder\wwwroot\css\admin.css

@@ -895,6 +895,8 @@ select.form-control {
 
 .composer-tools select,
 .composer-tools input {
+    flex: 1;
+    min-width: 0;
     padding: 8px 12px;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
@@ -1681,7 +1683,11 @@ select.form-control {
 @media (max-width: 575.98px) {
     .composer-card {
         flex-direction: column;
+        align-items: stretch;
         padding: 14px;
+    }
+    .composer-form {
+        width: 100%;
     }
 }
 

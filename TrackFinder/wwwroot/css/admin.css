@@ -67,6 +67,14 @@
 .admin-footer {
     border-top: 1px solid #e2e8f0;
 }
+.admin-footer-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+    margin-right: 6px;
+}
 
 /* ── Dark Mode ───────────────────────────────────────────── */
 body.dark-mode {
